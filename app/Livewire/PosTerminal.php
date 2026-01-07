@@ -26,7 +26,7 @@ class PosTerminal extends Component
     public float $subtotal = 0;
     public float $discount = 0;
     public float $discountType = 0; // 0 = nominal, 1 = percentage
-    public float $discountValue = 0;
+    public $discountValue = '';
     public float $tax = 0;
     public float $defaultTax = 0;
     public float $total = 0;
@@ -34,7 +34,7 @@ class PosTerminal extends Component
     // Checkout modal
     public bool $showCheckoutModal = false;
     public string $paymentMethod = 'cash';
-    public $amountPaid = 0;
+    public $amountPaid = '';
     public $change = 0;
 
     // Discount modal
@@ -217,7 +217,7 @@ class PosTerminal extends Component
     {
         $this->cart = [];
         $this->discount = 0;
-        $this->discountValue = 0;
+        $this->discountValue = '';
         $this->calculateTotals();
         $this->dispatch('notify', type: 'info', message: 'Keranjang dikosongkan');
     }
@@ -227,11 +227,11 @@ class PosTerminal extends Component
         $this->subtotal = array_sum(array_column($this->cart, 'total'));
         
         // Calculate discount
-        if ($this->discountType == 1 && $this->discountValue > 0) {
+        if ($this->discountType == 1 && (float) $this->discountValue > 0) {
             // Percentage discount
-            $this->discount = $this->subtotal * ($this->discountValue / 100);
+            $this->discount = $this->subtotal * ((float) $this->discountValue / 100);
         } else {
-            $this->discount = $this->discountValue;
+            $this->discount = (float) $this->discountValue;
         }
 
         // Calculate total (with tax if applicable)
@@ -253,7 +253,7 @@ class PosTerminal extends Component
             return;
         }
 
-        $this->amountPaid = 0;
+        $this->amountPaid = '';
         $this->change = 0;
         $this->paymentMethod = 'cash';
         $this->showCheckoutModal = true;
@@ -375,7 +375,7 @@ class PosTerminal extends Component
             // Clear cart
             $this->cart = [];
             $this->discount = 0;
-            $this->discountValue = 0;
+            $this->discountValue = '';
             $this->calculateTotals();
             $this->showCheckoutModal = false;
 

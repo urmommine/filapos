@@ -286,7 +286,7 @@
 
 <!-- Checkout Modal -->
 @if($showCheckoutModal)
-    <div class="custom-modal-backdrop" wire:click.self="closeModal">
+    <div class="custom-modal-backdrop" wire:click.self="closeModal" x-data @keydown.window.escape="$wire.closeModal()" @keydown.window.f1.prevent="$wire.setExactAmount()">
         <div class="custom-modal" wire:click.stop>
             <div class="p-5 border-b border-border-dark bg-background-dark/50">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2"><x-heroicon-o-credit-card class="w-6 h-6 text-blue-400" /> Pembayaran</h3>
@@ -317,7 +317,9 @@
                                 wire:model.live="amountPaid" 
                                 class="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-xl font-bold focus:ring-2 focus:ring-primary focus:border-transparent"
                                 placeholder="0"
-                                autofocus
+
+                                x-init="$nextTick(() => $el.focus())"
+                                wire:keydown.enter="processPayment"
                             >
                         </div>
                          
@@ -328,7 +330,7 @@
                                     {{ number_format($amt/1000) }}k
                                 </button>
                              @endforeach
-                             <button class="bg-[#382929] text-white py-2 rounded text-sm hover:bg-[#4a3636] col-span-3" wire:click="setExactAmount">Uang Pas</button>
+                             <button class="bg-[#382929] text-white py-2 rounded text-sm hover:bg-[#4a3636] col-span-3" wire:click="setExactAmount">Uang Pas (F1)</button>
                         </div>
 
                         @if($amountPaid >= $total)
@@ -347,7 +349,7 @@
                     wire:click="processPayment"
                     @if($paymentMethod === 'cash' && $amountPaid < $total) disabled @endif
                 >
-                    Proses Pembayaran
+                    Proses Pembayaran (Enter)
                 </button>
             </div>
         </div>
@@ -356,15 +358,15 @@
 
 <!-- Discount Modal -->
 @if($showDiscountModal)
-    <div class="custom-modal-backdrop" wire:click.self="closeModal">
+    <div class="custom-modal-backdrop" wire:click.self="closeModal" x-data @keydown.window.escape="$wire.closeModal()" @keydown.window.f1.prevent="$wire.set('discountType', 0)" @keydown.window.f2.prevent="$wire.set('discountType', 1)">
         <div class="custom-modal" wire:click.stop style="max-width: 400px;">
             <div class="p-5 border-b border-border-dark bg-background-dark/50">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2"><x-heroicon-o-tag class="w-6 h-6 text-yellow-500" /> Tambah Diskon</h3>
             </div>
             <div class="p-6 space-y-6">
                 <div class="flex bg-[#382929] p-1 rounded-lg">
-                    <button class="flex-1 py-2 rounded-md text-sm font-bold transition-all {{ $discountType == 0 ? 'bg-primary text-white shadow' : 'text-[#b89d9f]' }}" wire:click="$set('discountType', 0)">Nominal (Rp)</button>
-                    <button class="flex-1 py-2 rounded-md text-sm font-bold transition-all {{ $discountType == 1 ? 'bg-primary text-white shadow' : 'text-[#b89d9f]' }}" wire:click="$set('discountType', 1)">Persen (%)</button>
+                    <button class="flex-1 py-2 rounded-md text-sm font-bold transition-all {{ $discountType == 0 ? 'bg-primary text-white shadow' : 'text-[#b89d9f]' }}" wire:click="$set('discountType', 0)">Nominal (Rp) (F1)</button>
+                    <button class="flex-1 py-2 rounded-md text-sm font-bold transition-all {{ $discountType == 1 ? 'bg-primary text-white shadow' : 'text-[#b89d9f]' }}" wire:click="$set('discountType', 1)">Persen (%) (F2)</button>
                 </div>
                 
                 <input 
@@ -372,11 +374,13 @@
                     wire:model="discountValue"
                     class="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-xl font-bold focus:ring-2 focus:ring-primary focus:border-transparent text-center"
                     placeholder="0"
+                    x-init="$nextTick(() => $el.focus())"
+                    wire:keydown.enter="applyDiscount"
                 >
             </div>
             <div class="p-5 border-t border-border-dark flex gap-3 bg-background-dark/50">
                 <button class="flex-1 py-3 px-4 rounded-xl border border-border-dark text-white hover:bg-[#382929] transition-colors font-bold" wire:click="closeModal">Batal</button>
-                <button class="flex-1 py-3 px-4 rounded-xl bg-primary text-white hover:bg-red-600 transition-colors font-bold" wire:click="applyDiscount">Terapkan</button>
+                <button class="flex-1 py-3 px-4 rounded-xl bg-primary text-white hover:bg-red-600 transition-colors font-bold" wire:click="applyDiscount">Terapkan (Enter)</button>
             </div>
         </div>
     </div>
