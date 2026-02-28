@@ -13,8 +13,11 @@
 
     <div class="order-info">
         <p><span>No. Invoice:</span> <span>{{ $order->invoice_number }}</span></p>
-        <p><span>Kasir:</span> <span>{{ $order->user->name }}</span></p>
-        <p><span>Tanggal:</span> <span>{{ $order->created_at->format('d/m/Y H:i') }}</span></p>
+        <!-- <p><span>Kasir:</span> <span>{{ $order->user->name }}</span></p>
+        <p><span>Tanggal:</span> <span>{{ $order->created_at->format('d/m/Y H:i') }}</span></p> -->
+        @if($order->customer)
+            <p><span>Pelanggan:</span> <span>{{ $order->customer->name }}</span></p>
+        @endif
     </div>
 
     <div class="items">

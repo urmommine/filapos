@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\ProductExporter;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Category;
 use App\Models\Product;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
 use Filament\Support\Colors\Color;
 
@@ -131,7 +134,7 @@ class ProductResource extends Resource
                     ->label('Nama Produk')
                     ->searchable()
                     ->sortable()
-                    ->description(fn (Product $record): string => $record->sku),
+                    ->description(fn(Product $record): string => $record->sku),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Kategori')
                     ->badge()
@@ -144,7 +147,7 @@ class ProductResource extends Resource
                     ->label('Stok')
                     ->sortable()
                     ->badge()
-                    ->color(fn (Product $record): string => match(true) {
+                    ->color(fn(Product $record): string => match (true) {
                         $record->stock <= 0 => 'danger',
                         $record->stock <= $record->min_stock => 'warning',
                         default => 'success',
@@ -169,7 +172,7 @@ class ProductResource extends Resource
                     ->falseLabel('Tidak Aktif'),
                 Tables\Filters\Filter::make('low_stock')
                     ->label('Stok Menipis')
-                    ->query(fn ($query) => $query->whereColumn('stock', '<=', 'min_stock')),
+                    ->query(fn($query) => $query->whereColumn('stock', '<=', 'min_stock')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -178,6 +181,9 @@ class ProductResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->exporter(ProductExporter::class)
+                        ->label('Export Terpilih'),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

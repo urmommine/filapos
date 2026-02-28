@@ -14,8 +14,8 @@ class ReceiptController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load(['items', 'user']);
-        
+        $order->load(['items', 'user', 'customer']);
+
         $storeSettings = [
             'name' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),
             'address' => StoreSetting::get(StoreSetting::STORE_ADDRESS, ''),
@@ -31,12 +31,12 @@ class ReceiptController extends Controller
      */
     public function print(Order $order)
     {
-        $order->load(['items', 'user']);
-        
+        $order->load(['items', 'user', 'customer']);
+
         try {
             $printer = new ReceiptPrinter();
             $printer->printReceipt($order);
-            
+
             return response()->json(['success' => true, 'message' => 'Struk berhasil dicetak']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Gagal mencetak: ' . $e->getMessage()], 500);

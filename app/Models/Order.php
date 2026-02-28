@@ -14,6 +14,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'customer_id',
         'invoice_number',
         'subtotal',
         'discount',
@@ -57,7 +58,7 @@ class Order extends Model
     {
         $today = Carbon::today();
         $prefix = 'INV-' . $today->format('Ymd') . '-';
-        
+
         // Get the last order of today
         $lastOrder = self::where('invoice_number', 'like', $prefix . '%')
             ->orderBy('invoice_number', 'desc')
@@ -88,6 +89,14 @@ class Order extends Model
     public function kasir(): BelongsTo
     {
         return $this->user();
+    }
+
+    /**
+     * Get the customer for the order
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     /**
@@ -153,7 +162,7 @@ class Order extends Model
     public function scopeThisMonth($query)
     {
         return $query->whereMonth('created_at', Carbon::now()->month)
-                     ->whereYear('created_at', Carbon::now()->year);
+            ->whereYear('created_at', Carbon::now()->year);
     }
 
     /**

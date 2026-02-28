@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -19,7 +20,7 @@ class PosTerminal extends Component
     // Search and filter
     public string $search = '';
     public ?int $selectedCategory = null;
-    public int $perPage = 30;
+    public int $perPage = 12;
 
     // Cart
     public array $cart = [];
@@ -46,6 +47,12 @@ class PosTerminal extends Component
     public string $profileEmail = '';
     public string $profilePassword = '';
     public string $profilePasswordConfirmation = '';
+
+    // Customer
+    public bool $showCustomerModal = false;
+    public string $customerSearch = '';
+    public ?int $selectedCustomerId = null;
+    public ?Customer $selectedCustomer = null;
 
     public function mount()
     {
@@ -83,13 +90,34 @@ class PosTerminal extends Component
         $user->save();
 
         $this->showProfileModal = false;
-        $this->dispatch('notify', type: 'success', message: 'Profil berhasil diperbarui');
+        $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Profil berhasil diperbarui');
+    }
+
+    public function openCustomerModal()
+    {
+        $this->showCustomerModal = true;
+        $this->customerSearch = ''; // Reset search
+    }
+
+    public function selectCustomer($customerId)
+    {
+        $this->selectedCustomerId = $customerId;
+        $this->selectedCustomer = Customer::find($customerId);
+        $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Pelanggan dipilih: ' . $this->selectedCustomer->name);
+        $this->showCustomerModal = false;
+    }
+
+    public function removeCustomer()
+    {
+        $this->selectedCustomerId = null;
+        $this->selectedCustomer = null;
+        $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Pelanggan dihapus');
     }
 
     public function render()
     {
         $categories = Category::active()->withCount('products')->get();
-        
+
         $products = Product::query()
             ->active()
             ->when($this->search, fn($q) => $q->search($this->search))
@@ -98,9 +126,26 @@ class PosTerminal extends Component
             ->take($this->perPage)
             ->get();
 
+        $products->transform(function ($product) {
+            $cartItem = collect($this->cart)->where('product_id', $product->id)->first();
+            $product->available_stock = $product->stock - ($cartItem['quantity'] ?? 0);
+            return $product;
+        });
+
+        $customers = [];
+        if ($this->showCustomerModal) {
+            $customers = Customer::query()
+                ->when($this->customerSearch, fn($q) => $q->where('name', 'like', '%' . $this->customerSearch . '%')
+                    ->orWhere('phone', 'like', '%' . $this->customerSearch . '%')
+                    ->orWhere('email', 'like', '%' . $this->customerSearch . '%'))
+                ->take(10)
+                ->get();
+        }
+
         return view('livewire.pos-terminal', [
             'categories' => $categories,
             'products' => $products,
+            'customers' => $customers,
             'storeName' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),
         ]);
     }
@@ -108,30 +153,30 @@ class PosTerminal extends Component
     public function selectCategory(?int $categoryId)
     {
         $this->selectedCategory = $categoryId === $this->selectedCategory ? null : $categoryId;
-        $this->perPage = 30; // Reset pagination
+        $this->perPage = 12;
     }
 
     public function updatedSearch()
     {
-        $this->perPage = 30; // Reset pagination
+        $this->perPage = 12;
     }
 
     public function loadMore()
     {
-        $this->perPage += 30;
+        $this->perPage += 12;
     }
 
     public function addToCart(int $productId)
     {
         $product = Product::find($productId);
-        
+
         if (!$product || !$product->is_active) {
-            $this->dispatch('notify', type: 'error', message: 'Produk tidak ditemukan');
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Produk tidak ditemukan');
             return;
         }
 
         if ($product->stock <= 0) {
-            $this->dispatch('notify', type: 'error', message: 'Stok produk habis');
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Stok produk ' . $product->name . ' habis');
             return;
         }
 
@@ -141,7 +186,7 @@ class PosTerminal extends Component
         if ($cartKey !== false) {
             // Check stock before increasing
             if ($this->cart[$cartKey]['quantity'] >= $product->stock) {
-                $this->dispatch('notify', type: 'warning', message: 'Stok tidak mencukupi');
+                $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Stok tidak mencukupi');
                 return;
             }
             $this->cart[$cartKey]['quantity']++;
@@ -159,18 +204,52 @@ class PosTerminal extends Component
         }
 
         $this->calculateTotals();
-        $this->dispatch('notify', type: 'success', message: $product->name . ' ditambahkan');
+        $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: $product->name . ' ditambahkan');
+    }
+
+    public function handleBarcodeScan($scannedBarcode = null)
+    {
+        $barcode = $scannedBarcode ?? $this->search;
+
+        if (empty($barcode)) {
+            return;
+        }
+
+        $product = Product::byCode($barcode)->first();
+
+        if ($product) {
+            $this->addToCart($product->id);
+            $this->clearSearch();
+        } else {
+            $this->notifyProductNotFound($barcode, false);
+        }
     }
 
     #[On('barcodeScanned')]
     public function handleBarcode(string $barcode)
     {
-        $product = Product::where('barcode', $barcode)->first();
+        $product = Product::byCode($barcode)->first();
 
         if ($product) {
             $this->addToCart($product->id);
         } else {
-            $this->dispatch('notify', type: 'error', message: 'Produk dengan barcode ' . $barcode . ' tidak ditemukan');
+            $this->notifyProductNotFound($barcode, true);
+        }
+    }
+
+    private function clearSearch(): void
+    {
+        $this->search = '';
+        $this->dispatch('clear-search-input');
+    }
+
+    private function notifyProductNotFound(string $barcode, bool $forceNotify = false): void
+    {
+        // Only show error if forced or it looks like a barcode/SKU (alphanumeric and >= 3 digits)
+        $isProbableCode = preg_match('/^[a-zA-Z0-9]+$/', $barcode) && strlen($barcode) >= 3;
+
+        if ($forceNotify || $isProbableCode) {
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Produk dengan kode ' . $barcode . ' tidak ditemukan');
         }
     }
 
@@ -178,13 +257,13 @@ class PosTerminal extends Component
     {
         if (isset($this->cart[$index])) {
             $product = Product::find($this->cart[$index]['product_id']);
-            
+
             if ($product && $this->cart[$index]['quantity'] < $product->stock) {
                 $this->cart[$index]['quantity']++;
                 $this->cart[$index]['total'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
                 $this->calculateTotals();
             } else {
-                $this->dispatch('notify', type: 'warning', message: 'Stok tidak mencukupi');
+                $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Stok tidak mencukupi');
             }
         }
     }
@@ -209,23 +288,30 @@ class PosTerminal extends Component
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart); // Re-index array
             $this->calculateTotals();
-            $this->dispatch('notify', type: 'success', message: $name . ' dihapus dari keranjang');
+            $this->dispatch('toastMagic', status: 'info', title: $name . ' dihapus', message: '');
         }
     }
 
     public function clearCart()
     {
+        $this->resetCartState();
+        $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Keranjang dikosongkan');
+    }
+
+    private function resetCartState(): void
+    {
         $this->cart = [];
         $this->discount = 0;
         $this->discountValue = '';
+        $this->selectedCustomerId = null;
+        $this->selectedCustomer = null;
         $this->calculateTotals();
-        $this->dispatch('notify', type: 'info', message: 'Keranjang dikosongkan');
     }
 
     public function calculateTotals()
     {
         $this->subtotal = array_sum(array_column($this->cart, 'total'));
-        
+
         // Calculate discount
         if ($this->discountType == 1 && (float) $this->discountValue > 0) {
             // Percentage discount
@@ -249,7 +335,7 @@ class PosTerminal extends Component
     public function openCheckout()
     {
         if (empty($this->cart)) {
-            $this->dispatch('notify', type: 'warning', message: 'Keranjang masih kosong');
+            $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Keranjang masih kosong');
             return;
         }
 
@@ -265,12 +351,13 @@ class PosTerminal extends Component
         $this->showCheckoutModal = false;
         $this->showDiscountModal = false;
         $this->showProfileModal = false;
+        $this->showCustomerModal = false;
     }
 
     public function setPaymentMethod(string $method)
     {
         $this->paymentMethod = $method;
-        
+
         // For non-cash, set amount paid to exact total
         if ($method !== 'cash') {
             $this->amountPaid = $this->total;
@@ -309,17 +396,17 @@ class PosTerminal extends Component
     {
         $this->calculateTotals();
         $this->showDiscountModal = false;
-        $this->dispatch('notify', type: 'success', message: 'Diskon diterapkan');
+        $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Diskon diterapkan');
     }
 
     public function toggleTax()
     {
         if ($this->tax > 0) {
             $this->tax = 0;
-            $this->dispatch('notify', type: 'info', message: 'Pajak dinonaktifkan');
+            $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Pajak dinonaktifkan');
         } else {
             $this->tax = $this->defaultTax;
-            $this->dispatch('notify', type: 'success', message: 'Pajak diaktifkan (' . $this->tax . '%)');
+            $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Pajak diaktifkan (' . $this->tax . '%)');
         }
         $this->calculateTotals();
     }
@@ -327,12 +414,12 @@ class PosTerminal extends Component
     public function processPayment()
     {
         if (empty($this->cart)) {
-            $this->dispatch('notify', type: 'error', message: 'Keranjang kosong');
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Keranjang kosong');
             return;
         }
 
         if ($this->paymentMethod === 'cash' && (float) $this->amountPaid < $this->total) {
-            $this->dispatch('notify', type: 'error', message: 'Jumlah bayar kurang dari total');
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Jumlah bayar kurang dari total');
             return;
         }
 
@@ -342,6 +429,7 @@ class PosTerminal extends Component
             // Create order
             $order = Order::create([
                 'user_id' => Auth::id(),
+                'customer_id' => $this->selectedCustomerId,
                 'subtotal' => $this->subtotal,
                 'discount' => $this->discount,
                 'tax' => $this->tax > 0 ? ($this->subtotal - $this->discount) * ($this->tax / 100) : 0,
@@ -372,21 +460,20 @@ class PosTerminal extends Component
 
             DB::commit();
 
-            // Clear cart
-            $this->cart = [];
-            $this->discount = 0;
-            $this->discountValue = '';
-            $this->calculateTotals();
+            // Success cleanup
+            $transactionInvoice = $order->invoice_number;
+            $transactionId = $order->id;
+
+            $this->resetCartState();
             $this->showCheckoutModal = false;
 
             // Dispatch event to print receipt
-            $this->dispatch('printReceipt', orderId: $order->id);
-            
-            $this->dispatch('notify', type: 'success', message: 'Transaksi berhasil! Invoice: ' . $order->invoice_number);
+            $this->dispatch('printReceipt', orderId: $transactionId);
+            $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Transaksi berhasil! Invoice: ' . $transactionInvoice);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->dispatch('notify', type: 'error', message: 'Terjadi kesalahan: ' . $e->getMessage());
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

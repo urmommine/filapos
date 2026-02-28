@@ -76,10 +76,10 @@ class DatabaseSeeder extends Seeder
         }
 
         // Store Settings
-        StoreSetting::set(StoreSetting::STORE_NAME, 'Antigravity Store');
+        StoreSetting::set(StoreSetting::STORE_NAME, 'Fila POS');
         StoreSetting::set(StoreSetting::STORE_ADDRESS, 'Jl. Contoh No. 123, Kota');
         StoreSetting::set(StoreSetting::STORE_PHONE, '0812-3456-789');
-        StoreSetting::set(StoreSetting::STORE_EMAIL, 'info@antigravity.com');
+        StoreSetting::set(StoreSetting::STORE_EMAIL, 'info@filapos.com');
         StoreSetting::set(StoreSetting::TAX_PERCENTAGE, '0'); // 0% tax by default
         StoreSetting::set(StoreSetting::RECEIPT_FOOTER, 'Terima Kasih Sudah Berbelanja!');
         StoreSetting::set(StoreSetting::PRINTER_TYPE, 'usb');

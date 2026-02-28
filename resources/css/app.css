@@ -1,11 +1,134 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-primary: #84cc16;
+    --color-primary-hover: #65a30d;
+    --color-primary-content: #ffffff;
+    --color-secondary: #ecfccb;
+    --color-background-light: #f8fafc;
+    --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* ========== POS MOBILE ORIENTATION ========== */
+
+/* Mobile portrait: 2-col product grid */
+@media (max-width: 1023px) and (orientation: portrait) {
+    .pos-product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.75rem !important;
+    }
+}
+
+/* Mobile landscape: compact header + 3-col grid */
+@media (max-width: 1023px) and (orientation: landscape) {
+    .pos-header {
+        height: 3rem;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .pos-store-name {
+        font-size: 1rem;
+        line-height: 1.25rem;
+    }
+
+    .pos-store-date {
+        display: none;
+    }
+
+    .pos-product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.75rem !important;
+    }
+
+    .pos-product-card .pos-product-image {
+        aspect-ratio: 3 / 2;
+    }
+
+    .pos-content-area {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .pos-category-bar {
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* Tablet landscape (640px–1023px): show cart inline */
+@media (min-width: 640px) and (max-width: 1023px) and (orientation: landscape) {
+    .pos-cart-panel {
+        position: static !important;
+        transform: translateX(0) !important;
+        width: 320px;
+        min-width: 320px;
+        box-shadow: none;
+        border-left: 1px solid #e2e8f0;
+    }
+
+    .pos-cart-fab {
+        display: none !important;
+    }
+
+    .pos-product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Small landscape phones (<640px): keep 3-col, FAB cart */
+@media (max-width: 639px) and (orientation: landscape) {
+    .pos-product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    .pos-product-card .pos-product-btn {
+        display: none;
+    }
+
+    .pos-product-card .pos-product-details {
+        padding: 0.25rem 0;
+    }
+
+    .pos-product-card .pos-product-name {
+        font-size: 0.75rem;
+        min-height: auto;
+        -webkit-line-clamp: 1;
+    }
 }

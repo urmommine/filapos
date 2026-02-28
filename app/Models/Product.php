@@ -121,14 +121,23 @@ class Product extends Model
     }
 
     /**
+     * Scope to find a product by exact barcode or SKU
+     */
+    public function scopeByCode($query, string $code)
+    {
+        return $query->where('barcode', $code)
+            ->orWhere('sku', $code);
+    }
+
+    /**
      * Scope to search products by name, sku, or barcode
      */
     public function scopeSearch($query, string $search)
     {
         return $query->where(function ($q) use ($search) {
             $q->where('name', 'like', "%{$search}%")
-              ->orWhere('sku', 'like', "%{$search}%")
-              ->orWhere('barcode', 'like', "%{$search}%");
+                ->orWhere('sku', 'like', "%{$search}%")
+                ->orWhere('barcode', 'like', "%{$search}%");
         });
     }
 }

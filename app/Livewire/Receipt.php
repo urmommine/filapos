@@ -16,7 +16,7 @@ class Receipt extends Component
     public function mount(Order $order)
     {
         $this->order = $order;
-        $this->order->load(['items', 'user']);
+        $this->order->load(['items', 'user', 'customer']);
 
         $this->storeSettings = [
             'name' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,7 @@
             margin: 0 auto;
             background: white;
             padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header {
@@ -153,6 +154,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="receipt">
         <div class="header">
@@ -168,7 +170,10 @@
         <div class="order-info">
             <p><span>No. Invoice:</span> <span>{{ $order->invoice_number }}</span></p>
             <p><span>Kasir:</span> <span>{{ $order->user->name }}</span></p>
-            <p><span>Tanggal:</span> <span>{{ $order->created_at->format('d/m/Y H:i') }}</span></p>
+            @if($order->customer)
+                <p><span>Pelanggan:</span> <span>{{ $order->customer->name }}</span></p>
+            @endif
+            <!-- <p><span>Tanggal:</span> <span>{{ $order->created_at->format('d/m/Y H:i') }}</span></p> -->
         </div>
 
         <div class="items">
@@ -232,11 +237,12 @@
 
     <script>
         // Auto print on load
-        window.onload = function() {
-            setTimeout(function() {
+        window.onload = function () {
+            setTimeout(function () {
                 window.print();
             }, 500);
         };
     </script>
 </body>
+
 </html>
