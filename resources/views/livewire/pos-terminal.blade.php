@@ -71,7 +71,8 @@
         <header class="pos-header h-16 sm:h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 z-10">
             <div class="flex flex-col min-w-0">
                 <h1 class="pos-store-name text-lg sm:text-2xl font-bold text-slate-900 truncate">{{ $storeName }}</h1>
-                <p class="pos-store-date text-xs sm:text-sm text-slate-500">{{ now()->translatedFormat('l, d M Y') }}</p>
+                <p class="pos-store-date text-xs sm:text-sm text-slate-500">{{ now()->translatedFormat('l, d M Y') }}
+                </p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="hidden xl:flex gap-4 text-xs text-slate-500 font-medium items-center">
@@ -307,7 +308,7 @@
                 </div>
             @empty
                 <div class="flex-1 flex flex-col items-center justify-center text-slate-400">
-                    <span class="material-symbols-outlined text-6xl mb-2 opacity-30">shopping_basket</span>
+                    <span class="material-symbols-outlined text-6xl mb-2 opacity-30">shopping_sbasket</span>
                     <p class="font-medium">Keranjang Kosong</p>
                 </div>
             @endforelse
