@@ -308,7 +308,7 @@
                 </div>
             @empty
                 <div class="flex-1 flex flex-col items-center justify-center text-slate-400">
-                    <span class="material-symbols-outlined text-6xl mb-2 opacity-30">shopping_sbasket</span>
+                    <span class="material-symbols-outlined text-6xl mb-2 opacity-30">shopping_basket</span>
                     <p class="font-medium">Keranjang Kosong</p>
                 </div>
             @endforelse

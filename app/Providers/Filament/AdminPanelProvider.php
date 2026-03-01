@@ -7,6 +7,7 @@ use App\Filament\Widgets\LowStockWidget;
 use App\Filament\Widgets\SalesChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Models\StoreSetting;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -40,8 +41,9 @@ class AdminPanelProvider extends PanelProvider
                 // 'success' => Color::Emerald,
                 // 'warning' => Color::Amber,
             ])
+            ->defaultThemeMode(ThemeMode::Light)
             ->font('Inter')
-            ->brandName(fn () => StoreSetting::get(StoreSetting::STORE_NAME, 'Fila POS'))
+            ->brandName(fn() => StoreSetting::get(StoreSetting::STORE_NAME, 'Fila POS'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
