@@ -19,7 +19,7 @@
                 <span class="material-symbols-outlined text-5xl text-white">point_of_sale</span>
             </div>
             <h1 class="text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
-                Nabila Store <span class="text-primary">POS</span>
+                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }} 
             </h1>
             <p class="text-xl text-slate-300 leading-relaxed">
                 Platform kasir modern untuk bisnis yang ingin melaju lebih cepat. Kelola penjualan, stok, dan pelanggan
@@ -55,7 +55,7 @@
                     <span class="material-symbols-outlined text-3xl">point_of_sale</span>
                 </div>
                 <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Selamat Datang</h2>
-                <p class="mt-3 text-slate-500">Silakan masuk ke akun kasir Anda</p>
+                <p class="mt-3 text-slate-500">Silakan masuk ke akun Anda</p>
             </div>
 
             <form wire:submit="login" class="space-y-6">
@@ -104,7 +104,7 @@
 
                 <button type="submit"
                     class="w-full bg-primary hover:bg-lime-600 text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_rgba(132,204,22,0.4)] hover:shadow-[0_6px_20px_rgba(132,204,22,0.6)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-none transition-all text-sm uppercase tracking-wide flex items-center justify-center gap-3 group">
-                    <span wire:loading.remove>Masuk ke Kasir</span>
+                    <span wire:loading.remove>Masuk</span>
                     <span wire:loading class="flex items-center gap-2">
                         <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
@@ -121,16 +121,18 @@
                 </button>
             </form>
 
-            <div class="pt-6 mt-6 border-t border-border-muted text-center">
+            <!-- <div class="pt-6 mt-6 border-t border-border-muted text-center">
                 <p class="text-slate-500 text-sm">
                     Butuh bantuan? <a href="#" class="text-primary hover:underline font-medium">Hubungi Support</a>
                 </p>
-            </div>
+            </div> -->
         </div>
 
         <!-- Footer -->
         <div class="absolute bottom-6 left-0 w-full text-center lg:text-left lg:pl-12">
-            <p class="text-xs text-slate-400">© {{ date('Y') }} Nabila Store POS. All rights reserved.</p>
+            <p class="text-xs text-slate-400">© {{ date('Y') }}
+                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }}. All
+                rights reserved.</p>
         </div>
     </div>
 </div>
