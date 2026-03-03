@@ -18,7 +18,7 @@ class StatsOverviewWidget extends BaseWidget
         // Optimized Data Fetching for Today and Yesterday
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
-        
+
 
         // 1. Revenue & Transactions (Today vs Yesterday)
         $todayData = Order::whereDate('created_at', $today)
@@ -87,7 +87,7 @@ class StatsOverviewWidget extends BaseWidget
                 ->descriptionIcon($profitChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($profitChange >= 0 ? 'success' : 'danger'),
 
-            Stat::make('Total Revenue', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
+            Stat::make('Total Omset', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
                 ->description('Dari awal transaksi')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('primary'),
