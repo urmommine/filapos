@@ -18,6 +18,7 @@ class StatsOverviewWidget extends BaseWidget
         // Optimized Data Fetching for Today and Yesterday
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
+        
 
         // 1. Revenue & Transactions (Today vs Yesterday)
         $todayData = Order::whereDate('created_at', $today)
@@ -60,11 +61,11 @@ class StatsOverviewWidget extends BaseWidget
             : ($todayProfit > 0 ? 100 : 0);
 
         // 3. AOV (Average Order Value)
-        $todayAOV = $todayTransactions > 0 ? $todaySales / $todayTransactions : 0;
-        $yesterdayAOV = $yesterdayTransactions > 0 ? $yesterdaySales / $yesterdayTransactions : 0;
-        $aovChange = $yesterdayAOV > 0
-            ? (($todayAOV - $yesterdayAOV) / $yesterdayAOV) * 100
-            : ($todayAOV > 0 ? 100 : 0);
+        // $todayAOV = $todayTransactions > 0 ? $todaySales / $todayTransactions : 0;
+        // $yesterdayAOV = $yesterdayTransactions > 0 ? $yesterdaySales / $yesterdayTransactions : 0;
+        // $aovChange = $yesterdayAOV > 0
+        //     ? (($todayAOV - $yesterdayAOV) / $yesterdayAOV) * 100
+        //     : ($todayAOV > 0 ? 100 : 0);
 
         // 4. Margin %
         $todayMargin = $todaySales > 0 ? ($todayProfit / $todaySales) * 100 : 0;
@@ -72,6 +73,7 @@ class StatsOverviewWidget extends BaseWidget
         // 5. Product Stats
         $activeProducts = Product::active()->count();
         $lowStockCount = Product::active()->lowStock()->count();
+        $totalRevenue = Order::paid()->sum('total_amount');
 
         return [
             Stat::make('Penjualan Hari Ini', 'Rp ' . number_format($todaySales, 0, ',', '.'))
@@ -85,15 +87,20 @@ class StatsOverviewWidget extends BaseWidget
                 ->descriptionIcon($profitChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($profitChange >= 0 ? 'success' : 'danger'),
 
-            Stat::make('Margin Laba', number_format($todayMargin, 1) . '%')
-                ->description('Efisiensi keuntungan')
-                ->descriptionIcon('heroicon-m-presentation-chart-line')
-                ->color('info'),
+            Stat::make('Total Revenue', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
+                ->description('Dari awal transaksi')
+                ->descriptionIcon('heroicon-m-banknotes')
+                ->color('primary'),
 
-            Stat::make('Rata-rata Pesanan (AOV)', 'Rp ' . number_format($todayAOV, 0, ',', '.'))
-                ->description($aovChange >= 0 ? '+' . number_format($aovChange, 1) . '%' : number_format($aovChange, 1) . '%')
-                ->descriptionIcon('heroicon-m-calculator')
-                ->color($aovChange >= 0 ? 'success' : 'warning'),
+            Stat::make('Produk Aktif', $activeProducts)
+                ->description('Produk yang tersedia')
+                ->descriptionIcon('heroicon-m-archive-box')
+                ->color('success'),
+
+            // Stat::make('Rata-rata Pesanan (AOV)', 'Rp ' . number_format($todayAOV, 0, ',', '.'))
+            //     ->description($aovChange >= 0 ? '+' . number_format($aovChange, 1) . '%' : number_format($aovChange, 1) . '%')
+            //     ->descriptionIcon('heroicon-m-calculator')
+            //     ->color($aovChange >= 0 ? 'success' : 'warning'),
 
             Stat::make('Transaksi Hari Ini', $todayTransactions)
                 ->description('Kemarin: ' . $yesterdayTransactions)
