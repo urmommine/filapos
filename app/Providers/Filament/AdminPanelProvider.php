@@ -2,10 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\BestSellersWidget;
 use App\Filament\Widgets\LatestOrdersWidget;
+use App\Filament\Widgets\LowPerformingProductsWidget;
 use App\Filament\Widgets\LowStockWidget;
+use App\Filament\Widgets\PeakHoursWidget;
 use App\Filament\Widgets\SalesChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Filament\Widgets\TopCategoriesWidget;
 use App\Models\StoreSetting;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
@@ -49,12 +53,14 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 StatsOverviewWidget::class,
+                SalesChartWidget::class,
+                BestSellersWidget::class,
+                LowPerformingProductsWidget::class,
                 LowStockWidget::class,
                 LatestOrdersWidget::class,
-                SalesChartWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -75,6 +81,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Master Data',
                 'Transaksi',
+                'Laporan',
                 'Pengaturan',
             ])
             ->userMenuItems([

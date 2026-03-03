@@ -11,7 +11,7 @@ class LowStockWidget extends BaseWidget
 {
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?string $heading = '⚠️ Produk Stok Menipis';
 
@@ -32,14 +32,15 @@ class LowStockWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk')
                     ->searchable()
-                    ->description(fn (Product $record): string => $record->sku),
+                    ->description(fn(Product $record): string => $record->sku),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Kategori')
                     ->badge(),
                 Tables\Columns\TextColumn::make('stock')
                     ->label('Stok Saat Ini')
                     ->badge()
-                    ->color(fn (Product $record): string => 
+                    ->color(
+                        fn(Product $record): string =>
                         $record->stock <= 0 ? 'danger' : 'warning'
                     ),
                 Tables\Columns\TextColumn::make('min_stock')
@@ -53,7 +54,8 @@ class LowStockWidget extends BaseWidget
                     ->label('Restock')
                     ->icon('heroicon-o-plus-circle')
                     ->color('success')
-                    ->url(fn (Product $record): string => 
+                    ->url(
+                        fn(Product $record): string =>
                         route('filament.admin.resources.products.edit', ['record' => $record])
                     ),
             ])
