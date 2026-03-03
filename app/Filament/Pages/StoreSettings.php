@@ -77,26 +77,26 @@ class StoreSettings extends Page
                             ->helperText('Set 0 jika tidak ada pajak'),
                     ]),
 
-                Forms\Components\Section::make('Pengaturan Printer')
-                    ->description('Konfigurasi untuk thermal printer')
-                    ->schema([
-                        Forms\Components\Select::make('printer_type')
-                            ->label('Tipe Koneksi Printer')
-                            ->options([
-                                'usb' => 'USB / Local',
-                                'network' => 'Network (IP)',
-                            ])
-                            ->default('usb')
-                            ->live(),
-                        Forms\Components\TextInput::make('printer_name')
-                            ->label('Nama Printer')
-                            ->helperText('Nama printer di Windows, misal: POS-58')
-                            ->visible(fn (Forms\Get $get) => $get('printer_type') === 'usb'),
-                        Forms\Components\TextInput::make('printer_ip')
-                            ->label('IP Address Printer')
-                            ->helperText('Contoh: 192.168.1.100')
-                            ->visible(fn (Forms\Get $get) => $get('printer_type') === 'network'),
-                    ])->columns(2),
+                // Forms\Components\Section::make('Pengaturan Printer')
+                //     ->description('Konfigurasi untuk thermal printer')
+                //     ->schema([
+                //         Forms\Components\Select::make('printer_type')
+                //             ->label('Tipe Koneksi Printer')
+                //             ->options([
+                //                 'usb' => 'USB / Local',
+                //                 'network' => 'Network (IP)',
+                //             ])
+                //             ->default('usb')
+                //             ->live(),
+                //         Forms\Components\TextInput::make('printer_name')
+                //             ->label('Nama Printer')
+                //             ->helperText('Nama printer di Windows, misal: POS-58')
+                //             ->visible(fn (Forms\Get $get) => $get('printer_type') === 'usb'),
+                //         Forms\Components\TextInput::make('printer_ip')
+                //             ->label('IP Address Printer')
+                //             ->helperText('Contoh: 192.168.1.100')
+                //             ->visible(fn (Forms\Get $get) => $get('printer_type') === 'network'),
+                //     ])->columns(2),
 
                 Forms\Components\Section::make('Pengaturan Struk')
                     ->schema([
