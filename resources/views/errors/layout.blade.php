@@ -3,63 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Error')</title>
 
     @vite(['resources/css/app.css'])
-
-    <style>
-        body {
-            margin: 0;
-            font-family: system-ui, sans-serif;
-            background: #0f172a;
-            color: #e5e7eb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        .card {
-            max-width: 420px;
-        }
-
-        h1 {
-            font-size: 80px;
-            margin: 0;
-        }
-
-        p {
-            opacity: .8;
-            margin: 10px 0 30px;
-        }
-
-        a {
-            padding: 10px 18px;
-            background: #84cc16;
-            /* Lime 500 */
-            color: #1a2e05;
-            /* Lime 950 for text contrast */
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        a:hover {
-            background: #65a30d;
-            /* Lime 600 */
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-[#0f172a] text-[#e5e7eb] flex items-center justify-center min-h-screen text-center font-sans antialiased">
 
-    <div class="card">
-        <h1>@yield('code')</h1>
-        <p>@yield('message')</p>
+    <div class="max-w-[420px] p-6">
+        <h1 class="text-[80px] font-bold leading-none m-0">@yield('code')</h1>
+        <p class="opacity-80 mt-[10px] mb-[30px]">@yield('message')</p>
 
-        <a href="{{ url('/') }}">
+        <a href="{{ url('/') }}" class="inline-block px-[18px] py-[10px] bg-[#84cc16] text-[#1a2e05] rounded-lg font-semibold no-underline transition-colors duration-200 hover:bg-[#65a30d]">
             Kembali
         </a>
     </div>
