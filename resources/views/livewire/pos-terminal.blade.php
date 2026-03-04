@@ -165,15 +165,10 @@
                         </div>
                         <div class="pos-product-details mt-auto">
                             <h3
-                                class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-0.5 line-clamp-2 min-h-[36px] sm:min-h-[44px]">
+                                class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-1 line-clamp-2 min-h-[36px] sm:min-h-[44px]">
                                 {{ $product->name }}
                             </h3>
-                            <div class="pos-product-price font-extrabold text-primary text-sm sm:text-base mb-1">
-                                Rp {{ number_format($product->selling_price, 0, ',', '.') }}
-                            </div>
-                            <p class="text-[10px] sm:text-xs text-slate-400 mb-2 sm:mb-3 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-xs">inventory_2</span>
-                                Stok: {{ $product->available_stock }}
+                            <p class="text-xs sm:text-sm text-slate-400 mb-2 sm:mb-3">Stok: {{ $product->available_stock }}
                             </p>
                             <div
                                 class="pos-product-btn w-full py-1.5 sm:py-2 bg-secondary text-primary-hover group-hover:bg-primary group-hover:text-white font-medium rounded-lg transition-colors text-xs sm:text-sm text-center">

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'Error')</title>
 
-    {{-- kalau pake Vite --}}
-    {{-- @vite(['resources/css/app.css']) --}}
+    @vite(['resources/css/app.css'])
 
     <style>
         body {
@@ -36,18 +36,23 @@
 
         a {
             padding: 10px 18px;
-            background: #22c55e;
-            color: #022c22;
+            background: #84cc16;
+            /* Lime 500 */
+            color: #1a2e05;
+            /* Lime 950 for text contrast */
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
+            transition: background 0.2s;
         }
 
         a:hover {
-            background: #16a34a;
+            background: #65a30d;
+            /* Lime 600 */
         }
     </style>
 </head>
+
 <body>
 
     <div class="card">
@@ -60,4 +65,5 @@
     </div>
 
 </body>
+
 </html>
