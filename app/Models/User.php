@@ -49,22 +49,24 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    /**
-     * Determine if user can access Filament admin panel
-     */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Admin can access admin panel
+        // Admin and Superadmin can access admin panel
         // Kasir can only access POS
-        return $this->isAdmin();
+        return $this->isAdmin() || $this->isSuperAdmin();
     }
 
-    /**
-     * Check if user is admin
-     */
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is superadmin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
     }
 
     /**

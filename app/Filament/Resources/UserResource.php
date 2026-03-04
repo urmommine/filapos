@@ -46,6 +46,7 @@ class UserResource extends Resource
                         Forms\Components\Select::make('role')
                             ->label('Role')
                             ->options([
+                                'superadmin' => 'Super Admin',
                                 'admin' => 'Administrator',
                                 'kasir' => 'Kasir',
                             ])
@@ -54,9 +55,9 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('password')
                             ->label('Password')
                             ->password()
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                            ->dehydrated(fn ($state) => filled($state))
-                            ->required(fn (string $context): bool => $context === 'create')
+                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->dehydrated(fn($state) => filled($state))
+                            ->required(fn(string $context): bool => $context === 'create')
                             ->minLength(6)
                             ->maxLength(255),
                     ])->columns(2),
@@ -78,12 +79,14 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('role')
                     ->label('Role')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
+                        'superadmin' => 'success',
                         'admin' => 'danger',
                         'kasir' => 'info',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'superadmin' => 'Super Admin',
                         'admin' => 'Administrator',
                         'kasir' => 'Kasir',
                         default => $state,
@@ -102,6 +105,7 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('role')
                     ->label('Role')
                     ->options([
+                        'superadmin' => 'Super Admin',
                         'admin' => 'Administrator',
                         'kasir' => 'Kasir',
                     ]),
