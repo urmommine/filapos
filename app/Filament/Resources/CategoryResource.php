@@ -67,6 +67,7 @@ class CategoryResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->label('Slug')
+                    ->hidden()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('products_count')
                     ->label('Jumlah Produk')
@@ -78,8 +79,8 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d M Y')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
+                    //->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
