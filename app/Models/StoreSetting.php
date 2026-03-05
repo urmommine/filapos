@@ -59,5 +59,4 @@ class StoreSetting extends Model
     public const PRINTER_TYPE = 'printer_type'; // usb, network, bluetooth
     public const PRINTER_IP = 'printer_ip';
     public const RECEIPT_FOOTER = 'receipt_footer';
-    public const DEPLOYMENT_MODE = 'deployment_mode'; // local, cloud
 }
