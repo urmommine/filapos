@@ -29,6 +29,6 @@ class Receipt extends Component
     #[Layout('layouts.receipt')]
     public function render()
     {
-        return view('livewire.receipt');
+        return view('livewire.struk.receipt');
     }
 }

@@ -5,41 +5,39 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\StoreSetting;
 use App\Services\ReceiptPrinter;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ReceiptController extends Controller
 {
-    /**
-     * Show receipt HTML (for browser print)
-     */
-    public function show(Order $order)
+    public function print(Order $order): JsonResponse
     {
         $order->load(['items', 'user', 'customer']);
 
-        $storeSettings = [
-            'name' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),
-            'address' => StoreSetting::get(StoreSetting::STORE_ADDRESS, ''),
-            'phone' => StoreSetting::get(StoreSetting::STORE_PHONE, ''),
-            'footer' => StoreSetting::get(StoreSetting::RECEIPT_FOOTER, 'Terima Kasih!'),
-        ];
-
-        return view('receipt.show', compact('order', 'storeSettings'));
-    }
-
-    /**
-     * Print receipt using ESC/POS
-     */
-    public function print(Order $order)
-    {
-        $order->load(['items', 'user', 'customer']);
+        $deploymentMode = StoreSetting::get(StoreSetting::DEPLOYMENT_MODE, 'cloud');
+        $printer = new ReceiptPrinter();
 
         try {
-            $printer = new ReceiptPrinter();
-            $printer->printReceipt($order);
+            if ($deploymentMode === 'local') {
+                // Scenario A: Direct print to hardware
+                $printer->printReceipt($order);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Struk berhasil dicetak',
+                ]);
+            }
 
-            return response()->json(['success' => true, 'message' => 'Struk berhasil dicetak']);
+            // Scenario B: Generate raw Base64 ESC/POS data for QZ Tray
+            $rawData = $printer->generateRawData($order);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data struk berhasil dibuat',
+                'raw' => $rawData,
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Gagal mencetak: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mencetak: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }

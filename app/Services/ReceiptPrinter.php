@@ -7,16 +7,14 @@ use App\Models\StoreSetting;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\DummyPrintConnector;
 use Mike42\Escpos\Printer;
-use Mike42\Escpos\EscposImage;
+use Mike42\Escpos\CapabilityProfile;
 
 class ReceiptPrinter
 {
     protected ?Printer $printer = null;
 
-    /**
-     * Get printer connector based on settings
-     */
     protected function getConnector()
     {
         $printerType = StoreSetting::get(StoreSetting::PRINTER_TYPE, 'usb');
@@ -33,36 +31,28 @@ class ReceiptPrinter
             case 'usb':
             default:
                 if (empty($printerName)) {
-                    // Try to use default printer on Windows
                     $printerName = 'POS-58';
                 }
 
-                // Windows printer
                 if (PHP_OS_FAMILY === 'Windows') {
                     return new WindowsPrintConnector($printerName);
                 }
 
-                // Linux/Mac - use file connector
                 return new FilePrintConnector('/dev/usb/lp0');
         }
     }
 
     /**
-     * Print receipt for an order
+     * Scenario A: Direct print to hardware printer
      */
     public function printReceipt(Order $order): void
     {
         $connector = $this->getConnector();
-        $this->printer = new Printer($connector);
+        $profile = CapabilityProfile::load('default');
+        $this->printer = new Printer($connector, $profile);
 
         try {
-            $this->printHeader();
-            $this->printOrderInfo($order);
-            $this->printItems($order);
-            $this->printTotals($order);
-            $this->printPayment($order);
-            $this->printFooter();
-
+            $this->composeReceipt($order);
             $this->printer->cut();
             $this->printer->pulse();
         } finally {
@@ -71,8 +61,37 @@ class ReceiptPrinter
     }
 
     /**
-     * Print store header
+     * Scenario B: Generate raw ESC/POS data as Base64
+     * Uses DummyPrintConnector to capture output without sending to hardware
      */
+    public function generateRawData(Order $order): string
+    {
+        $connector = new DummyPrintConnector();
+        $profile = CapabilityProfile::load('default');
+        $this->printer = new Printer($connector, $profile);
+
+        $this->composeReceipt($order);
+        $this->printer->cut();
+
+        $rawData = $connector->getData();
+        $this->printer->close();
+
+        return base64_encode($rawData);
+    }
+
+    /**
+     * Shared receipt composition — used by both scenarios
+     */
+    protected function composeReceipt(Order $order): void
+    {
+        $this->printHeader();
+        $this->printOrderInfo($order);
+        $this->printItems($order);
+        $this->printTotals($order);
+        $this->printPayment($order);
+        $this->printFooter();
+    }
+
     protected function printHeader(): void
     {
         $storeName = StoreSetting::get(StoreSetting::STORE_NAME, 'POS STORE');
@@ -96,9 +115,6 @@ class ReceiptPrinter
         $this->printer->text(str_repeat("=", 32) . "\n");
     }
 
-    /**
-     * Print order info
-     */
     protected function printOrderInfo(Order $order): void
     {
         $this->printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -111,16 +127,11 @@ class ReceiptPrinter
         $this->printer->text(str_repeat("-", 32) . "\n");
     }
 
-    /**
-     * Print order items
-     */
     protected function printItems(Order $order): void
     {
         foreach ($order->items as $item) {
-            // Product name
             $this->printer->text($this->truncate($item->product_name, 32) . "\n");
 
-            // Quantity x Price = Total
             $qty = $item->quantity;
             $price = number_format((float) $item->unit_price, 0, ',', '.');
             $total = number_format((float) $item->total_price, 0, ',', '.');
@@ -132,19 +143,14 @@ class ReceiptPrinter
         $this->printer->text(str_repeat("-", 32) . "\n");
     }
 
-    /**
-     * Print totals
-     */
     protected function printTotals(Order $order): void
     {
-        // Subtotal
         $this->printer->text($this->formatLine(
             "Subtotal",
             number_format((float) $order->subtotal, 0, ',', '.'),
             32
         ) . "\n");
 
-        // Discount
         if ($order->discount > 0) {
             $this->printer->text($this->formatLine(
                 "Diskon",
@@ -153,7 +159,6 @@ class ReceiptPrinter
             ) . "\n");
         }
 
-        // Tax
         if ($order->tax > 0) {
             $this->printer->text($this->formatLine(
                 "Pajak",
@@ -164,7 +169,6 @@ class ReceiptPrinter
 
         $this->printer->text(str_repeat("-", 32) . "\n");
 
-        // Total
         $this->printer->setEmphasis(true);
         $this->printer->text($this->formatLine(
             "TOTAL",
@@ -174,9 +178,6 @@ class ReceiptPrinter
         $this->printer->setEmphasis(false);
     }
 
-    /**
-     * Print payment info
-     */
     protected function printPayment(Order $order): void
     {
         $paymentMethod = match ($order->payment_method) {
@@ -203,9 +204,6 @@ class ReceiptPrinter
         $this->printer->text(str_repeat("=", 32) . "\n");
     }
 
-    /**
-     * Print footer
-     */
     protected function printFooter(): void
     {
         $footer = StoreSetting::get(StoreSetting::RECEIPT_FOOTER, 'Terima Kasih Sudah Berbelanja!');
@@ -215,9 +213,6 @@ class ReceiptPrinter
         $this->printer->text("\n\n");
     }
 
-    /**
-     * Format a line with left and right text
-     */
     protected function formatLine(string $left, string $right, int $width): string
     {
         $leftLen = mb_strlen($left);
@@ -227,9 +222,6 @@ class ReceiptPrinter
         return $left . str_repeat(" ", $spaces) . $right;
     }
 
-    /**
-     * Truncate text to fit width
-     */
     protected function truncate(string $text, int $maxLength): string
     {
         if (mb_strlen($text) <= $maxLength) {

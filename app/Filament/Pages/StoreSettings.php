@@ -34,6 +34,7 @@ class StoreSettings extends Page
             'store_phone' => StoreSetting::get(StoreSetting::STORE_PHONE, ''),
             'store_email' => StoreSetting::get(StoreSetting::STORE_EMAIL, ''),
             'tax_percentage' => StoreSetting::get(StoreSetting::TAX_PERCENTAGE, '0'),
+            'deployment_mode' => StoreSetting::get(StoreSetting::DEPLOYMENT_MODE, 'cloud'),
             'printer_name' => StoreSetting::get(StoreSetting::PRINTER_NAME, ''),
             'printer_type' => StoreSetting::get(StoreSetting::PRINTER_TYPE, 'usb'),
             'printer_ip' => StoreSetting::get(StoreSetting::PRINTER_IP, ''),
@@ -77,26 +78,36 @@ class StoreSettings extends Page
                             ->helperText('Set 0 jika tidak ada pajak'),
                     ]),
 
-                // Forms\Components\Section::make('Pengaturan Printer')
-                //     ->description('Konfigurasi untuk thermal printer')
-                //     ->schema([
-                //         Forms\Components\Select::make('printer_type')
-                //             ->label('Tipe Koneksi Printer')
-                //             ->options([
-                //                 'usb' => 'USB / Local',
-                //                 'network' => 'Network (IP)',
-                //             ])
-                //             ->default('usb')
-                //             ->live(),
-                //         Forms\Components\TextInput::make('printer_name')
-                //             ->label('Nama Printer')
-                //             ->helperText('Nama printer di Windows, misal: POS-58')
-                //             ->visible(fn (Forms\Get $get) => $get('printer_type') === 'usb'),
-                //         Forms\Components\TextInput::make('printer_ip')
-                //             ->label('IP Address Printer')
-                //             ->helperText('Contoh: 192.168.1.100')
-                //             ->visible(fn (Forms\Get $get) => $get('printer_type') === 'network'),
-                //     ])->columns(2),
+                Forms\Components\Section::make('Pengaturan Printer')
+                    ->description('Konfigurasi untuk thermal printer')
+                    ->schema([
+                        Forms\Components\Select::make('deployment_mode')
+                            ->label('Mode Deployment')
+                            ->options([
+                                'local' => 'Local Server (printer terhubung langsung)',
+                                'cloud' => 'Cloud / Shared Hosting (via QZ Tray)',
+                            ])
+                            ->default('cloud')
+                            ->helperText('Local: server cetak langsung ke printer. Cloud: data dikirim ke browser lalu ke QZ Tray.')
+                            ->live(),
+                        Forms\Components\Select::make('printer_type')
+                            ->label('Tipe Koneksi Printer')
+                            ->options([
+                                'usb' => 'USB / Local',
+                                'network' => 'Network (IP)',
+                            ])
+                            ->default('usb')
+                            ->visible(fn(Forms\Get $get) => $get('deployment_mode') === 'local')
+                            ->live(),
+                        Forms\Components\TextInput::make('printer_name')
+                            ->label('Nama Printer')
+                            ->helperText('Nama printer di Windows, misal: POS-58')
+                            ->visible(fn(Forms\Get $get) => $get('deployment_mode') === 'local' && $get('printer_type') === 'usb'),
+                        Forms\Components\TextInput::make('printer_ip')
+                            ->label('IP Address Printer')
+                            ->helperText('Contoh: 192.168.1.100')
+                            ->visible(fn(Forms\Get $get) => $get('deployment_mode') === 'local' && $get('printer_type') === 'network'),
+                    ])->columns(2),
 
                 Forms\Components\Section::make('Pengaturan Struk')
                     ->schema([
@@ -128,6 +139,7 @@ class StoreSettings extends Page
         StoreSetting::set(StoreSetting::STORE_PHONE, $data['store_phone'] ?? '');
         StoreSetting::set(StoreSetting::STORE_EMAIL, $data['store_email'] ?? '');
         StoreSetting::set(StoreSetting::TAX_PERCENTAGE, $data['tax_percentage'] ?? '0');
+        StoreSetting::set(StoreSetting::DEPLOYMENT_MODE, $data['deployment_mode'] ?? 'cloud');
         StoreSetting::set(StoreSetting::PRINTER_NAME, $data['printer_name'] ?? '');
         StoreSetting::set(StoreSetting::PRINTER_TYPE, $data['printer_type'] ?? 'usb');
         StoreSetting::set(StoreSetting::PRINTER_IP, $data['printer_ip'] ?? '');
@@ -139,6 +151,7 @@ class StoreSettings extends Page
         Cache::forget('store_setting_' . StoreSetting::STORE_PHONE);
         Cache::forget('store_setting_' . StoreSetting::STORE_EMAIL);
         Cache::forget('store_setting_' . StoreSetting::TAX_PERCENTAGE);
+        Cache::forget('store_setting_' . StoreSetting::DEPLOYMENT_MODE);
         Cache::forget('store_setting_' . StoreSetting::PRINTER_NAME);
         Cache::forget('store_setting_' . StoreSetting::PRINTER_TYPE);
         Cache::forget('store_setting_' . StoreSetting::PRINTER_IP);
