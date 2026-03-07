@@ -27,21 +27,21 @@
                 @endif
             </div>
 
-            <div class="pos-product-details mt-auto">
-                <h3
-                    class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-1 line-clamp-2 min-h-[36px] sm:min-h-[44px]">
-                    {{ $product->name }}
-                </h3>
+       <div class="pos-product-details mt-auto">
+    <h3
+        class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-0 leading-tight line-clamp-2 min-h-[28px] sm:min-h-[32px]">
+        {{ $product->name }}
+    </h3>
 
-                <p class="text-xs sm:text-sm text-slate-400 mb-2 sm:mb-3">
-                    Stok: {{ $product->available_stock }}
-                </p>
+    <p class="text-xs sm:text-sm text-slate-400 mb-1 leading-tight">
+        Stok: {{ $product->available_stock }}
+    </p>
 
-                <div
-                    class="pos-product-btn w-full py-1.5 sm:py-2 bg-secondary text-primary-hover group-hover:bg-primary group-hover:text-white font-medium rounded-lg transition-colors text-xs sm:text-sm text-center">
-                    Tambah ke Keranjang
-                </div>
-            </div>
+    <div
+        class="pos-product-btn w-full py-1.5 sm:py-2 bg-secondary text-primary-hover group-hover:bg-primary group-hover:text-white font-medium rounded-lg transition-colors text-xs sm:text-sm text-center">
+        Tambah ke Keranjang
+    </div>
+</div>
         </div>
     @empty
         <div class="col-span-full flex flex-col items-center justify-center text-slate-400 py-16">
