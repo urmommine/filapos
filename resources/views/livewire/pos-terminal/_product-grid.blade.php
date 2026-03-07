@@ -5,13 +5,13 @@
             class="pos-product-card relative bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer group flex flex-col h-full {{ $product->available_stock <= 0 ? 'opacity-60 grayscale' : '' }}"
             wire:click="addToCart({{ $product->id }})">
 
-            {{-- Price Badge --}}
-            <span
-                class="absolute top-2 right-2 bg-primary text-white text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg shadow-md z-10">
-                Rp {{ number_format($product->selling_price, 0, ',', '.') }}
-            </span>
 
             <div class="pos-product-image relative aspect-[4/3] rounded-lg overflow-hidden mb-2 sm:mb-4 bg-slate-100">
+            
+                        {{-- Price Badge --}}
+           <span
+ class="absolute top-2 right-2 bg-primary text-white text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg shadow-md"> Rp {{ number_format($product->selling_price, 0, ',', '.') }}
+            </span>
                 <div
                     class="w-full h-full bg-center bg-cover bg-no-repeat group-hover:scale-105 transition-transform duration-300"
                     style='background-image: url("{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}");'>
