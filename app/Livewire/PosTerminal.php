@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StoreSetting;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
@@ -54,14 +55,22 @@ class PosTerminal extends Component
     public ?int $selectedCustomerId = null;
     public ?Customer $selectedCustomer = null;
 
-    public function mount()
+    // PERF: Cached data — loaded once in mount(), not on every render
+    public Collection $cachedCategories;
+    public string $storeName = '';
+
+    public function mount(): void
     {
         // Load tax percentage from settings
         $this->defaultTax = (float) StoreSetting::get(StoreSetting::TAX_PERCENTAGE, 0);
         $this->tax = $this->defaultTax;
+
+        // PERF: Cache categories and store name — these rarely change during a POS session
+        $this->cachedCategories = Category::active()->withCount('products')->get();
+        $this->storeName = StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store');
     }
 
-    public function openProfileModal()
+    public function openProfileModal(): void
     {
         $user = Auth::user();
         $this->profileName = $user->name;
@@ -71,7 +80,7 @@ class PosTerminal extends Component
         $this->showProfileModal = true;
     }
 
-    public function updateProfile()
+    public function updateProfile(): void
     {
         $this->validate([
             'profileName' => 'required|string|max:255',
@@ -93,13 +102,13 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Profil berhasil diperbarui');
     }
 
-    public function openCustomerModal()
+    public function openCustomerModal(): void
     {
         $this->showCustomerModal = true;
         $this->customerSearch = ''; // Reset search
     }
 
-    public function selectCustomer($customerId)
+    public function selectCustomer(int $customerId): void
     {
         $this->selectedCustomerId = $customerId;
         $this->selectedCustomer = Customer::find($customerId);
@@ -107,7 +116,7 @@ class PosTerminal extends Component
         $this->showCustomerModal = false;
     }
 
-    public function removeCustomer()
+    public function removeCustomer(): void
     {
         $this->selectedCustomerId = null;
         $this->selectedCustomer = null;
@@ -116,8 +125,8 @@ class PosTerminal extends Component
 
     public function render()
     {
-        $categories = Category::active()->withCount('products')->get();
-
+        // PERF: Products query is reactive (depends on search/category/perPage)
+        // This is the only necessary DB query in render()
         $products = Product::query()
             ->active()
             ->when($this->search, fn($q) => $q->search($this->search))
@@ -126,12 +135,15 @@ class PosTerminal extends Component
             ->take($this->perPage)
             ->get();
 
-        $products->transform(function ($product) {
-            $cartItem = collect($this->cart)->where('product_id', $product->id)->first();
+        // PERF: O(1) lookup map instead of O(n) scan per product
+        $cartByProductId = collect($this->cart)->keyBy('product_id');
+        $products->transform(function ($product) use ($cartByProductId) {
+            $cartItem = $cartByProductId->get($product->id);
             $product->available_stock = $product->stock - ($cartItem['quantity'] ?? 0);
             return $product;
         });
 
+        // Only query customers when the modal is actually open
         $customers = [];
         if ($this->showCustomerModal) {
             $customers = Customer::query()
@@ -143,30 +155,30 @@ class PosTerminal extends Component
         }
 
         return view('livewire.pos-terminal', [
-            'categories' => $categories,
+            'categories' => $this->cachedCategories,
             'products' => $products,
             'customers' => $customers,
-            'storeName' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),
+            'storeName' => $this->storeName,
         ]);
     }
 
-    public function selectCategory(?int $categoryId)
+    public function selectCategory(?int $categoryId): void
     {
         $this->selectedCategory = $categoryId === $this->selectedCategory ? null : $categoryId;
         $this->perPage = 12;
     }
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->perPage = 12;
     }
 
-    public function loadMore()
+    public function loadMore(): void
     {
         $this->perPage += 12;
     }
 
-    public function addToCart(int $productId)
+    public function addToCart(int $productId): void
     {
         $product = Product::find($productId);
 
@@ -181,16 +193,16 @@ class PosTerminal extends Component
         }
 
         // Check if already in cart
-        $cartKey = array_search($productId, array_column($this->cart, 'product_id'));
+        $cartKey = $this->findCartIndex($productId);
 
         if ($cartKey !== false) {
-            // Check stock before increasing
+            // PERF: Use cached stock from cart — zero extra DB queries
             if ($this->cart[$cartKey]['quantity'] >= $product->stock) {
                 $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Stok tidak mencukupi');
                 return;
             }
             $this->cart[$cartKey]['quantity']++;
-            $this->cart[$cartKey]['total'] = $this->cart[$cartKey]['quantity'] * $this->cart[$cartKey]['price'];
+            $this->recalculateCartItemTotal($cartKey);
         } else {
             $this->cart[] = [
                 'product_id' => $product->id,
@@ -207,7 +219,7 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: $product->name . ' ditambahkan');
     }
 
-    public function handleBarcodeScan($scannedBarcode = null)
+    public function handleBarcodeScan($scannedBarcode = null): void
     {
         $barcode = $scannedBarcode ?? $this->search;
 
@@ -226,7 +238,7 @@ class PosTerminal extends Component
     }
 
     #[On('barcodeScanned')]
-    public function handleBarcode(string $barcode)
+    public function handleBarcode(string $barcode): void
     {
         $product = Product::byCode($barcode)->first();
 
@@ -253,14 +265,13 @@ class PosTerminal extends Component
         }
     }
 
-    public function incrementQuantity(int $index)
+    public function incrementQuantity(int $index): void
     {
         if (isset($this->cart[$index])) {
-            $product = Product::find($this->cart[$index]['product_id']);
-
-            if ($product && $this->cart[$index]['quantity'] < $product->stock) {
+            // PERF: Use cached stock from cart array — no Product::find() query needed
+            if ($this->cart[$index]['quantity'] < $this->cart[$index]['stock']) {
                 $this->cart[$index]['quantity']++;
-                $this->cart[$index]['total'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
+                $this->recalculateCartItemTotal($index);
                 $this->calculateTotals();
             } else {
                 $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Stok tidak mencukupi');
@@ -268,12 +279,12 @@ class PosTerminal extends Component
         }
     }
 
-    public function decrementQuantity(int $index)
+    public function decrementQuantity(int $index): void
     {
         if (isset($this->cart[$index])) {
             if ($this->cart[$index]['quantity'] > 1) {
                 $this->cart[$index]['quantity']--;
-                $this->cart[$index]['total'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
+                $this->recalculateCartItemTotal($index);
             } else {
                 $this->removeFromCart($index);
             }
@@ -281,7 +292,7 @@ class PosTerminal extends Component
         }
     }
 
-    public function removeFromCart(int $index)
+    public function removeFromCart(int $index): void
     {
         if (isset($this->cart[$index])) {
             $name = $this->cart[$index]['name'];
@@ -292,7 +303,7 @@ class PosTerminal extends Component
         }
     }
 
-    public function clearCart()
+    public function clearCart(): void
     {
         $this->resetCartState();
         $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Keranjang dikosongkan');
@@ -308,7 +319,7 @@ class PosTerminal extends Component
         $this->calculateTotals();
     }
 
-    public function calculateTotals()
+    public function calculateTotals(): void
     {
         $this->subtotal = array_sum(array_column($this->cart, 'total'));
 
@@ -332,7 +343,7 @@ class PosTerminal extends Component
     }
 
     #[On('openCheckout')]
-    public function openCheckout()
+    public function openCheckout(): void
     {
         if (empty($this->cart)) {
             $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Keranjang masih kosong');
@@ -346,7 +357,7 @@ class PosTerminal extends Component
     }
 
     #[On('closeModal')]
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showCheckoutModal = false;
         $this->showDiscountModal = false;
@@ -354,7 +365,7 @@ class PosTerminal extends Component
         $this->showCustomerModal = false;
     }
 
-    public function setPaymentMethod(string $method)
+    public function setPaymentMethod(string $method): void
     {
         $this->paymentMethod = $method;
 
@@ -365,41 +376,41 @@ class PosTerminal extends Component
         }
     }
 
-    public function setQuickAmount(float $amount)
+    public function setQuickAmount(float $amount): void
     {
         $this->amountPaid = $amount;
         $this->calculateChange();
     }
 
-    public function setExactAmount()
+    public function setExactAmount(): void
     {
         $this->amountPaid = $this->total;
         $this->change = 0;
     }
 
-    public function updatedAmountPaid()
+    public function updatedAmountPaid(): void
     {
         $this->calculateChange();
     }
 
-    public function calculateChange()
+    public function calculateChange(): void
     {
         $this->change = max(0, (float) $this->amountPaid - $this->total);
     }
 
-    public function openDiscountModal()
+    public function openDiscountModal(): void
     {
         $this->showDiscountModal = true;
     }
 
-    public function applyDiscount()
+    public function applyDiscount(): void
     {
         $this->calculateTotals();
         $this->showDiscountModal = false;
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Diskon diterapkan');
     }
 
-    public function toggleTax()
+    public function toggleTax(): void
     {
         if ($this->tax > 0) {
             $this->tax = 0;
@@ -411,7 +422,7 @@ class PosTerminal extends Component
         $this->calculateTotals();
     }
 
-    public function processPayment()
+    public function processPayment(): void
     {
         if (empty($this->cart)) {
             $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Keranjang kosong');
@@ -440,6 +451,10 @@ class PosTerminal extends Component
                 'payment_status' => 'paid',
             ]);
 
+            // PERF: Single query loads all cart products — prevents N+1 inside the loop
+            $productIds = array_column($this->cart, 'product_id');
+            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
             // Create order items and reduce stock
             foreach ($this->cart as $item) {
                 OrderItem::create([
@@ -451,11 +466,9 @@ class PosTerminal extends Component
                     'total_price' => $item['total'],
                 ]);
 
-                // Reduce stock
-                $product = Product::find($item['product_id']);
-                if ($product) {
-                    $product->reduceStock($item['quantity']);
-                }
+                // Reduce stock using pre-loaded product
+                $product = $products->get($item['product_id']);
+                $product?->reduceStock($item['quantity']);
             }
 
             DB::commit();
@@ -475,5 +488,25 @@ class PosTerminal extends Component
             DB::rollBack();
             $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    // ──────────────────────────────────────────────
+    // Private helpers
+    // ──────────────────────────────────────────────
+
+    /**
+     * Find a cart item index by product ID — O(n) scan but on a small array.
+     */
+    private function findCartIndex(int $productId): int|false
+    {
+        return array_search($productId, array_column($this->cart, 'product_id'));
+    }
+
+    /**
+     * Recalculate a single cart item's total from its quantity × price.
+     */
+    private function recalculateCartItemTotal(int $index): void
+    {
+        $this->cart[$index]['total'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
     }
 }

@@ -9,7 +9,7 @@
                 </h3>
             </div>
             <div class="p-6 space-y-4">
-                <input type="text" wire:model.live.debounce.300ms="customerSearch"
+                <input type="text" wire:model.live.debounce.500ms="customerSearch"
                     class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-900 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                     placeholder="Cari nama, email, atau telepon..." x-init="$nextTick(() => $el.focus())">
                 <div class="max-h-[300px] overflow-y-auto space-y-2">

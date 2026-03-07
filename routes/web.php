@@ -28,7 +28,7 @@ Route::get('/pos/login', \App\Livewire\Auth\PosLogin::class)->name('login')->mid
 Route::middleware(['auth'])->group(function () {
     Route::get('/pos', PosTerminal::class)->name('pos');
     Route::get('/pos/receipt/{order}', App\Livewire\Receipt::class)->name('pos.receipt');
-    Route::get('/pos/receipt/{order}/print', [ReceiptController::class, 'print'])->name('pos.receipt.print');
+   // Route::get('/pos/receipt/{order}/print', [ReceiptController::class, 'print'])->name('pos.receipt.print');
 });
 
 // Logout route
