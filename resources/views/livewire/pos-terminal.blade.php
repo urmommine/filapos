@@ -30,6 +30,7 @@
     @include('livewire.pos-terminal._modal-discount')
     @include('livewire.pos-terminal._modal-profile')
     @include('livewire.pos-terminal._modal-customer')
+    @include('livewire.pos-terminal._modal-create-customer')
 
     {{-- Scripts --}}
     @include('livewire.pos-terminal._scripts')

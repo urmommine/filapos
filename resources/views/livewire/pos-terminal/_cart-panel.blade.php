@@ -45,10 +45,10 @@
                         </button>
                     @endif
                 </div>
-                <button wire:click="openCustomerModal"
+                <!-- <button wire:click="openCustomerModal"
                     class="w-10 h-10 rounded-lg bg-secondary text-primary hover:bg-primary hover:text-white flex items-center justify-center transition-colors shrink-0">
                     <span class="material-symbols-outlined">{{ $selectedCustomer ? 'swap_horiz' : 'add' }}</span>
-                </button>
+                </button> -->
             </div>
         </div>
     </div>

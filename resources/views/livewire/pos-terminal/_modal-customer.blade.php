@@ -9,9 +9,15 @@
                 </h3>
             </div>
             <div class="p-6 space-y-4">
-                <input type="text" wire:model.live.debounce.500ms="customerSearch"
-                    class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-900 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                    placeholder="Cari nama, email, atau telepon..." x-init="$nextTick(() => $el.focus())">
+                <div class="flex gap-2">
+                    <input type="text" wire:model.live.debounce.500ms="customerSearch"
+                        class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-900 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                        placeholder="Cari nama, email, atau telepon..." x-init="$nextTick(() => $el.focus())">
+                    <button wire:click="openCreateCustomerModal"
+                        class="px-4 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-hover flex items-center justify-center gap-2 transition-colors shrink-0">
+                        <span class="material-symbols-outlined">add</span> Baru
+                    </button>
+                </div>
                 <div class="max-h-[300px] overflow-y-auto space-y-2">
                     @forelse($customers as $customer)
                         <div class="p-3 bg-slate-50 rounded-lg cursor-pointer hover:bg-secondary hover:border-primary border border-slate-100 transition-all"

@@ -55,6 +55,13 @@ class PosTerminal extends Component
     public ?int $selectedCustomerId = null;
     public ?Customer $selectedCustomer = null;
 
+    // Create Customer
+    public bool $showCreateCustomerModal = false;
+    public string $newCustomerName = '';
+    public string $newCustomerPhone = '';
+    public string $newCustomerEmail = '';
+    public string $newCustomerAddress = '';
+
     // PERF: Cached data — loaded once in mount(), not on every render
     public Collection $cachedCategories;
     public string $storeName = '';
@@ -106,6 +113,37 @@ class PosTerminal extends Component
     {
         $this->showCustomerModal = true;
         $this->customerSearch = ''; // Reset search
+    }
+
+    public function openCreateCustomerModal(): void
+    {
+        $this->newCustomerName = '';
+        $this->newCustomerPhone = '';
+        $this->newCustomerEmail = '';
+        $this->newCustomerAddress = '';
+        $this->showCreateCustomerModal = true;
+        $this->showCustomerModal = false;
+    }
+
+    public function createCustomer(): void
+    {
+        $this->validate([
+            'newCustomerName' => 'required|string|max:255',
+            'newCustomerPhone' => 'required|string|max:20',
+            'newCustomerEmail' => 'nullable|email|max:255',
+            'newCustomerAddress' => 'nullable|string',
+        ]);
+
+        $customer = Customer::create([
+            'name' => $this->newCustomerName,
+            'phone' => $this->newCustomerPhone,
+            'email' => $this->newCustomerEmail,
+            'address' => $this->newCustomerAddress,
+        ]);
+
+        $this->selectCustomer($customer->id);
+        $this->showCreateCustomerModal = false;
+        $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Pelanggan baru berhasil ditambahkan');
     }
 
     public function selectCustomer(int $customerId): void
@@ -363,6 +401,7 @@ class PosTerminal extends Component
         $this->showDiscountModal = false;
         $this->showProfileModal = false;
         $this->showCustomerModal = false;
+        $this->showCreateCustomerModal = false;
     }
 
     public function setPaymentMethod(string $method): void
