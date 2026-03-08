@@ -19,7 +19,7 @@
                 <span class="material-symbols-outlined text-5xl text-white">point_of_sale</span>
             </div>
             <h1 class="text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
-                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }} 
+                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }}
             </h1>
             <p class="text-xl text-slate-300 leading-relaxed">
                 Platform kasir modern untuk bisnis yang ingin melaju lebih cepat. Kelola penjualan, stok, dan pelanggan
@@ -77,12 +77,18 @@
                     <label
                         class="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-primary transition-colors"
                         for="password">Password</label>
-                    <div class="relative">
+                    <div class="relative" x-data="{ showPassword: false }">
                         <span
                             class="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary transition-colors material-symbols-outlined text-xl">lock</span>
-                        <input type="password" id="password" wire:model="password"
-                            class="w-full bg-slate-50 border border-border-muted rounded-xl py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                        <input :type="showPassword ? 'text' : 'password'" id="password" wire:model="password"
+                            class="w-full bg-slate-50 border border-border-muted rounded-xl py-3.5 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                             placeholder="••••••••">
+                        <button type="button" @click="showPassword = !showPassword"
+                            class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                            tabindex="-1">
+                            <span class="material-symbols-outlined text-xl"
+                                x-text="showPassword ? 'visibility_off' : 'visibility'">visibility</span>
+                        </button>
                     </div>
                     @error('password') <span class="text-red-500 text-xs font-medium pl-1">{{ $message }}</span>
                     @enderror
@@ -132,7 +138,8 @@
         <div class="absolute bottom-6 left-0 w-full text-center lg:text-left lg:pl-12">
             <p class="text-xs text-slate-400">© {{ date('Y') }}
                 {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }}. All
-                rights reserved.</p>
+                rights reserved.
+            </p>
         </div>
     </div>
 </div>
