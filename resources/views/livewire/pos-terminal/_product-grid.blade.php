@@ -4,7 +4,6 @@
         <div class="pos-product-card relative bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer group flex flex-col h-full {{ $product->available_stock <= 0 ? 'opacity-60 grayscale' : '' }}"
             wire:click="addToCart({{ $product->id }})">
 
-
             <div class="pos-product-image relative aspect-[4/3] rounded-lg overflow-hidden mb-2 sm:mb-4 bg-slate-100">
                 <div class="w-full h-full bg-center bg-cover bg-no-repeat group-hover:scale-105 transition-transform duration-300"
                     style='background-image: url("{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}");'>
@@ -18,20 +17,19 @@
                     </div>
                 @endif
 
-                {{-- Price Badge --}}
-                <span
-                    class="absolute top-2 right-2 z-20 bg-primary text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg shadow-md leading-tight">
-                    Rp {{ number_format($product->selling_price, 0, ',', '.') }}
-                </span>
             </div>
 
             <div class="pos-product-details mt-auto">
                 <h3
-                    class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-0 leading-tight line-clamp-2 min-h-[28px] sm:min-h-[32px]">
+                    class="pos-product-name font-bold text-sm sm:text-base text-slate-800 mb-0.5 leading-tight line-clamp-2 min-h-[28px] sm:min-h-[32px]">
                     {{ $product->name }}
                 </h3>
 
-                <p class="text-xs sm:text-sm text-slate-400 mb-1 leading-tight">
+                <p class="text-xs sm:text-sm font-bold text-primary mb-0.5 leading-tight">
+                    Rp {{ number_format($product->selling_price, 0, ',', '.') }}
+                </p>
+
+                <p class="text-[10px] sm:text-xs text-slate-400 mb-1 leading-tight">
                     Stok: {{ $product->available_stock }}
                 </p>
 
