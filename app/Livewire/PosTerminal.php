@@ -137,8 +137,8 @@ class PosTerminal extends Component
         $customer = Customer::create([
             'name' => $this->newCustomerName,
             'phone' => $this->newCustomerPhone,
-            'email' => $this->newCustomerEmail,
-            'address' => $this->newCustomerAddress,
+            'email' => $this->newCustomerEmail ?: null,
+            'address' => $this->newCustomerAddress ?: null,
         ]);
 
         $this->selectCustomer($customer->id);
