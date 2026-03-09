@@ -23,7 +23,7 @@ class PosLogin extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
 
-            if (Auth::user()->isAdmin()) {
+            if (Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()) {
                 return redirect()->intended('/admin');
             }
 

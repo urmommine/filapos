@@ -2,6 +2,7 @@
 
 use App\Livewire\PosTerminal;
 use App\Http\Controllers\ReceiptController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        if (Auth::user()->isAdmin()) {
+        if (Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()) {
             return redirect('/admin');
         }
         return redirect('/pos');
