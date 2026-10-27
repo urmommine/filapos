@@ -1,4 +1,4 @@
-@extends('errors.layout')
+@extends('layouts.error')
 
 @section('title', '419 - Halaman Kedaluwarsa')
 @section('code', '419')

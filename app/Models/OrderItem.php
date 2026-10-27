@@ -26,7 +26,7 @@ class OrderItem extends Model
     ];
 
     /**
-     * Get the order this item belongs to
+     * Relasi ke pesanan induk.
      */
     public function order(): BelongsTo
     {
@@ -34,7 +34,7 @@ class OrderItem extends Model
     }
 
     /**
-     * Get the product (may be null if product was deleted)
+     * Relasi ke produk (bisa null jika produk dihapus).
      */
     public function product(): BelongsTo
     {
@@ -42,7 +42,7 @@ class OrderItem extends Model
     }
 
     /**
-     * Calculate total price before saving
+     * Hitung total harga secara otomatis sebelum disimpan.
      */
     protected static function boot()
     {

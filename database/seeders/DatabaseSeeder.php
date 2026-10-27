@@ -82,6 +82,10 @@ class DatabaseSeeder extends Seeder
             Product::create($product);
         }
 
+        $this->call([
+            DummyProductSeeder::class,
+        ]);
+
         // Store Settings
         StoreSetting::set(StoreSetting::STORE_NAME, 'Fila POS');
         StoreSetting::set(StoreSetting::STORE_ADDRESS, 'Jl. Contoh No. 123, Kota');

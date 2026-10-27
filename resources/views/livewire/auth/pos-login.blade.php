@@ -19,7 +19,7 @@
                 <span class="material-symbols-outlined text-5xl text-white">point_of_sale</span>
             </div>
             <h1 class="text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
-                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Nabila Store') }}
+                {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Fila POS') }}
             </h1>
             <p class="text-xl text-slate-300 leading-relaxed">
                 Platform kasir modern untuk bisnis yang ingin melaju lebih cepat. Kelola penjualan, stok, dan pelanggan
@@ -29,12 +29,12 @@
             <div class="mt-12 flex items-center justify-center gap-4 text-sm font-medium text-slate-400">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">verified_user</span>
-                    <span>Secure</span>
+                    <span>Aman</span>
                 </div>
                 <div class="w-1 h-1 rounded-full bg-slate-700"></div>
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">bolt</span>
-                    <span>Fast</span>
+                    <span>Cepat</span>
                 </div>
                 <div class="w-1 h-1 rounded-full bg-slate-700"></div>
                 <div class="flex items-center gap-2">
@@ -62,13 +62,13 @@
                 <div class="space-y-2 group">
                     <label
                         class="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-primary transition-colors"
-                        for="email">Email Address</label>
+                        for="email">Email</label>
                     <div class="relative">
                         <span
                             class="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary transition-colors material-symbols-outlined text-xl">mail</span>
                         <input type="email" id="email" wire:model="email"
                             class="w-full bg-slate-50 border border-border-muted rounded-xl py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
-                            placeholder="nama@toko.com" autofocus>
+                            placeholder="Masukkan Email" autofocus>
                     </div>
                     @error('email') <span class="text-red-500 text-xs font-medium pl-1">{{ $message }}</span> @enderror
                 </div>
@@ -104,8 +104,8 @@
                             class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors select-none">Ingat
                             saya</span>
                     </label>
-                    <!-- Optional: Forgot Password Link -->
-                    <!-- <a href="#" class="text-sm font-medium text-primary hover:text-lime-600 transition-colors">Lupa sandi?</a> -->
+                    <!-- Forgot Password Link -->
+                    <a href="{{ route('password.request') }}" class="text-sm font-medium text-primary hover:text-lime-600 transition-colors" wire:navigate>Lupa sandi?</a>
                 </div>
 
                 <button type="submit"

@@ -18,6 +18,9 @@ class Customer extends Model
         'address',
     ];
 
+    /**
+     * Relasi ke pesanan yang dibuat oleh pelanggan ini.
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

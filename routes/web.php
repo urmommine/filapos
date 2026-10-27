@@ -19,8 +19,8 @@ Route::get('/', function () {
         }
         return redirect('/pos');
     }
-    return redirect()->route('login');
-});
+    return view('landing');
+})->name('landing');
 
 // POS Auth Routes
 Route::get('/pos/login', \App\Livewire\Auth\PosLogin::class)->name('login')->middleware('guest');

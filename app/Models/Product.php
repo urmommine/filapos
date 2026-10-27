@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
+use App\Models\User;
+use Illuminate\Support\HtmlString;
 
 class Product extends Model
 {
@@ -34,7 +38,26 @@ class Product extends Model
     ];
 
     /**
-     * Get the category of this product
+     * Booted method untuk mendaftarkan event listener.
+     */
+    protected static function booted()
+    {
+        static::updated(function ($product) {
+            // Hanya kirim notifikasi jika stok berubah dan menjadi menipis
+            // Dan hanya kirim jika sebelumnya stok TIDAK menipis untuk menghindari spam
+            if ($product->wasChanged('stock')) {
+                $wasLow = $product->getOriginal('stock') <= $product->getOriginal('min_stock');
+                $isLow = $product->stock <= $product->min_stock;
+
+                if ($isLow && !$wasLow) {
+                    $product->notifyLowStock();
+                }
+            }
+        });
+    }
+
+    /**
+     * Relasi ke kategori produk ini.
      */
     public function category(): BelongsTo
     {
@@ -42,7 +65,7 @@ class Product extends Model
     }
 
     /**
-     * Get order items containing this product
+     * Relasi ke item pesanan yang berisi produk ini.
      */
     public function orderItems(): HasMany
     {
@@ -50,7 +73,7 @@ class Product extends Model
     }
 
     /**
-     * Check if stock is low (at or below minimum)
+     * Cek apakah stok menipis (di bawah atau sama dengan stok minimum).
      */
     public function isLowStock(): bool
     {
@@ -58,7 +81,7 @@ class Product extends Model
     }
 
     /**
-     * Check if product is out of stock
+     * Cek apakah stok produk habis.
      */
     public function isOutOfStock(): bool
     {
@@ -66,7 +89,7 @@ class Product extends Model
     }
 
     /**
-     * Calculate profit margin
+     * Hitung margin keuntungan.
      */
     public function getProfitAttribute(): float
     {
@@ -74,7 +97,7 @@ class Product extends Model
     }
 
     /**
-     * Calculate profit percentage
+     * Hitung persentase keuntungan.
      */
     public function getProfitPercentageAttribute(): float
     {
@@ -85,7 +108,7 @@ class Product extends Model
     }
 
     /**
-     * Reduce stock after sale
+     * Kurangi stok setelah penjualan.
      */
     public function reduceStock(int $quantity): bool
     {
@@ -97,7 +120,7 @@ class Product extends Model
     }
 
     /**
-     * Increase stock (restock)
+     * Tambah stok (restock).
      */
     public function addStock(int $quantity): void
     {
@@ -105,7 +128,7 @@ class Product extends Model
     }
 
     /**
-     * Scope to get only active products
+     * Scope untuk mendapatkan produk yang aktif saja.
      */
     public function scopeActive($query)
     {
@@ -113,7 +136,7 @@ class Product extends Model
     }
 
     /**
-     * Scope to get products with low stock
+     * Scope untuk mendapatkan produk dengan stok menipis.
      */
     public function scopeLowStock($query)
     {
@@ -121,7 +144,7 @@ class Product extends Model
     }
 
     /**
-     * Scope to find a product by exact barcode or SKU
+     * Scope untuk mencari produk berdasarkan barcode atau SKU yang tepat.
      */
     public function scopeByCode($query, string $code)
     {
@@ -130,7 +153,7 @@ class Product extends Model
     }
 
     /**
-     * Scope to search products by name, sku, or barcode
+     * Scope untuk mencari produk berdasarkan nama, SKU, atau barcode.
      */
     public function scopeSearch($query, string $search)
     {
@@ -139,5 +162,23 @@ class Product extends Model
                 ->orWhere('sku', 'like', "%{$search}%")
                 ->orWhere('barcode', 'like', "%{$search}%");
         });
+    }
+
+    /**
+     * Kirim notifikasi stok menipis ke semua admin.
+     */
+    public function notifyLowStock(): void
+    {
+        Notification::make()
+            ->title('Peringatan: Stok Menipis')
+            ->body(new HtmlString("Produk <b>{$this->name}</b> saat ini memiliki stok <b>{$this->stock}</b> (Batas minimum: {$this->min_stock})."))
+            ->warning()
+            ->icon('heroicon-o-exclamation-triangle')
+            ->actions([
+                Action::make('view')
+                    ->label('Lihat Produk')
+                    ->url(\App\Filament\Resources\ProductResource::getUrl('edit', ['record' => $this->id])),
+            ])
+            ->sendToDatabase(User::whereIn('role', ['admin', 'superadmin'])->get());
     }
 }

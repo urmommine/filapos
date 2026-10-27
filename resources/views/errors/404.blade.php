@@ -1,4 +1,4 @@
-@extends('errors.layout')
+@extends('layouts.error')
 
 @section('title', '404 - Tidak Ditemukan')
 @section('code', '404')

@@ -56,6 +56,7 @@ class ProductImporter extends Importer
             ImportColumn::make('min_stock')
                 ->label('Stok Minimum')
                 ->numeric()
+
                 ->rules(['nullable', 'integer', 'min:0']),
             ImportColumn::make('is_active')
                 ->label('Status Aktif')
@@ -75,8 +76,9 @@ class ProductImporter extends Importer
     public static function getCompletedNotificationBody(Import $import): string
     {
         $body = 'Import produk selesai. ' . number_format($import->successful_rows) . ' baris berhasil diimport.';
+        $failedRowsCount = $import->getFailedRowsCount();
 
-        if ($failedRowsCount = $import->getFailedRowsCount()) {
+        if ($failedRowsCount) {
             $body .= ' ' . number_format($failedRowsCount) . ' baris gagal.';
         }
 

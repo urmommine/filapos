@@ -37,7 +37,7 @@ class Order extends Model
     ];
 
     /**
-     * Boot method to auto-generate invoice number
+     * Boot method untuk generate nomor invoice secara otomatis.
      */
     protected static function boot()
     {
@@ -51,7 +51,7 @@ class Order extends Model
     }
 
     /**
-     * Generate unique invoice number
+     * Generate nomor invoice yang unik.
      * Format: INV-YYYYMMDD-XXXX
      */
     public static function generateInvoiceNumber(): string
@@ -76,7 +76,7 @@ class Order extends Model
     }
 
     /**
-     * Get the kasir who processed this order
+     * Relasi ke user (kasir) yang memproses pesanan ini.
      */
     public function user(): BelongsTo
     {
@@ -84,7 +84,7 @@ class Order extends Model
     }
 
     /**
-     * Alias for user relationship
+     * Alias untuk relasi user (kasir).
      */
     public function kasir(): BelongsTo
     {
@@ -92,7 +92,7 @@ class Order extends Model
     }
 
     /**
-     * Get the customer for the order
+     * Relasi ke pelanggan untuk pesanan ini.
      */
     public function customer(): BelongsTo
     {
@@ -100,7 +100,7 @@ class Order extends Model
     }
 
     /**
-     * Get order items
+     * Relasi ke item pesanan.
      */
     public function items(): HasMany
     {
@@ -108,7 +108,7 @@ class Order extends Model
     }
 
     /**
-     * Check if order is paid
+     * Cek apakah pesanan sudah dibayar.
      */
     public function isPaid(): bool
     {
@@ -116,7 +116,7 @@ class Order extends Model
     }
 
     /**
-     * Mark order as paid
+     * Tandai pesanan sebagai sudah dibayar.
      */
     public function markAsPaid(): void
     {
@@ -124,7 +124,7 @@ class Order extends Model
     }
 
     /**
-     * Calculate total profit from this order
+     * Hitung total keuntungan dari pesanan ini.
      */
     public function calculateProfit(): float
     {
@@ -138,7 +138,7 @@ class Order extends Model
     }
 
     /**
-     * Scope to get orders for today
+     * Scope untuk mendapatkan pesanan hari ini.
      */
     public function scopeToday($query)
     {
@@ -146,7 +146,7 @@ class Order extends Model
     }
 
     /**
-     * Scope to get orders for this week
+     * Scope untuk mendapatkan pesanan minggu ini.
      */
     public function scopeThisWeek($query)
     {
@@ -157,7 +157,7 @@ class Order extends Model
     }
 
     /**
-     * Scope to get orders for this month
+     * Scope untuk mendapatkan pesanan bulan ini.
      */
     public function scopeThisMonth($query)
     {
@@ -166,7 +166,7 @@ class Order extends Model
     }
 
     /**
-     * Scope to get paid orders only
+     * Scope untuk mendapatkan pesanan yang sudah dibayar saja.
      */
     public function scopePaid($query)
     {

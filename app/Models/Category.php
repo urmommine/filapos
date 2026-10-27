@@ -23,7 +23,7 @@ class Category extends Model
     ];
 
     /**
-     * Boot method to auto-generate slug
+     * Boot method untuk generate slug secara otomatis.
      */
     protected static function boot()
     {
@@ -43,7 +43,7 @@ class Category extends Model
     }
 
     /**
-     * Get products in this category
+     * Relasi ke produk dalam kategori ini.
      */
     public function products(): HasMany
     {
@@ -51,7 +51,7 @@ class Category extends Model
     }
 
     /**
-     * Scope to get only active categories
+     * Scope untuk mendapatkan kategori yang aktif saja.
      */
     public function scopeActive($query)
     {

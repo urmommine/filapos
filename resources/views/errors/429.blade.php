@@ -1,4 +1,4 @@
-@extends('errors.layout')
+@extends('layouts.error')
 
 @section('title', '429 - Terlalu Banyak Permintaan')
 @section('code', '429')

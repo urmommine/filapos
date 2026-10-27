@@ -33,9 +33,9 @@
                     <p class="text-sm font-bold text-slate-900 truncate">{{ auth()->user()->name }}</p>
                     <p class="text-xs text-slate-400 truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <a href="{{ route('filament.admin.pages.dashboard') }}"
+                <a href="{{ route('filament.admin.pages.dashboard') }}" 
                     class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
-                    <span class="material-symbols-outlined text-lg">dashboard</span>
+                    <span class="material-symbols-outlined text-lg" wire:navigate>dashboard</span>
                     Admin Panel
                 </a>
                 <button wire:click="openProfileModal(); userMenu = false"
@@ -43,7 +43,8 @@
                     <span class="material-symbols-outlined text-lg">person</span>
                     Profil Saya
                 </button>
-                <form method="POST" action="{{ route('logout') }}">
+                
+                <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
                     <button type="submit"
                         class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors flex items-center gap-2 border-t border-slate-100">

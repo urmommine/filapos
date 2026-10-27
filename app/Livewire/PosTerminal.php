@@ -66,6 +66,9 @@ class PosTerminal extends Component
     public Collection $cachedCategories;
     public string $storeName = '';
 
+    /**
+     * Inisialisasi komponen: load setting pajak, kategori, dan nama toko.
+     */
     public function mount(): void
     {
         // Load tax percentage from settings
@@ -77,6 +80,9 @@ class PosTerminal extends Component
         $this->storeName = StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store');
     }
 
+    /**
+     * Membuka modal profil dan mengisi data user saat ini.
+     */
     public function openProfileModal(): void
     {
         $user = Auth::user();
@@ -87,6 +93,9 @@ class PosTerminal extends Component
         $this->showProfileModal = true;
     }
 
+    /**
+     * Memperbarui data profil user (nama, email, password).
+     */
     public function updateProfile(): void
     {
         $this->validate([
@@ -109,12 +118,18 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Profil berhasil diperbarui');
     }
 
+    /**
+     * Membuka modal untuk memilih pelanggan.
+     */
     public function openCustomerModal(): void
     {
         $this->showCustomerModal = true;
         $this->customerSearch = ''; // Reset search
     }
 
+    /**
+     * Membuka modal untuk membuat data pelanggan baru.
+     */
     public function openCreateCustomerModal(): void
     {
         $this->newCustomerName = '';
@@ -125,6 +140,9 @@ class PosTerminal extends Component
         $this->showCustomerModal = false;
     }
 
+    /**
+     * Menyimpan data pelanggan baru ke database dan langsung memilihnya.
+     */
     public function createCustomer(): void
     {
         $this->validate([
@@ -146,6 +164,9 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Pelanggan baru berhasil ditambahkan');
     }
 
+    /**
+     * Memilih pelanggan untuk transaksi ini.
+     */
     public function selectCustomer(int $customerId): void
     {
         $this->selectedCustomerId = $customerId;
@@ -154,6 +175,9 @@ class PosTerminal extends Component
         $this->showCustomerModal = false;
     }
 
+    /**
+     * Menghapus pelanggan yang terpilih dari transaksi.
+     */
     public function removeCustomer(): void
     {
         $this->selectedCustomerId = null;
@@ -161,6 +185,9 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Pelanggan dihapus');
     }
 
+    /**
+     * Me-render view POS dengan data produk dan pelanggan yang difilter.
+     */
     public function render()
     {
         // PERF: Products query is reactive (depends on search/category/perPage)
@@ -200,22 +227,34 @@ class PosTerminal extends Component
         ]);
     }
 
+    /**
+     * Memfilter produk berdasarkan kategori yang dipilih.
+     */
     public function selectCategory(?int $categoryId): void
     {
         $this->selectedCategory = $categoryId === $this->selectedCategory ? null : $categoryId;
         $this->perPage = 12;
     }
 
+    /**
+     * Reset pagination saat query pencarian berubah.
+     */
     public function updatedSearch(): void
     {
         $this->perPage = 12;
     }
 
+    /**
+     * Menambah jumlah produk yang ditampilkan (Lazy Loading/Load More).
+     */
     public function loadMore(): void
     {
         $this->perPage += 12;
     }
 
+    /**
+     * Menambahkan produk ke keranjang belanja.
+     */
     public function addToCart(int $productId): void
     {
         $product = Product::find($productId);
@@ -257,6 +296,9 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: $product->name . ' ditambahkan');
     }
 
+    /**
+     * Menangani input barcode untuk pencarian produk cepat.
+     */
     public function handleBarcodeScan($scannedBarcode = null): void
     {
         $barcode = $scannedBarcode ?? $this->search;
@@ -275,24 +317,30 @@ class PosTerminal extends Component
         }
     }
 
-    #[On('barcodeScanned')]
-    public function handleBarcode(string $barcode): void
-    {
-        $product = Product::byCode($barcode)->first();
+    // #[On('barcodeScanned')]
+    // public function handleBarcode(string $barcode): void
+    // {
+    //     $product = Product::byCode($barcode)->first();
 
-        if ($product) {
-            $this->addToCart($product->id);
-        } else {
-            $this->notifyProductNotFound($barcode, true);
-        }
-    }
+    //     if ($product) {
+    //         $this->addToCart($product->id);
+    //     } else {
+    //         $this->notifyProductNotFound($barcode, true);
+    //     }
+    // }
 
+    /**
+     * Membersihkan input pencarian.
+     */
     private function clearSearch(): void
     {
         $this->search = '';
         $this->dispatch('clear-search-input');
     }
 
+    /**
+     * Menampilkan notifikasi jika produk/barcode tidak ditemukan.
+     */
     private function notifyProductNotFound(string $barcode, bool $forceNotify = false): void
     {
         // Only show error if forced or it looks like a barcode/SKU (alphanumeric and >= 3 digits)
@@ -303,6 +351,9 @@ class PosTerminal extends Component
         }
     }
 
+    /**
+     * Menambah jumlah qty item di keranjang.
+     */
     public function incrementQuantity(int $index): void
     {
         if (isset($this->cart[$index])) {
@@ -317,6 +368,9 @@ class PosTerminal extends Component
         }
     }
 
+    /**
+     * Mengurangi jumlah qty item di keranjang atau menghapusnya jika qty = 1.
+     */
     public function decrementQuantity(int $index): void
     {
         if (isset($this->cart[$index])) {
@@ -330,6 +384,9 @@ class PosTerminal extends Component
         }
     }
 
+    /**
+     * Menghapus item tertentu dari keranjang.
+     */
     public function removeFromCart(int $index): void
     {
         if (isset($this->cart[$index])) {
@@ -341,12 +398,18 @@ class PosTerminal extends Component
         }
     }
 
+    /**
+     * Mengosongkan seluruh isi keranjang.
+     */
     public function clearCart(): void
     {
         $this->resetCartState();
         $this->dispatch('toastMagic', status: 'info', title: 'Informasi', message: 'Keranjang dikosongkan');
     }
 
+    /**
+     * Reset state keranjang dan diskon ke awal.
+     */
     private function resetCartState(): void
     {
         $this->cart = [];
@@ -357,9 +420,12 @@ class PosTerminal extends Component
         $this->calculateTotals();
     }
 
+    /**
+     * Menghitung ulang subtotal, diskon, pajak, dan total akhir.
+     */
     public function calculateTotals(): void
     {
-        $this->subtotal = array_sum(array_column($this->cart, 'total'));
+        $this->subtotal = array_sum(array_column($this->cart, 'total')); //ambil all nilai di kolom total yang ada di $cart[]
 
         // Calculate discount
         if ($this->discountType == 1 && (float) $this->discountValue > 0) {
@@ -381,6 +447,9 @@ class PosTerminal extends Component
     }
 
     #[On('openCheckout')]
+    /**
+     * Membuka modal checkout/pembayaran.
+     */
     public function openCheckout(): void
     {
         if (empty($this->cart)) {
@@ -394,7 +463,10 @@ class PosTerminal extends Component
         $this->showCheckoutModal = true;
     }
 
-    #[On('closeModal')]
+   // #[On('closeModal')]
+    /**
+     * Menutup semua modal yang sedang terbuka.
+     */
     public function closeModal(): void
     {
         $this->showCheckoutModal = false;
@@ -404,6 +476,9 @@ class PosTerminal extends Component
         $this->showCreateCustomerModal = false;
     }
 
+    /**
+     * Mengatur metode pembayaran (Cash, qris, tf ).
+     */
     public function setPaymentMethod(string $method): void
     {
         $this->paymentMethod = $method;
@@ -415,33 +490,51 @@ class PosTerminal extends Component
         }
     }
 
+    /**
+     * Mengatur nominal template pembayaran cepat 10, 20, 100k (Quick Amount).
+     */
     public function setQuickAmount(float $amount): void
     {
         $this->amountPaid = $amount;
         $this->calculateChange();
     }
 
+    /**
+     * Mengatur nominal pembayaran sesuai dengan total tagihan (Uang Pas).
+     */
     public function setExactAmount(): void
     {
         $this->amountPaid = $this->total;
         $this->change = 0;
     }
 
+    /**
+     * Event hook saat input nominal bayar berubah.
+     */
     public function updatedAmountPaid(): void
     {
         $this->calculateChange();
     }
 
+    /**
+     * Menghitung jumlah uang kembalian.
+     */
     public function calculateChange(): void
     {
         $this->change = max(0, (float) $this->amountPaid - $this->total);
     }
 
+    /**
+     * Membuka modal input diskon.
+     */
     public function openDiscountModal(): void
     {
         $this->showDiscountModal = true;
     }
 
+    /**
+     * Menerapkan diskon yang telah diinput ke keranjang.
+     */
     public function applyDiscount(): void
     {
         $this->calculateTotals();
@@ -449,6 +542,9 @@ class PosTerminal extends Component
         $this->dispatch('toastMagic', status: 'success', title: 'Sukses', message: 'Diskon diterapkan');
     }
 
+    /**
+     * Mengaktifkan/menonaktifkan penerapan pajak pada transaksi.
+     */
     public function toggleTax(): void
     {
         if ($this->tax > 0) {
@@ -461,6 +557,9 @@ class PosTerminal extends Component
         $this->calculateTotals();
     }
 
+    /**
+     * Memproses pembayaran, menyimpan order ke DB, dan mengurangi stok produk.
+     */
     public function processPayment(): void
     {
         if (empty($this->cart)) {
@@ -534,7 +633,7 @@ class PosTerminal extends Component
     // ──────────────────────────────────────────────
 
     /**
-     * Find a cart item index by product ID — O(n) scan but on a small array.
+     * Mencari index item di keranjang berdasarkan ID produk.
      */
     private function findCartIndex(int $productId): int|false
     {
@@ -542,7 +641,7 @@ class PosTerminal extends Component
     }
 
     /**
-     * Recalculate a single cart item's total from its quantity × price.
+     * Menghitung ulang total harga untuk satu baris item di keranjang.
      */
     private function recalculateCartItemTotal(int $index): void
     {

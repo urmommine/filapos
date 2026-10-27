@@ -195,7 +195,7 @@ class OrderResource extends Resource
                                     ->label('Total')
                                     ->money('IDR'),
                             ])->columns(4),
-                    ]),
+                    ])->collapsed(),
 
                 Infolists\Components\Section::make('Catatan')
                     ->schema([

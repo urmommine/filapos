@@ -64,4 +64,5 @@ class LowStockWidget extends BaseWidget
             ->emptyStateIcon('heroicon-o-check-circle')
             ->paginated([5, 10, 25]);
     }
+    
 }

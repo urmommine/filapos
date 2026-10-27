@@ -17,9 +17,9 @@ class Receipt extends Component
     {
         $this->order = $order;
         $this->order->load(['items', 'user', 'customer']);
-
+        
         $this->storeSettings = [
-            'name' => StoreSetting::get(StoreSetting::STORE_NAME, 'POS Store'),
+            'name' => StoreSetting::get(StoreSetting::STORE_NAME, 'filaPOS'),
             'address' => StoreSetting::get(StoreSetting::STORE_ADDRESS, ''),
             'phone' => StoreSetting::get(StoreSetting::STORE_PHONE, ''),
             'footer' => StoreSetting::get(StoreSetting::RECEIPT_FOOTER, 'Terima Kasih!'),

@@ -3,14 +3,17 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
+use Illuminate\Validation\ValidationException;
 
 #[Layout('layouts.pos-auth')]
 class PosLogin extends Component
 {
     public string $email = '';
+
     public string $password = '';
+
     public bool $remember = false;
 
     public function login()
@@ -27,12 +30,14 @@ class PosLogin extends Component
                 return redirect()->intended('/admin');
             }
 
-            return redirect()->intended('/pos');
+            $this->redirect(route('pos'), navigate: true);
+        } else {
+            throw ValidationException::withMessages([
+                'email' => 'Email atau Password Salah! Silakan coba lagi.',
+            ]);
         }
-
-        $this->addError('email', 'Kredensial yang diberikan tidak cocok dengan catatan kami.');
     }
-
+    
     public function render()
     {
         return view('livewire.auth.pos-login');

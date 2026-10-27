@@ -16,7 +16,7 @@ class StoreSetting extends Model
     ];
 
     /**
-     * Get a setting value by key
+     * Ambil nilai pengaturan berdasarkan key.
      */
     public static function get(string $key, $default = null)
     {
@@ -27,7 +27,7 @@ class StoreSetting extends Model
     }
 
     /**
-     * Set a setting value
+     * Simpan atau perbarui nilai pengaturan.
      */
     public static function set(string $key, $value): void
     {
@@ -40,7 +40,7 @@ class StoreSetting extends Model
     }
 
     /**
-     * Get all settings as key-value pairs
+     * Ambil semua pengaturan dalam bentuk pasangan key-value.
      */
     public static function getAllSettings(): array
     {
@@ -48,7 +48,7 @@ class StoreSetting extends Model
     }
 
     /**
-     * Default settings keys
+     * Key pengaturan default.
      */
     public const STORE_NAME = 'store_name';
     public const STORE_ADDRESS = 'store_address';
@@ -56,7 +56,7 @@ class StoreSetting extends Model
     public const STORE_EMAIL = 'store_email';
     public const TAX_PERCENTAGE = 'tax_percentage';
     public const PRINTER_NAME = 'printer_name';
-    public const PRINTER_TYPE = 'printer_type'; // usb, network, bluetooth
+    public const PRINTER_TYPE = 'printer_type'; // usb, jaringan, bluetooth
     public const PRINTER_IP = 'printer_ip';
     public const RECEIPT_FOOTER = 'receipt_footer';
 }

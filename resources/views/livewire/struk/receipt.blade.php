@@ -79,10 +79,6 @@
     </div>
 
     <script>
-        document.addEventListener('livewire:initialized', () => {
-             // Optional: If you want to use Livewire events
-        });
-        
         // Auto print immediately when loaded
         window.onload = function() {
             setTimeout(function() {

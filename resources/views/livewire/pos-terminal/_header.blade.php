@@ -20,7 +20,7 @@
         <div class="relative w-48 sm:w-72 lg:w-96 group">
             <input
                 class="w-full pl-10 sm:pl-12 pr-20 sm:pr-24 py-2.5 sm:py-3 bg-white border border-slate-200 rounded-xl placeholder:text-slate-300 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lg focus:shadow-primary/5 text-slate-800 outline-none text-sm sm:text-base transition-all duration-200"
-                placeholder=" Cari / Scan produk..." wire:model.live.debounce.300ms="search"
+                placeholder=" Cari Produk..." wire:model.live.debounce.300ms="search"
                 wire:keydown.enter="handleBarcodeScan($event.target.value); $event.target.value = '';"
                 id="search-input" />
             <div class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -49,7 +49,7 @@
                     class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-secondary hover:text-primary transition-colors flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">person</span> Profil Saya
                 </button>
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
                     <button type="submit"
                         class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors flex items-center gap-2 border-t border-slate-100">

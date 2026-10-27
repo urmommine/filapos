@@ -15,7 +15,7 @@ class User extends Authenticatable implements FilamentUser
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Atribut yang dapat diisi secara massal.
      *
      * @var list<string>
      */
@@ -27,7 +27,7 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Atribut yang harus disembunyikan untuk serialisasi.
      *
      * @var list<string>
      */
@@ -37,7 +37,7 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Atribut yang harus di-cast.
      *
      * @return array<string, string>
      */
@@ -49,20 +49,26 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /**
+     * Menentukan apakah user bisa mengakses panel Filament.
+     */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Admin and Superadmin can access admin panel
-        // Kasir can only access POS
+        // Admin dan Superadmin dapat mengakses panel admin
+        // Kasir hanya dapat mengakses POS
         return $this->isAdmin() || $this->isSuperAdmin();
     }
 
+    /**
+     * Cek apakah user adalah admin.
+     */
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
     /**
-     * Check if user is superadmin
+     * Cek apakah user adalah superadmin.
      */
     public function isSuperAdmin(): bool
     {
@@ -70,7 +76,7 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Check if user is kasir
+     * Cek apakah user adalah kasir.
      */
     public function isKasir(): bool
     {
@@ -78,7 +84,7 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Get orders processed by this user (kasir)
+     * Relasi ke pesanan yang diproses oleh user (kasir) ini.
      */
     public function orders(): HasMany
     {

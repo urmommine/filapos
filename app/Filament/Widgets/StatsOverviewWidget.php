@@ -13,6 +13,18 @@ class StatsOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
+    //pakai fungsi biasa bukan closure
+    protected function calculateProfit($date){
+        return DB::table('order_items')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->join('products', 'order_items.product_id', '=', 'products.id')
+                ->whereDate('orders.created_at', $date)
+                ->where('orders.payment_status', 'paid')
+                ->selectRaw('SUM((order_items.unit_price - products.purchase_price) * order_items.quantity) as total_profit')
+                ->first()
+                ->total_profit ?? 0;
+    }
+    
     protected function getStats(): array
     {
         // Optimized Data Fetching for Today and Yesterday
@@ -42,19 +54,19 @@ class StatsOverviewWidget extends BaseWidget
             : ($todaySales > 0 ? 100 : 0);
 
         // 2. Optimized Profit Calculation
-        $calculateProfit = function ($date) {
-            return DB::table('order_items')
-                ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->join('products', 'order_items.product_id', '=', 'products.id')
-                ->whereDate('orders.created_at', $date)
-                ->where('orders.payment_status', 'paid')
-                ->selectRaw('SUM((order_items.unit_price - products.purchase_price) * order_items.quantity) as total_profit')
-                ->first()
-                ->total_profit ?? 0;
-        };
+        // $calculateProfit = function ($date) {
+        //     return DB::table('order_items')
+        //         ->join('orders', 'order_items.order_id', '=', 'orders.id')
+        //         ->join('products', 'order_items.product_id', '=', 'products.id')
+        //         ->whereDate('orders.created_at', $date)
+        //         ->where('orders.payment_status', 'paid')
+        //         ->selectRaw('SUM((order_items.unit_price - products.purchase_price) * order_items.quantity) as total_profit')
+        //         ->first()
+        //         ->total_profit ?? 0;
+        // };
 
-        $todayProfit = $calculateProfit($today);
-        $yesterdayProfit = $calculateProfit($yesterday);
+        $todayProfit = $this->calculateProfit($today);
+        $yesterdayProfit = $this->calculateProfit($yesterday);
 
         $profitChange = $yesterdayProfit > 0
             ? (($todayProfit - $yesterdayProfit) / $yesterdayProfit) * 100
@@ -76,13 +88,13 @@ class StatsOverviewWidget extends BaseWidget
         $totalRevenue = Order::paid()->sum('total_amount');
 
         return [
-            Stat::make('Penjualan Hari Ini', 'Rp ' . number_format($todaySales, 0, ',', '.'))
+            Stat::make('Pendapatan Hari Ini', 'Rp ' . number_format($todaySales, 0, ',', '.'))
                 ->description($salesChange >= 0 ? '+' . number_format($salesChange, 1) . '%' : number_format($salesChange, 1) . '%')
                 ->descriptionIcon($salesChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($salesChange >= 0 ? 'success' : 'danger')
                 ->chart([7, 3, 4, 5, 6, 3, 5, 8]),
 
-            Stat::make('Estimasi Laba Hari Ini', 'Rp ' . number_format($todayProfit, 0, ',', '.'))
+            Stat::make('Laba Hari Ini', 'Rp ' . number_format($todayProfit, 0, ',', '.'))
                 ->description($profitChange >= 0 ? '+' . number_format($profitChange, 1) . '%' : number_format($profitChange, 1) . '%')
                 ->descriptionIcon($profitChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($profitChange >= 0 ? 'success' : 'danger'),

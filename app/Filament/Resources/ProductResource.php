@@ -29,7 +29,7 @@ class ProductResource extends Resource
 
     protected static ?string $modelLabel = 'Produk';
 
-    protected static ?string $pluralModelLabel = 'Produk';
+    protected static ?string $pluralModelLabel = 'Semua Produk';
 
     public static function form(Form $form): Form
     {
@@ -75,23 +75,27 @@ class ProductResource extends Resource
                                     ->numeric()
                                     ->prefix('Rp')
                                     ->required()
-                                    ->default(0),
+                                    ->default(0)
+                                    ->minValue(0),
                                 Forms\Components\TextInput::make('selling_price')
                                     ->label('Harga Jual')
                                     ->numeric()
                                     ->prefix('Rp')
                                     ->required()
-                                    ->default(0),
+                                    ->default(0)
+                                    ->minValue(0),
                                 Forms\Components\TextInput::make('stock')
                                     ->label('Stok Saat Ini')
                                     ->numeric()
                                     ->required()
-                                    ->default(0),
+                                    ->default(0)
+                                    ->minValue(0),
                                 Forms\Components\TextInput::make('min_stock')
                                     ->label('Stok Minimum (Alert)')
                                     ->numeric()
                                     ->required()
                                     ->default(5)
+                                    ->minValue(0)
                                     ->helperText('Notifikasi akan muncul jika stok mencapai angka ini'),
                             ])->columns(2),
                     ])->columnSpan(['lg' => 2]),
@@ -116,7 +120,7 @@ class ProductResource extends Resource
                                 Forms\Components\Toggle::make('is_active')
                                     ->label('Produk Aktif')
                                     ->default(true)
-                                    ->helperText('Produk tidak aktif tidak akan muncul di POS'),
+                                    ->helperText('Produk aktif akan muncul di POS'),
                             ]),
                     ])->columnSpan(['lg' => 1]),
             ])->columns(3);
