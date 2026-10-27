@@ -823,27 +823,68 @@
         </div>
     </footer>
 
+    <!-- ======================================================== -->
+    <!-- JAVASCRIPT LOGIC (Interactions, Mobile Menu, Calculator)  -->
+    <!-- ======================================================== -->
+    <script>
+        // Mobile Drawer Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const openIcon = document.getElementById('menuIconOpen');
+            const closeIcon = document.getElementById('menuIconClose');
+            if (!menu) return;
 
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                if (openIcon) openIcon.classList.add('hidden');
+                if (closeIcon) closeIcon.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+                if (openIcon) openIcon.classList.remove('hidden');
+                if (closeIcon) closeIcon.classList.add('hidden');
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const openIcon = document.getElementById('menuIconOpen');
+            const closeIcon = document.getElementById('menuIconClose');
+            if (menu) menu.classList.add('hidden');
+            if (openIcon) openIcon.classList.remove('hidden');
+            if (closeIcon) closeIcon.classList.add('hidden');
+        }
+
+        // Close mobile menu on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
 
         // Interactive Cost Calculator
         function updateCalculator() {
-            const tx = parseInt(document.getElementById('txRange').value, 10);
-            const outlets = parseInt(document.getElementById('outletRange').value, 10);
+            const txEl = document.getElementById('txRange');
+            const outletEl = document.getElementById('outletRange');
+            if (!txEl || !outletEl) return;
 
-            document.getElementById('txValueText').innerText = tx;
-            document.getElementById('outletValueText').innerText = outlets;
+            const tx = parseInt(txEl.value, 10);
+            const outlets = parseInt(outletEl.value, 10);
+
+            const txValText = document.getElementById('txValueText');
+            const outletValText = document.getElementById('outletValueText');
+            if (txValText) txValText.innerText = tx;
+            if (outletValText) outletValText.innerText = outlets;
 
             // Calculations:
-            // Hardware savings: Conventional POS lease/hardware is ~Rp 350.000/month/outlet => Rp 4.200.000/yr/outlet
             const moneySaved = outlets * 4200000;
-            // Time saved: ~15 seconds per manual transaction calculation & receipt write => in hours/month
             const minutesSavedDaily = (tx * 0.4) * outlets;
             const hoursSavedMonthly = Math.round((minutesSavedDaily * 30) / 60);
 
-            // Format IDR
-            const formattedMoney = 'Rp ' + moneySaved.toLocaleString('id-ID');
-            document.getElementById('calcMoneySaved').innerText = formattedMoney;
-            document.getElementById('calcHoursSaved').innerText = hoursSavedMonthly + ' Jam';
+            const calcMoney = document.getElementById('calcMoneySaved');
+            const calcHours = document.getElementById('calcHoursSaved');
+            if (calcMoney) calcMoney.innerText = 'Rp ' + moneySaved.toLocaleString('id-ID');
+            if (calcHours) calcHours.innerText = hoursSavedMonthly + ' Jam';
         }
 
         // FAQ Accordion
@@ -858,7 +899,7 @@
 
             if (isHidden) {
                 content.classList.remove('hidden');
-                icon.classList.add('rotate-180');
+                if (icon) icon.classList.add('rotate-180');
             }
         }
 
