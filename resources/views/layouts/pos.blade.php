@@ -23,6 +23,7 @@
 
     {{ $slot }}
 
+    <script src="{{ asset('js/qrcode.min.js') }}"></script>
     @livewireScripts
     {!! ToastMagic::scripts() !!}
 </body>

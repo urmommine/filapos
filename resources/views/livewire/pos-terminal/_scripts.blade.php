@@ -20,6 +20,23 @@
             iframe.src = '/pos/receipt/' + data.orderId;
         });
 
+        Livewire.on('render-qris', (data) => {
+            setTimeout(() => {
+                const container = document.getElementById('qris-qrcode-render');
+                if (container && data.qrString && typeof QRCode !== 'undefined') {
+                    container.innerHTML = '';
+                    new QRCode(container, {
+                        text: data.qrString,
+                        width: 220,
+                        height: 220,
+                        colorDark: '#0f172a',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                }
+            }, 100);
+        });
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F2') { e.preventDefault(); document.getElementById('search-input').focus(); }
             if (e.key === 'F9') { e.preventDefault(); @this.call('openCheckout'); }

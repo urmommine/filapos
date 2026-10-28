@@ -24,3 +24,6 @@ Thumbs.db
 *.rar
 *.zip
 .ag-kit-backups/
+.agents/
+.agent/
+tests/test_*.php

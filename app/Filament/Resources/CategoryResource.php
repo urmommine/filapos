@@ -77,6 +77,7 @@ class CategoryResource extends Resource
                     ->label('Aktif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->hidden()
                     ->label('Dibuat')
                     ->dateTime('d M Y')
                     ->sortable(),

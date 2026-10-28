@@ -30,7 +30,9 @@ class LatestOrdersWidget extends BaseWidget
                     ->searchable()
                     ->copyable(),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('Kasir'),
+                    ->label('Kasir')
+                    ->formatStateUsing(fn ($state, Order $record) => $record->channel === 'pos' ? ($state ?: 'Yuliana') : '-')
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('items_count')
                     ->label('Items')
                     ->counts('items')

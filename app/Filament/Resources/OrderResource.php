@@ -39,6 +39,7 @@ class OrderResource extends Resource
                             ->disabled(),
                         Forms\Components\TextInput::make('user.name')
                             ->label('Kasir')
+                            ->formatStateUsing(fn ($state, ?Order $record) => ($record && $record->channel !== 'pos') ? '-' : ($state ?: 'Yuliana'))
                             ->disabled(),
                         Forms\Components\TextInput::make('total_amount')
                             ->label('Total')
@@ -63,8 +64,24 @@ class OrderResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->copyable(),
+                Tables\Columns\TextColumn::make('channel')
+                    ->label('Channel')
+                    ->badge()
+                    ->sortable()
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'ppob' => 'Top Up / PPOB',
+                        'wallet_topup' => 'Isi Saldo',
+                        default => 'Kasir POS',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'ppob' => 'info',
+                        'wallet_topup' => 'warning',
+                        default => 'success',
+                    }),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Kasir')
+                    ->formatStateUsing(fn ($state, Order $record) => $record->channel === 'pos' ? ($record->user?->role === 'kasir' ? $state : ($state ?: 'Yuliana')) : '-')
+                    ->placeholder('-')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->label('Total')
@@ -77,12 +94,14 @@ class OrderResource extends Resource
                         'cash' => 'success',
                         'qris' => 'info',
                         'transfer' => 'warning',
+                        'balance' => 'success',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'cash' => 'Tunai',
                         'qris' => 'QRIS',
                         'transfer' => 'Transfer',
+                        'balance' => 'Saldo Akun',
                         default => $state,
                     }),
                 Tables\Columns\TextColumn::make('payment_status')
@@ -102,17 +121,25 @@ class OrderResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
-                    ->dateTime('d M Y H:i')
+                    ->date('d M Y')
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
+                Tables\Filters\SelectFilter::make('channel')
+                    ->label('Channel Penjualan')
+                    ->options([
+                        'pos' => 'Kasir POS',
+                        'ppob' => 'Top Up / PPOB',
+                        'wallet_topup' => 'Isi Saldo',
+                    ]),
                 Tables\Filters\SelectFilter::make('payment_method')
                     ->label('Metode Bayar')
                     ->options([
                         'cash' => 'Tunai',
                         'qris' => 'QRIS',
                         'transfer' => 'Transfer',
+                        'balance' => 'Saldo Akun',
                     ]),
                 Tables\Filters\SelectFilter::make('payment_status')
                     ->label('Status')
@@ -144,10 +171,12 @@ class OrderResource extends Resource
                         Infolists\Components\TextEntry::make('invoice_number')
                             ->label('No. Invoice'),
                         Infolists\Components\TextEntry::make('user.name')
-                            ->label('Kasir'),
+                            ->label('Kasir')
+                            ->formatStateUsing(fn ($state, Order $record) => $record->channel === 'pos' ? ($record->user?->role === 'kasir' ? $state : ($state ?: 'Yuliana')) : '-')
+                            ->placeholder('-'),
                         Infolists\Components\TextEntry::make('created_at')
                             ->label('Tanggal')
-                            ->dateTime('d M Y H:i:s'),
+                            ->date('d M Y'),
                         Infolists\Components\TextEntry::make('payment_method')
                             ->label('Metode Bayar')
                             ->badge(),
@@ -178,6 +207,31 @@ class OrderResource extends Resource
                             ->label('Kembalian')
                             ->money('IDR'),
                     ])->columns(3),
+
+                Infolists\Components\Section::make('Detail Layanan Top Up / PPOB (Otomatis H2H)')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('game_name')
+                            ->label('Game / Brand')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['game'] ?? '-'),
+                        Infolists\Components\TextEntry::make('target_id')
+                            ->label('User ID / No. Tujuan')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['target'] ?? '-'),
+                        Infolists\Components\TextEntry::make('zone_id')
+                            ->label('Zone / Server ID')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['zone'] ?? '-'),
+                        Infolists\Components\TextEntry::make('nickname')
+                            ->label('Nickname Akun')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['nickname'] ?? '-'),
+                        Infolists\Components\TextEntry::make('customer_phone')
+                            ->label('No. WhatsApp Pelanggan')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['customer_phone'] ?? '-'),
+                        Infolists\Components\TextEntry::make('serial_number')
+                            ->label('Serial Number (SN) / Status H2H')
+                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['sn'] ?? (json_decode($record->notes ?? '', true)['melo_status'] ?? '-'))
+                            ->copyable(),
+                    ])
+                    ->columns(3)
+                    ->visible(fn (Order $record): bool => !empty(json_decode($record->notes ?? '', true)['type']) && str_starts_with(json_decode($record->notes ?? '', true)['type'], 'ppob_')),
 
                 Infolists\Components\Section::make('Item Transaksi')
                     ->schema([

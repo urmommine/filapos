@@ -27,6 +27,7 @@
 
     {{-- ==================== MODALS ==================== --}}
     @include('livewire.pos-terminal._modal-checkout')
+    @include('livewire.pos-terminal._modal-qris')
     @include('livewire.pos-terminal._modal-discount')
     @include('livewire.pos-terminal._modal-profile')
     @include('livewire.pos-terminal._modal-customer')

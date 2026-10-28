@@ -17,10 +17,28 @@ Route::get('/', function () {
         if (Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()) {
             return redirect('/admin');
         }
+        if (Auth::user()->role === 'user') {
+            return redirect('/topups');
+        }
         return redirect('/pos');
     }
     return view('landing');
 })->name('landing');
+
+// Public PPOB Game Top-up Portal
+Route::get('/topups', \App\Livewire\TopupGame::class)->name('topups');
+Route::get('/topups/check-username', \App\Livewire\CheckUsername::class)->name('topups.check-username');
+
+// PPOB Member Authentication & Account
+Route::get('/topups/login', \App\Livewire\TopupLogin::class)->name('topups.login');
+Route::get('/topups/register', \App\Livewire\TopupRegister::class)->name('topups.register');
+Route::get('/topups/account', \App\Livewire\TopupAccount::class)->name('topups.account');
+Route::post('/topups/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('topups');
+})->name('topups.logout');
 
 // POS Auth Routes
 Route::get('/pos/login', \App\Livewire\Auth\PosLogin::class)->name('login')->middleware('guest');

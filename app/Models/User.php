@@ -22,8 +22,10 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role',
+        'balance',
     ];
 
     /**
@@ -46,6 +48,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'balance' => 'decimal:2',
         ];
     }
 
@@ -56,6 +59,7 @@ class User extends Authenticatable implements FilamentUser
     {
         // Admin dan Superadmin dapat mengakses panel admin
         // Kasir hanya dapat mengakses POS
+        // User (member PPOB) hanya mengakses portal frontend
         return $this->isAdmin() || $this->isSuperAdmin();
     }
 
@@ -81,6 +85,38 @@ class User extends Authenticatable implements FilamentUser
     public function isKasir(): bool
     {
         return $this->role === 'kasir';
+    }
+
+    /**
+     * Cek apakah user adalah member PPOB biasa.
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Format saldo ke format Rupiah.
+     */
+    public function getFormattedBalanceAttribute(): string
+    {
+        return 'Rp ' . number_format((float) $this->balance, 0, ',', '.');
+    }
+
+    /**
+     * Cek apakah saldo mencukupi untuk nominal tertentu.
+     */
+    public function hasSufficientBalance(float $amount): bool
+    {
+        return (float) $this->balance >= $amount;
+    }
+
+    /**
+     * Relasi ke riwayat mutasi dompet/saldo.
+     */
+    public function walletTransactions(): HasMany
+    {
+        return $this->hasMany(WalletTransaction::class);
     }
 
     /**

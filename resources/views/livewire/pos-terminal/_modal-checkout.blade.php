@@ -56,15 +56,32 @@
                         @endif
                     </div>
                 @endif
+
+                @if($paymentMethod === 'qris')
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2 text-center">
+                        <div class="size-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                            <span class="material-symbols-outlined text-2xl">qr_code_2</span>
+                        </div>
+                        <p class="font-bold text-slate-800 text-sm">Pembayaran QRIS Dinamis (BorderPay)</p>
+                        <p class="text-xs text-slate-500">
+                            Sistem akan membuat QR Code resmi senilai <span class="font-bold text-slate-700">Rp {{ number_format($total, 0, ',', '.') }}</span> yang dapat dipindai langsung oleh pelanggan.
+                        </p>
+                    </div>
+                @endif
             </div>
             <div class="p-5 border-t border-slate-100 flex gap-3 bg-slate-50">
                 <button
                     class="flex-1 py-3 px-4 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors font-bold"
                     wire:click="closeModal">Batal</button>
                 <button
-                    class="flex-[2] py-3 px-4 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/25"
+                    class="flex-[2] py-3 px-4 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/25 flex items-center justify-center gap-2"
                     wire:click="processPayment" @if($paymentMethod === 'cash' && $amountPaid < $total) disabled @endif>
-                    Proses Pembayaran (Enter)
+                    @if($paymentMethod === 'qris')
+                        <span class="material-symbols-outlined text-lg">qr_code_2</span>
+                        <span>Buat QRIS (Enter)</span>
+                    @else
+                        <span>Proses Pembayaran (Enter)</span>
+                    @endif
                 </button>
             </div>
         </div>

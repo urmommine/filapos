@@ -139,6 +139,26 @@
             transform: translateY(0);
         }
 
+        /* Nav Popover Animation & Hover */
+        .nav-popover:not(.hidden) {
+            animation: heroFadeUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (min-width: 768px) {
+            .nav-dropdown-item:hover > .nav-popover {
+                display: block !important;
+                animation: heroFadeUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .nav-dropdown-item:hover > .nav-trigger-btn {
+                background-color: rgba(247, 254, 231, 0.9);
+                color: #3f6212;
+            }
+            .nav-dropdown-item:hover > .nav-trigger-btn .chevron-icon {
+                transform: rotate(180deg);
+                color: #4d7c0f;
+            }
+        }
+
         /* Reduced Motion Accessibility */
         @media (prefers-reduced-motion: reduce) {
             .anim-fade-up,
@@ -168,51 +188,174 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-18">
                 <!-- Brand Logo -->
-                <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
+                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
                     <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 flex items-center justify-center shadow-md shadow-lime-500/25 group-hover:scale-105 transition-transform duration-200">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-xl font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span></span>
-                            <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-lime-100 text-lime-800 rounded">Smart Ecosystem</span>
-                        </div>
-                        <span class="text-[11px] font-medium text-slate-500 -mt-0.5">Kasir • PPOB • AI Hub</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xl font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span></span>
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex items-center gap-7">
-                    <a href="#layanan" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Ekosistem Layanan</a>
-                    <a href="#pos-terminal" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Kasir POS</a>
-                    <a href="#ppob-digital" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">PPOB & Digital</a>
-                    <a href="#ai-subscription" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">AI Subscription</a>
-                    <a href="#simulasi" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Kalkulator Cuan</a>
-                    <a href="#faq" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">FAQ</a>
+                <!-- Desktop Navigation Dropdowns -->
+                <nav class="hidden md:flex items-center gap-1" id="desktopNav">
+                    <!-- Dropdown 1: Kasir Pintar (POS) -->
+                    <div class="relative nav-dropdown-item">
+                        <button type="button" 
+                                onclick="toggleNavDropdown('dropdown-pos', this)"
+                                class="nav-trigger-btn px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl flex items-center gap-1.5 transition-all duration-150 cursor-pointer focus:outline-none">
+                            <span>Kasir POS</span>
+                            <svg class="w-4 h-4 text-slate-400 chevron-icon transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <!-- Floating Popover Card -->
+                        <div id="dropdown-pos" class="nav-popover hidden absolute top-full left-0 mt-2 w-96 bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-2xl shadow-slate-900/10 space-y-1 z-50">
+                            <!-- Terminal Kasir -->
+                            <a href="#pos-terminal" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-lime-100 group-hover:text-lime-800 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-lime-700 transition-colors">Terminal Kasir Digital</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Input transaksi kilat, scan barcode produk, dan bayar via Tunai / QRIS.</div>
+                                </div>
+                            </a>
+
+                            <!-- Struk Thermal -->
+                            <a href="#pos-terminal" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-lime-100 group-hover:text-lime-800 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-lime-700 transition-colors">Cetak Struk Thermal Bluetooth</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Koneksi printer thermal 58mm & 80mm langsung tanpa install driver rumit.</div>
+                                </div>
+                            </a>
+
+                            <!-- Stok & Inventori -->
+                            <a href="#pos-terminal" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-lime-100 group-hover:text-lime-800 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-lime-700 transition-colors">Kelola Stok & Inventori</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Pengurangan stok real-time saat transaksi dan pengingat stok menipis.</div>
+                                </div>
+                            </a>
+
+                            <!-- Laporan Omset -->
+                            <a href="#pos-terminal" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-lime-100 group-hover:text-lime-800 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-lime-700 transition-colors">Laporan & Rekap Penjualan</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Pantau omset harian toko, rekap shift kasir, dan export riwayat transaksi.</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown 2: Produk Digital & PPOB -->
+                    <div class="relative nav-dropdown-item">
+                        <button type="button" 
+                                onclick="toggleNavDropdown('dropdown-digital', this)"
+                                class="nav-trigger-btn px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl flex items-center gap-1.5 transition-all duration-150 cursor-pointer focus:outline-none">
+                            <span>Produk Digital & PPOB</span>
+                            <svg class="w-4 h-4 text-slate-400 chevron-icon transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <!-- Floating Popover Card -->
+                        <div id="dropdown-digital" class="nav-popover hidden absolute top-full left-0 mt-2 w-96 bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-2xl shadow-slate-900/10 space-y-1 z-50">
+                            <!-- PLN & Tagihan -->
+                            <a href="#ppob-digital" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-amber-100 group-hover:text-amber-800 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-amber-700 transition-colors">PLN, Pulsa & Tagihan</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Token listrik PLN prabayar, pulsa & paket data kuota all-operator, PDAM & BPJS.</div>
+                                </div>
+                            </a>
+
+                            <!-- Game & E-Wallet -->
+                            <a href="{{ route('topups') }}" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-emerald-50/70 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Top Up Game (H2H)</div>
+                                        <span class="px-1.5 py-0.2 text-[9px] font-extrabold uppercase bg-emerald-600 text-white rounded">Online</span>
+                                    </div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Top up Diamond MLBB, FF, Genshin, Steam Wallet otomatis 24 jam via QRIS.</div>
+                                </div>
+                            </a>
+
+                            <!-- AI Subscription Hub -->
+                            <a href="#ai-subscription" onclick="closeAllNavDropdowns()" class="flex items-start gap-3.5 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 group-hover:bg-slate-900 group-hover:text-lime-400 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-slate-900 group-hover:text-lime-700 transition-colors">AI Subscription Hub</div>
+                                    <div class="text-xs text-slate-500 leading-snug mt-0.5">Langganan akun ChatGPT Plus, Midjourney, Claude & Canva Pro tanpa kartu kredit luar negeri.</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Direct Link: Simulasi Cuan (Single, not duplicated) -->
+                    <a href="#simulasi" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition-colors">
+                        Simulasi Cuan
+                    </a>
+
+                    <!-- Direct Link: FAQ -->
+                    <a href="#faq" class="px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition-colors">
+                        FAQ
+                    </a>
                 </nav>
 
                 <!-- Desktop Actions -->
                 <div class="hidden sm:flex items-center gap-3">
-                    <a href="{{ url('/admin') }}" class="px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <a href="{{ route('topups') }}" class="px-3.5 py-2 text-xs font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition-all flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-lime-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>Portal Admin</span>
+                        <span>Top Up Game</span>
                     </a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-950 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 rounded-lg shadow-sm shadow-lime-500/30 hover:shadow-md hover:shadow-lime-500/40 transition-all duration-200">
-                        <span>Buka Platform POS</span>
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-slate-950 bg-lime-500 hover:bg-lime-400 active:bg-lime-600 rounded-xl shadow-xs transition-all duration-150">
+                        <span>Buka Kasir POS</span>
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                     </a>
                 </div>
 
                 <!-- Mobile Hamburger Button -->
-                <div class="flex items-center lg:hidden">
-                    <button type="button" onclick="toggleMobileMenu()" id="mobileMenuBtn" aria-label="Menu" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500">
+                <div class="flex items-center md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" id="mobileMenuBtn" aria-label="Menu" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-500 cursor-pointer">
                         <svg id="menuIconOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -224,17 +367,99 @@
             </div>
         </div>
 
-        <!-- Mobile Drawer Menu -->
-        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-lg">
-            <div class="flex flex-col space-y-2">
-                <a href="#layanan" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Ekosistem Layanan</a>
-                <a href="#pos-terminal" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Kasir POS Digital</a>
-                <a href="#ppob-digital" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">PPOB, PLN & Game</a>
-                <a href="#ai-subscription" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">AI Subscriptions</a>
-                <a href="#simulasi" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Simulasi Keuntungan</a>
-                <a href="#faq" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Pertanyaan (FAQ)</a>
+        <!-- Mobile Drawer Menu (Matching FilaPOS Features) -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-4 shadow-lg">
+            <!-- Group 1: Fitur Kasir POS -->
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-600 px-2">Fitur Kasir POS</span>
+                <div class="mt-1.5 space-y-1">
+                    <a href="#pos-terminal" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-lime-100 text-lime-800 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <span>Terminal Kasir Digital</span>
+                    </a>
+                    <a href="#pos-terminal" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-lime-100 text-lime-800 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                        </div>
+                        <span>Cetak Struk Bluetooth</span>
+                    </a>
+                    <a href="#pos-terminal" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-lime-100 text-lime-800 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
+                        <span>Stok & Inventori Toko</span>
+                    </a>
+                </div>
             </div>
-            <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
+
+            <!-- Group 2: Produk Digital & PPOB -->
+            <div class="pt-2 border-t border-slate-100">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-600 px-2">Produk Digital & PPOB</span>
+                <div class="mt-1.5 space-y-1">
+                    <a href="#ppob-digital" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span>Token Listrik, Pulsa & PDAM</span>
+                    </a>
+                    <a href="{{ route('topups') }}" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-emerald-950 bg-emerald-50/80 hover:bg-emerald-100/80 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-200 text-emerald-900 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex items-center justify-between flex-1">
+                            <span>Top Up Game (H2H 24 Jam)</span>
+                            <span class="text-[9px] font-extrabold bg-emerald-600 text-white px-1.5 py-0.5 rounded">Online</span>
+                        </div>
+                    </a>
+                    <a href="#ai-subscription" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-slate-900 text-lime-400 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span>AI Subscription Hub</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 3: Navigasi Cepat -->
+            <div class="pt-2 border-t border-slate-100">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-600 px-2">Simulasi & Bantuan</span>
+                <div class="mt-1.5 space-y-1">
+                    <a href="#simulasi" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span>Kalkulator Cuan</span>
+                    </a>
+                    <a href="#faq" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span>Pertanyaan (FAQ)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Auth Buttons -->
+            <div class="pt-2 border-t border-slate-100 flex flex-col gap-2.5">
                 <a href="{{ url('/admin') }}" onclick="closeMobileMenu()" class="w-full py-2.5 px-4 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg flex items-center justify-center gap-2">
                     <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -1105,9 +1330,47 @@
             if (closeIcon) closeIcon.classList.add('hidden');
         }
 
-        // Close mobile menu on Escape key
+        // ========================================================
+        // NAVBAR RICH DROPDOWN / POPOVER SYSTEM
+        // ========================================================
+        function toggleNavDropdown(popoverId, btnElement) {
+            const popover = document.getElementById(popoverId);
+            const isCurrentlyOpen = popover && !popover.classList.contains('hidden');
+            
+            // Close all open popovers first
+            closeAllNavDropdowns();
+
+            // If it wasn't open, open it
+            if (!isCurrentlyOpen && popover) {
+                popover.classList.remove('hidden');
+                btnElement.classList.add('bg-lime-50', 'text-lime-800', 'border', 'border-lime-200/80');
+                btnElement.classList.remove('text-slate-700');
+                const chevron = btnElement.querySelector('.chevron-icon');
+                if (chevron) chevron.classList.add('rotate-180', 'text-lime-700');
+            }
+        }
+
+        function closeAllNavDropdowns() {
+            document.querySelectorAll('.nav-popover').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-trigger-btn').forEach(btn => {
+                btn.classList.remove('bg-lime-50', 'text-lime-800', 'border', 'border-lime-200/80');
+                btn.classList.add('text-slate-700');
+                const chevron = btn.querySelector('.chevron-icon');
+                if (chevron) chevron.classList.remove('rotate-180', 'text-lime-700');
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown-item')) {
+                closeAllNavDropdowns();
+            }
+        });
+
+        // Close menus on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closeAllNavDropdowns();
                 closeMobileMenu();
             }
         });

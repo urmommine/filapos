@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StoreSetting;
+use App\Services\BorderPayService;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -38,6 +39,17 @@ class PosTerminal extends Component
     public string $paymentMethod = 'cash';
     public $amountPaid = '';
     public $change = 0;
+
+    // BorderPay QRIS State
+    public bool $showQrisModal = false;
+    public ?string $qrisReferenceId = null;
+    public ?string $qrisQrString = null;
+    public ?string $qrisExpiresAt = null;
+    public float $qrisAmount = 0;
+    public float $qrisFee = 0;
+    public bool $isCheckingQris = false;
+    public bool $qrisPaid = false;
+    public string $qrisErrorMessage = '';
 
     // Discount modal
     public bool $showDiscountModal = false;
@@ -474,6 +486,7 @@ class PosTerminal extends Component
         $this->showProfileModal = false;
         $this->showCustomerModal = false;
         $this->showCreateCustomerModal = false;
+        $this->showQrisModal = false;
     }
 
     /**
@@ -567,6 +580,12 @@ class PosTerminal extends Component
             return;
         }
 
+        // Jika metode pembayaran QRIS, inisialisasi QRIS BorderPay
+        if ($this->paymentMethod === 'qris') {
+            $this->initiateQrisPayment();
+            return;
+        }
+
         if ($this->paymentMethod === 'cash' && (float) $this->amountPaid < $this->total) {
             $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Jumlah bayar kurang dari total');
             return;
@@ -579,6 +598,7 @@ class PosTerminal extends Component
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'customer_id' => $this->selectedCustomerId,
+                'channel' => 'pos',
                 'subtotal' => $this->subtotal,
                 'discount' => $this->discount,
                 'tax' => $this->tax > 0 ? ($this->subtotal - $this->discount) * ($this->tax / 100) : 0,
@@ -626,6 +646,152 @@ class PosTerminal extends Component
             DB::rollBack();
             $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Inisialisasi pembayaran QRIS melalui BorderPay API.
+     */
+    public function initiateQrisPayment(): void
+    {
+        if (empty($this->cart)) {
+            $this->dispatch('toastMagic', status: 'warning', title: 'Peringatan', message: 'Keranjang masih kosong');
+            return;
+        }
+
+        if ($this->total < 1000) {
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Nominal pembayaran QRIS minimal Rp1.000');
+            return;
+        }
+
+        $borderPay = app(BorderPayService::class);
+        $invoiceNumber = BorderPayService::generateInvoiceNumber();
+
+        $result = $borderPay->createQrisPayment($this->total, $invoiceNumber);
+
+        if (!$result['success']) {
+            $msg = $result['message'] ?? 'Terjadi kendala pada server BorderPay';
+            $errStr = is_array($msg) ? ($msg['message'] ?? json_encode($msg)) : (string) $msg;
+            $this->dispatch('toastMagic', status: 'error', title: 'Gagal Membuat QRIS', message: $errStr);
+            return;
+        }
+
+        $this->qrisReferenceId = $result['reference_id'];
+        $this->qrisQrString = $result['qr_string'];
+        $this->qrisExpiresAt = $result['expires_at'];
+        $this->qrisAmount = $result['amount'];
+        $this->qrisFee = $result['fee'] ?? 0;
+        $this->isCheckingQris = false;
+        $this->qrisPaid = false;
+        $this->qrisErrorMessage = '';
+
+        // Buka modal QRIS dan sembunyikan modal checkout tunai
+        $this->showCheckoutModal = false;
+        $this->showQrisModal = true;
+
+        // Berikan sinyal ke JavaScript untuk merender QR Code
+        $this->dispatch('render-qris', qrString: $this->qrisQrString);
+        $this->dispatch('toastMagic', status: 'info', title: 'QRIS Siap', message: 'Silakan minta pelanggan memindai QR Code');
+    }
+
+    /**
+     * Polling untuk mengecek status pelunasan QRIS BorderPay.
+     * Dipanggil secara otomatis oleh timer frontend setiap ~3 detik.
+     */
+    public function checkQrisStatus(): void
+    {
+        if (!$this->showQrisModal || empty($this->qrisReferenceId) || $this->qrisPaid) {
+            return;
+        }
+
+        $this->isCheckingQris = true;
+        $borderPay = app(BorderPayService::class);
+        $statusCheck = $borderPay->checkPaymentStatus($this->qrisReferenceId);
+        $this->isCheckingQris = false;
+
+        if ($statusCheck['success'] && $statusCheck['is_paid']) {
+            $this->finalizeQrisOrder();
+        }
+    }
+
+    /**
+     * Memproses order setelah verifikasi status BorderPay menyatakan 'paid'.
+     */
+    private function finalizeQrisOrder(): void
+    {
+        try {
+            DB::beginTransaction();
+
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'customer_id' => $this->selectedCustomerId,
+                'channel' => 'pos',
+                'invoice_number' => $this->qrisReferenceId,
+                'subtotal' => $this->subtotal,
+                'discount' => $this->discount,
+                'tax' => $this->tax > 0 ? ($this->subtotal - $this->discount) * ($this->tax / 100) : 0,
+                'total_amount' => $this->total,
+                'payment_method' => 'qris',
+                'amount_paid' => $this->total,
+                'change' => 0,
+                'payment_status' => 'paid',
+                'qris_reference_id' => $this->qrisReferenceId,
+                'qris_qr_string' => $this->qrisQrString,
+                'qris_expires_at' => $this->qrisExpiresAt,
+                'notes' => 'Lunas via BorderPay QRIS (' . $this->qrisReferenceId . ')',
+            ]);
+
+            $productIds = array_column($this->cart, 'product_id');
+            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+            foreach ($this->cart as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['product_id'],
+                    'product_name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['price'],
+                    'total_price' => $item['total'],
+                ]);
+
+                $product = $products->get($item['product_id']);
+                $product?->reduceStock($item['quantity']);
+            }
+
+            DB::commit();
+
+            $transactionInvoice = $order->invoice_number;
+            $transactionId = $order->id;
+
+            $this->qrisPaid = true;
+            $this->showQrisModal = false;
+            $this->resetCartState();
+
+            // Cetak struk otomatis dan tampilkan notifikasi sukses
+            $this->dispatch('printReceipt', orderId: $transactionId);
+            $this->dispatch('toastMagic', status: 'success', title: 'Pembayaran QRIS Berhasil!', message: 'Invoice: ' . $transactionInvoice);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->dispatch('toastMagic', status: 'error', title: 'Error', message: 'Gagal menyelesaikan transaksi: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Membatalkan transaksi QRIS yang sedang menunggu pembayaran.
+     */
+    public function cancelQrisPayment(): void
+    {
+        if (!empty($this->qrisReferenceId)) {
+            $borderPay = app(BorderPayService::class);
+            $borderPay->cancelPayment($this->qrisReferenceId);
+        }
+
+        $this->showQrisModal = false;
+        $this->qrisReferenceId = null;
+        $this->qrisQrString = null;
+        $this->qrisPaid = false;
+
+        $this->dispatch('toastMagic', status: 'info', title: 'Dibatalkan', message: 'Transaksi QRIS berhasil dibatalkan');
     }
 
     // ──────────────────────────────────────────────

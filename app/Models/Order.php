@@ -15,6 +15,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'customer_id',
+        'channel',
         'invoice_number',
         'subtotal',
         'discount',
@@ -24,6 +25,9 @@ class Order extends Model
         'amount_paid',
         'change',
         'payment_status',
+        'qris_reference_id',
+        'qris_qr_string',
+        'qris_expires_at',
         'notes',
     ];
 
@@ -34,6 +38,7 @@ class Order extends Model
         'total_amount' => 'decimal:2',
         'amount_paid' => 'decimal:2',
         'change' => 'decimal:2',
+        'qris_expires_at' => 'datetime',
     ];
 
     /**
@@ -45,34 +50,30 @@ class Order extends Model
 
         static::creating(function ($order) {
             if (empty($order->invoice_number)) {
-                $order->invoice_number = self::generateInvoiceNumber();
+                $order->invoice_number = self::generateInvoiceNumber($order->payment_method ?? 'cash');
             }
         });
     }
 
     /**
-     * Generate nomor invoice yang unik.
-     * Format: INV-YYYYMMDD-XXXX
+     * Generate nomor invoice.
+     * Format BORDER-... hanya untuk pembayaran QRIS.
+     * Untuk selain QRIS (Cash, Saldo Akun, Transfer), gunakan format invoice lama: INV-YYYYMMDD-XXXX.
      */
-    public static function generateInvoiceNumber(): string
+    public static function generateInvoiceNumber(?string $paymentMethod = 'cash'): string
     {
-        $today = Carbon::today();
-        $prefix = 'INV-' . $today->format('Ymd') . '-';
+        if ($paymentMethod === 'qris') {
+            $milliseconds = (string) round(microtime(true) * 1000);
+            $random = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
 
-        // Get the last order of today
-        $lastOrder = self::where('invoice_number', 'like', $prefix . '%')
-            ->orderBy('invoice_number', 'desc')
-            ->first();
-
-        if ($lastOrder) {
-            // Extract the number and increment
-            $lastNumber = (int) substr($lastOrder->invoice_number, -4);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
+            return 'BORDER-' . $milliseconds . '-' . $random;
         }
 
-        return $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        // Format invoice lama POS: INV-YYYYMMDD-XXXX
+        $dateStr = now()->format('Ymd');
+        $random = str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT);
+
+        return 'INV-' . $dateStr . '-' . $random;
     }
 
     /**
