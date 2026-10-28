@@ -49,6 +49,7 @@ class UserResource extends Resource
                                 'superadmin' => 'Super Admin',
                                 'admin' => 'Administrator',
                                 'kasir' => 'Kasir',
+                                'tamu' => 'Tamu (Guest)',
                             ])
                             ->required()
                             ->default('kasir'),
@@ -83,12 +84,14 @@ class UserResource extends Resource
                         'superadmin' => 'success',
                         'admin' => 'danger',
                         'kasir' => 'info',
+                        'tamu' => 'warning',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'superadmin' => 'Super Admin',
                         'admin' => 'Administrator',
                         'kasir' => 'Kasir',
+                        'tamu' => 'Tamu (Guest)',
                         default => $state,
                     }),
                 Tables\Columns\TextColumn::make('orders_count')

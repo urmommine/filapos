@@ -57,10 +57,18 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Admin dan Superadmin dapat mengakses panel admin
+        // Admin, Superadmin, dan Tamu dapat mengakses panel admin
         // Kasir hanya dapat mengakses POS
         // User (member PPOB) hanya mengakses portal frontend
-        return $this->isAdmin() || $this->isSuperAdmin();
+        return $this->isAdmin() || $this->isSuperAdmin() || $this->isTamu();
+    }
+
+    /**
+     * Cek apakah user adalah tamu (guest view-only).
+     */
+    public function isTamu(): bool
+    {
+        return $this->role === 'tamu';
     }
 
     /**

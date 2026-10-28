@@ -22,7 +22,10 @@ class StoreSettings extends Page
 
     protected static ?string $navigationLabel = 'Pengaturan Toko';
 
-    protected static ?string $title = 'Pengaturan Toko';
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isAdmin() || auth()->user()?->isSuperAdmin();
+    }
 
     public ?array $data = [];
 

@@ -151,6 +151,32 @@ class OrderResource extends Resource
                 Tables\Filters\Filter::make('today')
                     ->label('Hari Ini')
                     ->query(fn ($query) => $query->whereDate('created_at', today())),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('from')
+                            ->label('Dari Tanggal')
+                            ->default(fn () => auth()->user()?->isTamu() ? '2026-10-20' : null)
+                            ->minDate(fn () => auth()->user()?->isTamu() ? '2026-10-20' : null)
+                            ->helperText(fn () => auth()->user()?->isTamu() ? '⚠️ Akun Tamu hanya dapat melihat riwayat tanggal 20 Oktober 2026 ke atas.' : null),
+                        Forms\Components\DatePicker::make('until')
+                            ->label('Sampai Tanggal'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'], function ($q, $date) {
+                                if (auth()->user()?->isTamu() && $date < '2026-10-20') {
+                                    \Filament\Notifications\Notification::make()
+                                        ->danger()
+                                        ->title('Peringatan: Akses Terbatas!')
+                                        ->body('DILARANG: Akun Tamu tidak diizinkan melihat riwayat transaksi sebelum tanggal 20!')
+                                        ->persistent()
+                                        ->send();
+                                    return $q->where('created_at', '>=', '2026-10-20 00:00:00');
+                                }
+                                return $q->whereDate('created_at', '>=', $date);
+                            })
+                            ->when($data['until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -278,5 +304,16 @@ class OrderResource extends Resource
     public static function canCreate(): bool
     {
         return false; // Orders are created from POS terminal
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()?->isTamu()) {
+            $query->where('created_at', '>=', \Carbon\Carbon::create(2026, 10, 20)->startOfDay());
+        }
+
+        return $query;
     }
 }

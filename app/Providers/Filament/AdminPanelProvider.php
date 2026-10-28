@@ -85,6 +85,13 @@ class AdminPanelProvider extends PanelProvider
                 'Laporan',
                 'Pengaturan',
             ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Menu Kasir (POS)')
+                    ->url('/pos')
+                    ->icon('heroicon-o-computer-desktop')
+                    ->group('Transaksi')
+                    ->sort(-1),
+            ])
             ->userMenuItems([
                 MenuItem::make()
                     ->label('Buka Kasir (POS)')
