@@ -684,14 +684,24 @@
                         <!-- Checkout Button -->
                         <div id="submit-payment-action" class="space-y-2 scroll-mt-24">
                             <button id="btn-submit-payment" @click="submitPayment()" type="button"
-                                    class="w-full py-3.5 rounded-xl bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-slate-950 font-extrabold text-sm shadow-md shadow-lime-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                                <template x-if="selectedPaymentMethod === 'balance'">
+                                    :disabled="isSubmitting"
+                                    class="w-full py-3.5 rounded-xl font-extrabold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                                    :class="isSubmitting 
+                                        ? 'bg-slate-300 text-slate-500 cursor-wait' 
+                                        : 'bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-slate-950 shadow-lime-500/25 cursor-pointer'">
+                                <template x-if="isSubmitting">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></span>
+                                        <span>Memproses Transaksi H2H...</span>
+                                    </span>
+                                </template>
+                                <template x-if="!isSubmitting && selectedPaymentMethod === 'balance'">
                                     <span class="flex items-center gap-2">
                                         <span class="material-symbols-outlined text-xl">bolt</span>
                                         <span>Bayar Pakai Saldo (Instan)</span>
                                     </span>
                                 </template>
-                                <template x-if="selectedPaymentMethod !== 'balance'">
+                                <template x-if="!isSubmitting && selectedPaymentMethod !== 'balance'">
                                     <span class="flex items-center gap-2">
                                         <span class="material-symbols-outlined text-xl">qr_code_scanner</span>
                                         <span>Bayar Sekarang (QRIS)</span>
@@ -877,6 +887,7 @@
                 zone: '{{ addslashes($zone) }}',
                 customerPhone: '{{ addslashes($customerPhone) }}',
                 wizardStep: 1,
+                isSubmitting: false,
 
                 // Payment Method & Member Balance States
                 selectedPaymentMethod: '{{ (Auth::check() && (float)Auth::user()->balance > 0) ? 'balance' : 'qris' }}',
@@ -1166,7 +1177,9 @@
                     @this.checkAccount(this.selectedGame, this.target, this.zone);
                 },
 
-                submitPayment() {
+                async submitPayment() {
+                    if (this.isSubmitting) return;
+
                     if (!this.target.trim()) {
                         alert('Silakan masukkan ' + this.targetLabel + ' akun Anda.');
                         return;
@@ -1186,9 +1199,20 @@
                             alert('Saldo akun Anda tidak mencukupi (Tersedia: Rp ' + new Intl.NumberFormat('id-ID').format(this.userBalance) + '). Silakan pilih QRIS atau lakukan isi saldo terlebih dahulu.');
                             return;
                         }
-                        @this.payWithBalance(this.selectedGame, this.selectedSku, this.target, this.zone, this.customerPhone);
-                    } else {
-                        @this.initiatePayment(this.selectedGame, this.selectedSku, this.target, this.zone, this.customerPhone);
+                    }
+
+                    this.isSubmitting = true;
+                    try {
+                        if (this.selectedPaymentMethod === 'balance') {
+                            await this.$wire.payWithBalance(this.selectedGame, this.selectedSku, this.target, this.zone, this.customerPhone);
+                        } else {
+                            await this.$wire.initiatePayment(this.selectedGame, this.selectedSku, this.target, this.zone, this.customerPhone);
+                        }
+                    } catch (err) {
+                        console.error('Payment error:', err);
+                        alert('Terjadi kesalahan saat memproses pembayaran: ' + (err.message || err));
+                    } finally {
+                        this.isSubmitting = false;
                     }
                 }
             }

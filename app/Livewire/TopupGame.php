@@ -114,7 +114,7 @@ class TopupGame extends Component
                 $this->dispatch('topup-alert', type: 'error', message: 'Silakan masukkan User ID / Player ID akun game Anda.');
                 return;
             }
-            $inquiryFields = $this->gameDetails['inquiry_fields'] ?? [];
+            $inquiryFields = $this->gameDetails()['inquiry_fields'] ?? [];
             if (count($inquiryFields) > 1 && empty(trim($this->zone))) {
                 $this->dispatch('topup-alert', type: 'error', message: 'Silakan masukkan Server / Zone ID akun game Anda.');
                 return;
@@ -165,7 +165,7 @@ class TopupGame extends Component
     public function selectProduct(string $sku): void
     {
         $this->selectedSku = $sku;
-        $products = $this->gameDetails['products'] ?? [];
+        $products = $this->gameDetails()['products'] ?? [];
         foreach ($products as $p) {
             if ($p['sku_code'] === $sku) {
                 $this->selectedProduct = $p;
@@ -240,7 +240,6 @@ class TopupGame extends Component
     ): void {
         if (!empty($game)) {
             $this->selectedGame = $game;
-            $this->loadGameDetails($game);
         }
         if (!empty($sku)) {
             $this->selectProduct($sku);
@@ -262,7 +261,7 @@ class TopupGame extends Component
         }
 
         // Cek field zone jika game membutuhkan zone / server
-        $inquiryFields = $this->gameDetails['inquiry_fields'] ?? [];
+        $inquiryFields = $this->gameDetails()['inquiry_fields'] ?? [];
         $needsZone = false;
         if (count($inquiryFields) > 1) {
             $needsZone = true;
@@ -300,7 +299,7 @@ class TopupGame extends Component
             $cashierId = $cashier ? $cashier->id : 2;
 
             $invoiceNumber = BorderPayService::generateInvoiceNumber();
-            $gameName = $this->gameDetails['brand']['name'] ?? ucwords(str_replace('-', ' ', $this->selectedGame));
+            $gameName = $this->gameDetails()['brand']['name'] ?? ucwords(str_replace('-', ' ', $this->selectedGame));
             $productName = $this->selectedProduct['name'];
 
             $orderNotes = json_encode([
@@ -404,9 +403,6 @@ class TopupGame extends Component
 
         if (!empty($gameSlug)) {
             $this->selectedGame = $gameSlug;
-            if (empty($this->gameDetails) || ($this->gameDetails['brand']['slug'] ?? '') !== $gameSlug) {
-                $this->gameDetails = MeloStoreService::getGameProducts($gameSlug);
-            }
         }
 
         if (!empty($sku)) {
@@ -443,7 +439,7 @@ class TopupGame extends Component
             DB::beginTransaction();
 
             $invoiceNumber = BorderPayService::generateInvoiceNumber();
-            $gameName = $this->gameDetails['brand']['name'] ?? ucwords(str_replace('-', ' ', $this->selectedGame));
+            $gameName = $this->gameDetails()['brand']['name'] ?? ucwords(str_replace('-', ' ', $this->selectedGame));
             $productName = $this->selectedProduct['name'];
 
             $orderNotes = json_encode([
@@ -705,7 +701,7 @@ class TopupGame extends Component
 
         $catalog = [];
         if (!empty($this->selectedGame)) {
-            $catalog[$this->selectedGame] = $this->gameDetails;
+            $catalog[$this->selectedGame] = $this->gameDetails();
         }
 
         return view('livewire.topup-game', [
