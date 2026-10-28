@@ -13,8 +13,8 @@ class BlockUserRoleFromPos
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user() && ($request->user()->role === 'user' || $request->user()->isTamu())) {
-            abort(403, 'Akses Ditolak: Anda tidak memiliki izin mengakses Terminal Kasir.');
+        if ($request->user() && $request->user()->role === 'user') {
+            abort(403, 'Akses Ditolak: Akun Member PPOB tidak memiliki izin mengakses Terminal Kasir.');
         }
 
         return $next($request);

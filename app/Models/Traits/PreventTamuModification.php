@@ -14,13 +14,17 @@ trait PreventTamuModification
     {
         static::creating(function ($model) {
             if (auth()->check() && method_exists(auth()->user(), 'isTamu') && auth()->user()->isTamu()) {
-                throw new AuthorizationException('Akses Ditolak: Akun Tamu (Read-Only) tidak diizinkan menambah data.');
+                if (request()->is('admin*')) {
+                    throw new AuthorizationException('Akses Ditolak: Akun Tamu (Read-Only) tidak diizinkan menambah data di Admin Panel.');
+                }
             }
         });
 
         static::updating(function ($model) {
             if (auth()->check() && method_exists(auth()->user(), 'isTamu') && auth()->user()->isTamu()) {
-                throw new AuthorizationException('Akses Ditolak: Akun Tamu (Read-Only) tidak diizinkan mengubah data.');
+                if (request()->is('admin*')) {
+                    throw new AuthorizationException('Akses Ditolak: Akun Tamu (Read-Only) tidak diizinkan mengubah data di Admin Panel.');
+                }
             }
         });
 

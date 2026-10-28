@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\PreventTamuModification;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    use HasFactory, PreventTamuModification;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
