@@ -237,15 +237,15 @@ class OrderResource extends Resource
                         Infolists\Components\TextEntry::make('game_name')
                             ->label('Game / Brand')
                             ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['game'] ?? '-'),
-                        Infolists\Components\TextEntry::make('target_id')
-                            ->label('User ID / No. Tujuan')
-                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['target'] ?? '-'),
+                        // Infolists\Components\TextEntry::make('target_id')
+                        //     ->label('User ID / No. Tujuan')
+                        //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['target'] ?? '-'),
                         Infolists\Components\TextEntry::make('zone_id')
                             ->label('Zone / Server ID')
                             ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['zone'] ?? '-'),
-                        Infolists\Components\TextEntry::make('nickname')
-                            ->label('Nickname Akun')
-                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['nickname'] ?? '-'),
+                        // Infolists\Components\TextEntry::make('nickname')
+                        //     ->label('Nickname Akun')
+                        //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['nickname'] ?? '-'),
                         // Infolists\Components\TextEntry::make('customer_phone')
                         //     ->label('No. WhatsApp Pelanggan')
                         //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['customer_phone'] ?? '-'),
