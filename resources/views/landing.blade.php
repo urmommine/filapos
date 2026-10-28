@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FilaPOS Smart - Aplikasi Kasir Digital Web-Based untuk UMKM & Bisnis Modern</title>
-    <meta name="description" content="FilaPOS Smart adalah aplikasi kasir (POS) berbasis web modern yang cepat, responsif di HP/tablet/laptop, dan siap cetak struk thermal tanpa mesin kasir mahal.">
-    <meta name="keywords" content="aplikasi kasir, web pos, pos smart, software kasir umkm, point of sale indonesia, cetak struk thermal, kasir web">
+    <title>FilaPOS Smart - Platform Kasir Digital, PPOB Terlengkap & AI Subscription</title>
+    <meta name="description" content="FilaPOS Smart: Solusi bisnis all-in-one. Kelola kasir digital toko fisik, transaksi PPOB (pulsa, PLN, e-wallet, voucher game), dan langganan AI terpercaya dalam satu web app responsif.">
+    <meta name="keywords" content="aplikasi kasir, ppob pulsa pln, top up game, voucher e-wallet, ai subscription indonesia, point of sale web, kasir pintar umkm">
     <meta name="theme-color" content="#84cc16">
 
     <!-- Open Graph / Meta -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="FilaPOS Smart - Aplikasi Kasir Digital Web-Based Modern">
-    <meta property="og:description" content="Solusi kasir digital praktis di browser Anda. Ringan, cepat, hemat biaya tanpa investasi mesin kasir khusus.">
+    <meta property="og:title" content="FilaPOS Smart - Platform Bisnis Digital, Kasir & Layanan AI">
+    <meta property="og:description" content="Satu platform untuk kelola kasir toko, transaksi PPOB lengkap (PLN, pulsa, game, e-wallet), dan langganan AI subscription instan.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,6 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Subtle grid background */
         .bg-grid-pattern {
             background-size: 32px 32px;
             background-image: 
@@ -38,15 +37,15 @@
                 linear-gradient(to bottom, rgba(100, 116, 139, 0.05) 1px, transparent 1px);
         }
 
-        /* Thermal receipt paper zigzag effect */
-        .receipt-tear {
-            background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%, #ffffff 100%);
-            background-size: 14px 14px;
-        }
-
-        /* Custom range slider styling */
         input[type="range"] {
             accent-color: #84cc16;
+        }
+
+        .tab-btn.active {
+            background-color: #84cc16;
+            color: #0f172a;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(132, 204, 22, 0.25);
         }
     </style>
 </head>
@@ -61,25 +60,27 @@
             <div class="flex items-center justify-between h-18">
                 <!-- Brand Logo -->
                 <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
-                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-white flex items-center justify-center shadow-md shadow-lime-500/25 group-hover:scale-105 transition-transform duration-200">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 flex items-center justify-center shadow-md shadow-lime-500/25 group-hover:scale-105 transition-transform duration-200">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <div class="flex flex-col">
                         <div class="flex items-center gap-1.5">
                             <span class="text-xl font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span></span>
-                            <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-lime-100 text-lime-800 rounded">Smart</span>
+                            <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-lime-100 text-lime-800 rounded">Smart Ecosystem</span>
                         </div>
-                        <span class="text-[11px] font-medium text-slate-500 -mt-0.5">Kasir Digital Web</span>
+                        <span class="text-[11px] font-medium text-slate-500 -mt-0.5">Kasir • PPOB • AI Hub</span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center gap-8">
-                    <a href="#fitur" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Fitur</a>
-                    <a href="#keunggulan" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Keunggulan</a>
-                    <a href="#simulasi" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Simulasi Hemat</a>
+                <nav class="hidden lg:flex items-center gap-7">
+                    <a href="#layanan" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Ekosistem Layanan</a>
+                    <a href="#pos-terminal" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Kasir POS</a>
+                    <a href="#ppob-digital" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">PPOB & Digital</a>
+                    <a href="#ai-subscription" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">AI Subscription</a>
+                    <a href="#simulasi" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">Kalkulator Cuan</a>
                     <a href="#faq" class="text-sm font-semibold text-slate-600 hover:text-lime-600 transition-colors">FAQ</a>
                 </nav>
 
@@ -92,8 +93,8 @@
                         </svg>
                         <span>Portal Admin</span>
                     </a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-lime-600 hover:bg-lime-700 active:bg-lime-800 rounded-lg shadow-sm shadow-lime-600/30 hover:shadow-md hover:shadow-lime-600/40 transition-all duration-200">
-                        <span>Buka Kasir POS</span>
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-950 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 rounded-lg shadow-sm shadow-lime-500/30 hover:shadow-md hover:shadow-lime-500/40 transition-all duration-200">
+                        <span>Buka Platform POS</span>
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -101,7 +102,7 @@
                 </div>
 
                 <!-- Mobile Hamburger Button -->
-                <div class="flex items-center sm:hidden">
+                <div class="flex items-center lg:hidden">
                     <button type="button" onclick="toggleMobileMenu()" id="mobileMenuBtn" aria-label="Menu" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500">
                         <svg id="menuIconOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -115,11 +116,13 @@
         </div>
 
         <!-- Mobile Drawer Menu -->
-        <div id="mobileMenu" class="hidden sm:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3">
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-lg">
             <div class="flex flex-col space-y-2">
-                <a href="#fitur" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Fitur Kasir</a>
-                <a href="#keunggulan" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Keunggulan Bisnis</a>
-                <a href="#simulasi" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Simulasi Hemat</a>
+                <a href="#layanan" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Ekosistem Layanan</a>
+                <a href="#pos-terminal" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Kasir POS Digital</a>
+                <a href="#ppob-digital" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">PPOB, PLN & Game</a>
+                <a href="#ai-subscription" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">AI Subscriptions</a>
+                <a href="#simulasi" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Simulasi Keuntungan</a>
                 <a href="#faq" onclick="closeMobileMenu()" class="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Pertanyaan (FAQ)</a>
             </div>
             <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
@@ -130,7 +133,7 @@
                     </svg>
                     <span>Masuk Portal Admin</span>
                 </a>
-                <a href="{{ route('login') }}" class="w-full py-2.5 px-4 text-xs font-bold text-center text-white bg-lime-600 hover:bg-lime-700 rounded-lg shadow-sm">
+                <a href="{{ route('login') }}" class="w-full py-2.5 px-4 text-xs font-bold text-center text-slate-950 bg-lime-500 hover:bg-lime-600 rounded-lg shadow-sm">
                     Buka Kasir POS Sekarang
                 </a>
             </div>
@@ -142,32 +145,32 @@
     <!-- ======================================================== -->
     <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-grid-pattern">
         <!-- Background Glow Accent -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-lime-200/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-lime-200/45 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto">
+            <div class="text-center max-w-4xl mx-auto">
                 <!-- Pill Badge -->
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-100/90 border border-lime-300 text-lime-900 text-xs font-semibold mb-6 shadow-xs">
                     <span class="flex h-2 w-2 relative">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-lime-600"></span>
                     </span>
-                    <span>Aplikasi Kasir Web-Based Modern • Bebas Biaya Mesin Khusus</span>
+                    <span>Platform All-in-One: Kasir Web • Multi-PPOB • AI Subscriptions</span>
                 </div>
 
                 <!-- Main Heading -->
                 <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
-                    Transaksi Kasir <span class="text-lime-600 underline decoration-lime-300 decoration-wavy underline-offset-8">Lebih Cepat</span>, Ringan di Semua Gadget.
+                    Satu Platform untuk <span class="text-lime-600 underline decoration-lime-300 decoration-wavy underline-offset-8">Kasir Cepat</span>, PPOB Lengkap & Layanan AI.
                 </h1>
 
                 <!-- Subtitle -->
-                <p class="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-                    Kelola penjualan, cetak struk thermal instan, dan pantau stok toko tanpa ribet instalasi aplikasi. Cukup buka browser di smartphone, tablet, atau laptop Anda.
+                <p class="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
+                    Kelola transaksi kasir toko fisik Anda, raup cuan ekstra dari penjualan pulsa, token PLN, e-wallet, voucher game, hingga langganan tools AI modern langsung dalam satu web dashboard terintegrasi.
                 </p>
 
                 <!-- CTA Buttons -->
                 <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-sm font-bold text-white bg-lime-600 hover:bg-lime-700 active:bg-lime-800 rounded-xl shadow-lg shadow-lime-600/30 hover:shadow-xl hover:shadow-lime-600/40 transition-all duration-200">
+                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 rounded-xl shadow-lg shadow-lime-500/30 hover:shadow-xl hover:shadow-lime-500/40 transition-all duration-200">
                         <span>Buka Aplikasi Kasir</span>
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -182,36 +185,53 @@
                     </a>
                 </div>
 
-                <!-- Trust Chips -->
-                <div class="mt-10 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs font-medium text-slate-500">
-                    <div class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-lime-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>100% Berbasis Web</span>
+                <!-- 3 Pillars Badges Strip -->
+                <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-left">
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                        <div class="w-9 h-9 rounded-lg bg-lime-100 text-lime-800 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Kasir Web Modern</div>
+                            <div class="text-[11px] text-slate-500">Struk thermal, stok & multi-kasir</div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-lime-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Support Printer ESC/POS Thermal</span>
+
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">PPOB, Game & E-Wallet</div>
+                            <div class="text-[11px] text-slate-500">PLN, pulsa, MLBB, Dana & OVO</div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-lime-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Multi-Perangkat & Responsif</span>
+
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                        <div class="w-9 h-9 rounded-lg bg-slate-900 text-lime-400 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">AI Subscription Hub</div>
+                            <div class="text-[11px] text-slate-500">ChatGPT, Midjourney & AI Tools</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- ======================================================== -->
-            <!-- MULTI-DEVICE MOCKUP SHOWCASE (LAPTOP + HP + THERMAL STRUK) -->
+            <!-- MULTI-SERVICE INTERACTIVE SHOWCASE                       -->
             <!-- ======================================================== -->
             <div class="mt-14 relative max-w-5xl mx-auto">
-                <!-- Main Tablet / Laptop Display Frame -->
+                <!-- Outer Laptop/Tablet Shell -->
                 <div class="rounded-2xl bg-slate-900 p-2 sm:p-3.5 shadow-2xl shadow-slate-950/20 border border-slate-800">
-                    <!-- Browser Header Bar -->
+                    <!-- Top Window Bar -->
                     <div class="flex items-center justify-between px-3 py-2 bg-slate-950 rounded-t-xl mb-1 text-slate-400">
                         <div class="flex items-center gap-1.5">
                             <div class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></div>
@@ -222,408 +242,526 @@
                             <svg class="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            <span>https://filapos.store/pos</span>
+                            <span>https://filapos.store/hub</span>
                         </div>
-                        <div class="text-[11px] font-medium text-lime-400 bg-lime-950/80 px-2 py-0.5 rounded border border-lime-800/40">
-                            Kasir Aktif
+                        <div class="flex items-center gap-1.5 text-[11px] font-medium text-lime-400 bg-lime-950/80 px-2.5 py-0.5 rounded border border-lime-800/40">
+                            <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
+                            <span>Multi-Service Ready</span>
                         </div>
                     </div>
 
-                    <!-- Inner Mockup UI (POS Screen) -->
-                    <div class="bg-slate-100 rounded-b-xl overflow-hidden p-3 sm:p-4 text-slate-800 grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4">
-                        <!-- Left Catalog (8 cols) -->
-                        <div class="md:col-span-8 flex flex-col space-y-3">
-                            <!-- Category Filter Pill Bar -->
-                            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-                                <span class="px-3 py-1.5 font-bold bg-lime-600 text-white rounded-lg whitespace-nowrap shadow-xs">Semua (18)</span>
-                                <span class="px-3 py-1.5 font-medium bg-white text-slate-600 border border-slate-200 rounded-lg whitespace-nowrap">Minuman (5)</span>
-                                <span class="px-3 py-1.5 font-medium bg-white text-slate-600 border border-slate-200 rounded-lg whitespace-nowrap">Makanan (4)</span>
-                                <span class="px-3 py-1.5 font-medium bg-white text-slate-600 border border-slate-200 rounded-lg whitespace-nowrap">Snack (5)</span>
-                            </div>
-
-                            <!-- Products Grid -->
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                                <!-- Product Card 1 -->
-                                <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-lime-400 transition-colors">
-                                    <div class="h-20 bg-lime-50 rounded-lg flex items-center justify-center text-lime-700 font-bold text-xs mb-2">
-                                        <svg class="w-8 h-8 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-xs text-slate-900 leading-tight">Kopi Arabica</h4>
-                                        <div class="flex items-center justify-between mt-1">
-                                            <span class="text-xs font-extrabold text-lime-700">Rp 25.000</span>
-                                            <span class="text-[10px] text-slate-600 bg-slate-100 px-1 rounded font-medium">Stok: 50</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Product Card 2 -->
-                                <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-lime-400 transition-colors">
-                                    <div class="h-20 bg-amber-50 rounded-lg flex items-center justify-center text-amber-700 font-bold text-xs mb-2">
-                                        <svg class="w-8 h-8 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-xs text-slate-900 leading-tight">Es Teh Manis</h4>
-                                        <div class="flex items-center justify-between mt-1">
-                                            <span class="text-xs font-extrabold text-lime-700">Rp 8.000</span>
-                                            <span class="text-[10px] text-slate-600 bg-slate-100 px-1 rounded font-medium">Stok: 100</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Product Card 3 -->
-                                <div class="hidden sm:flex bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs flex-col justify-between hover:border-lime-400 transition-colors">
-                                    <div class="h-20 bg-orange-50 rounded-lg flex items-center justify-center text-orange-700 font-bold text-xs mb-2">
-                                        <svg class="w-8 h-8 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-xs text-slate-900 leading-tight">Nasi Goreng Spesial</h4>
-                                        <div class="flex items-center justify-between mt-1">
-                                            <span class="text-xs font-extrabold text-lime-700">Rp 20.000</span>
-                                            <span class="text-[10px] text-slate-600 bg-slate-100 px-1 rounded font-medium">Stok: 40</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Cart / Order Panel (4 cols) -->
-                        <div class="hidden md:flex md:col-span-4 bg-white rounded-xl border border-slate-200 p-3 flex-col justify-between shadow-xs">
+                    <!-- Inner Mockup: 3 Services Cards Grid -->
+                    <div class="bg-slate-100 rounded-b-xl overflow-hidden p-3 sm:p-5 text-slate-800 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        
+                        <!-- Panel 1: POS Kasir -->
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
                             <div>
-                                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                                    <span class="font-bold text-xs text-slate-900">Pesanan Aktif</span>
-                                    <span class="text-[10px] bg-lime-100 text-lime-800 font-bold px-1.5 py-0.5 rounded">2 Item</span>
-                                </div>
-                                <div class="divide-y divide-slate-100 py-1 text-xs">
-                                    <div class="py-2 flex items-center justify-between">
-                                        <div>
-                                            <p class="font-semibold text-slate-800 text-[11px]">1x Kopi Arabica</p>
-                                            <p class="text-[10px] text-slate-600">@ Rp 25.000</p>
+                                <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded bg-lime-100 text-lime-700 flex items-center justify-center">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                            </svg>
                                         </div>
-                                        <span class="font-bold text-slate-900 text-xs">Rp 25.000</span>
+                                        <span class="font-bold text-xs text-slate-900">Kasir POS Toko</span>
                                     </div>
-                                    <div class="py-2 flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Thermal Ready</span>
+                                </div>
+                                <div class="space-y-1.5 text-xs">
+                                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between">
                                         <div>
-                                            <p class="font-semibold text-slate-800 text-[11px]">1x Es Teh Manis</p>
-                                            <p class="text-[10px] text-slate-600">@ Rp 8.000</p>
+                                            <p class="font-bold text-slate-800 text-[11px]">Kopi Arabica Blend</p>
+                                            <p class="text-[10px] text-slate-500">Stok: 50 pcs</p>
                                         </div>
-                                        <span class="font-bold text-slate-900 text-xs">Rp 8.000</span>
+                                        <span class="font-extrabold text-lime-700 text-xs">Rp 25.000</span>
+                                    </div>
+                                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-slate-800 text-[11px]">Nasi Goreng Spesial</p>
+                                            <p class="text-[10px] text-slate-500">Stok: 40 pcs</p>
+                                        </div>
+                                        <span class="font-extrabold text-lime-700 text-xs">Rp 20.000</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-slate-100">
-                                <div class="flex justify-between text-xs mb-1">
-                                    <span class="text-slate-500 font-medium">Subtotal</span>
-                                    <span class="font-semibold text-slate-700">Rp 33.000</span>
-                                </div>
-                                <div class="flex justify-between text-xs font-extrabold text-slate-900 mb-3">
-                                    <span>Total Bayar</span>
-                                    <span class="text-lime-700 text-sm">Rp 33.000</span>
-                                </div>
-                                <button type="button" class="w-full py-2 bg-lime-600 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 shadow-sm">
-                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    <span>Bayar Tunai / QRIS (F8)</span>
-                                </button>
+                            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="text-slate-500 font-medium">Transaksi POS:</span>
+                                <span class="font-bold text-lime-700">Cetak Nota Instan ➔</span>
                             </div>
                         </div>
+
+                        <!-- Panel 2: PPOB & Game Hub -->
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                            </svg>
+                                        </div>
+                                        <span class="font-bold text-xs text-slate-900">PPOB, Game & PLN</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">24/7 Otomatis</span>
+                                </div>
+                                <div class="space-y-1.5 text-xs">
+                                    <div class="p-2 rounded-lg bg-emerald-50/50 border border-emerald-100 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-slate-800 text-[11px]">Token Listrik PLN 50.000</p>
+                                            <p class="text-[10px] text-slate-500">ID: 1428-9921-3011</p>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-emerald-700 bg-white px-1.5 py-0.5 rounded border border-emerald-200">SUKSES</span>
+                                    </div>
+                                    <div class="p-2 rounded-lg bg-emerald-50/50 border border-emerald-100 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-slate-800 text-[11px]">257 Diamond MLBB</p>
+                                            <p class="text-[10px] text-slate-500">User ID: 88219 (Zone 2101)</p>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-emerald-700 bg-white px-1.5 py-0.5 rounded border border-emerald-200">TERKIRIM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="text-slate-500 font-medium">Margin PPOB:</span>
+                                <span class="font-bold text-emerald-700">+ Cuan Rp 2.500/trx ➔</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel 3: AI Subscriptions Hub -->
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded bg-slate-900 text-lime-400 flex items-center justify-center">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <span class="font-bold text-xs text-slate-900">AI Subscription</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-lime-800 bg-lime-100 px-1.5 py-0.5 rounded">Aktif Instan</span>
+                                </div>
+                                <div class="space-y-1.5 text-xs">
+                                    <div class="p-2 rounded-lg bg-slate-900 text-white flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-[11px] text-lime-400">ChatGPT Plus / Team</p>
+                                            <p class="text-[10px] text-slate-300">Akses GPT-4o & Canvas</p>
+                                        </div>
+                                        <span class="text-[10px] font-mono text-lime-300 bg-slate-800 px-1.5 py-0.5 rounded">Reseller OK</span>
+                                    </div>
+                                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-slate-800 text-[11px]">Midjourney & Claude Pro</p>
+                                            <p class="text-[10px] text-slate-500">Desain & Smart Writing</p>
+                                        </div>
+                                        <span class="text-[10px] font-semibold text-slate-700 bg-white px-1.5 py-0.5 rounded border border-slate-200">1 Bulan</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="text-slate-500 font-medium">Layanan AI:</span>
+                                <span class="font-bold text-slate-900">Katalog Lengkap ➔</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- Floating Mobile Smartphone Mockup Frame (Overlaid on Bottom Right) -->
-                <div class="absolute -bottom-8 -right-2 sm:-bottom-10 sm:right-6 w-44 sm:w-56 bg-slate-950 p-2 sm:p-2.5 rounded-3xl shadow-2xl border-2 border-slate-800 hidden xs:block">
-                    <!-- Phone Notch & Speaker -->
-                    <div class="w-16 h-3 bg-slate-800 rounded-full mx-auto mb-1.5 flex items-center justify-center">
-                        <div class="w-2 h-2 rounded-full bg-slate-900"></div>
+                <!-- Floating Live Transaction Notification (Top Left) -->
+                <div class="absolute -top-6 -left-2 sm:-top-8 sm:-left-6 w-52 sm:w-64 bg-white rounded-xl shadow-2xl p-3 border border-slate-200/90 text-[11px] transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="font-bold text-slate-900">Transaksi PPOB Berhasil</span>
+                        <span class="text-[9px] text-slate-600 ml-auto">Baru saja</span>
                     </div>
-                    <!-- Phone Screen Content -->
-                    <div class="bg-white rounded-2xl overflow-hidden p-2 text-slate-800 text-[10px]">
-                        <div class="flex items-center justify-between pb-1 mb-1.5 border-b border-slate-100">
-                            <span class="font-extrabold text-slate-900">FilaPOS Mobile</span>
-                            <span class="text-[9px] text-lime-700 font-bold bg-lime-100 px-1 py-0.5 rounded">Kasir 1</span>
-                        </div>
-                        <div class="space-y-1.5">
-                            <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100 flex items-center justify-between">
-                                <div>
-                                    <p class="font-bold text-slate-800">Kopi Arabica</p>
-                                    <p class="text-lime-700 font-extrabold text-[9px]">Rp 25.000</p>
-                                </div>
-                                <span class="bg-lime-600 text-white px-1.5 py-0.5 rounded font-bold text-[9px]">+ Tambah</span>
-                            </div>
-                            <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100 flex items-center justify-between">
-                                <div>
-                                    <p class="font-bold text-slate-800">Es Teh Manis</p>
-                                    <p class="text-lime-700 font-extrabold text-[9px]">Rp 8.000</p>
-                                </div>
-                                <span class="bg-lime-600 text-white px-1.5 py-0.5 rounded font-bold text-[9px]">+ Tambah</span>
-                            </div>
-                        </div>
-                        <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between bg-lime-50 p-1 rounded font-bold text-lime-900">
-                            <span>2 Item</span>
-                            <span>Rp 33.000 ➔</span>
-                        </div>
+                    <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100 text-[10px] text-slate-700 font-mono">
+                        <div>PLN Prepaid: 50.000</div>
+                        <div class="text-emerald-700 font-bold">Strum: 31.2 kWh (Token Siap)</div>
                     </div>
                 </div>
 
-                <!-- Floating Thermal Receipt Card (Overlaid on Bottom Left) -->
-                <div class="absolute -top-6 -left-2 sm:-top-8 sm:-left-6 w-48 sm:w-60 bg-white rounded-xl shadow-2xl p-3 border border-slate-200/90 font-mono text-[10px] transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-                    <div class="text-center pb-2 border-b border-dashed border-slate-300">
-                        <div class="font-extrabold text-slate-900 tracking-wider">FILA POS SMART</div>
-                        <div class="text-[9px] text-slate-600">Jl. Contoh No. 123, Kota</div>
-                        <div class="text-[8px] text-slate-500 mt-0.5">Nota: #ORD-8821 • 11:35 WIB</div>
+                <!-- Floating AI Assistant Card (Bottom Right) -->
+                <div class="absolute -bottom-6 -right-2 sm:-bottom-8 sm:right-4 w-52 sm:w-64 bg-slate-950 text-white rounded-xl shadow-2xl p-3 border border-slate-800 text-[11px] transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2 h-2 rounded-full bg-lime-400"></span>
+                        <span class="font-bold text-lime-400">AI Store Assistant</span>
                     </div>
-                    <div class="py-1.5 space-y-1 text-slate-700">
-                        <div class="flex justify-between">
-                            <span>1x Kopi Arabica</span>
-                            <span>25.000</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>1x Es Teh Manis</span>
-                            <span>8.000</span>
-                        </div>
-                    </div>
-                    <div class="pt-1.5 border-t border-dashed border-slate-300 space-y-0.5">
-                        <div class="flex justify-between font-bold text-slate-900">
-                            <span>TOTAL:</span>
-                            <span class="text-lime-700">Rp 33.000</span>
-                        </div>
-                        <div class="flex justify-between text-slate-600 text-[9px]">
-                            <span>TUNAI:</span>
-                            <span>Rp 50.000</span>
-                        </div>
-                        <div class="flex justify-between text-slate-600 text-[9px]">
-                            <span>KEMBALI:</span>
-                            <span>Rp 17.000</span>
-                        </div>
-                    </div>
-                    <div class="mt-2 pt-1 text-center text-[8px] text-emerald-600 font-bold bg-emerald-50 py-0.5 rounded border border-emerald-200 flex items-center justify-center gap-1">
-                        <svg class="w-3 h-3 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>STRUK TERCETAK (ESC/POS)</span>
-                    </div>
+                    <p class="text-[10px] text-slate-300 leading-tight">
+                        "Produk Kopi Arabica stok tersisa 10 pcs. Mau saya buatkan caption promo diskon 15% untuk WhatsApp?"
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- METRICS / VALUE STRIP                                    -->
+    <!-- VALUE PROPOSITIONS METRIC STRIP                          -->
     <!-- ======================================================== -->
     <section class="border-y border-slate-200 bg-white py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="p-4">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Rp 0,-</div>
-                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Hardware Baru</div>
-                    <p class="mt-1 text-xs text-slate-500">Gunakan HP / Laptop toko yang sudah ada</p>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">3-in-1 Hub</div>
+                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Multi Layanan</div>
+                    <p class="mt-1 text-xs text-slate-500">Kasir Toko, PPOB Digital, & AI Subscriptions</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">&lt; 2 Detik</div>
-                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Kecepatan Checkout</div>
-                    <p class="mt-1 text-xs text-slate-500">Antrean cepat tanpa pembeli menunggu</p>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">1000+ Produk</div>
+                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">PPOB & Game</div>
+                    <p class="mt-1 text-xs text-slate-500">PLN, Pulsa, DANA, OVO, MLBB, Free Fire, dll</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">100% Cloud</div>
-                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Akses Fleksibel</div>
-                    <p class="mt-1 text-xs text-slate-500">Pantau penjualan dari mana saja secara real-time</p>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Instan & 24 Jam</div>
+                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Transaksi Otomatis</div>
+                    <p class="mt-1 text-xs text-slate-500">Proses kilat dalam hitungan detik non-stop</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">58 & 80 mm</div>
-                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Printer Thermal</div>
-                    <p class="mt-1 text-xs text-slate-500">Mendukung standar Bluetooth, USB & LAN</p>
+                <div class="p-3">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Rp 0,- Hardware</div>
+                    <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Tanpa Mesin Khusus</div>
+                    <p class="mt-1 text-xs text-slate-500">Cukup buka browser di HP, tablet, atau PC</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- CORE FEATURES SECTION                                    -->
+    <!-- 3 CORE PILLARS OVERVIEW                                  -->
     <!-- ======================================================== -->
-    <section id="fitur" class="py-20 bg-slate-50">
+    <section id="layanan" class="py-20 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-14">
-                <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Fitur Lengkap Kasir</span>
-                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Dirancang Khusus untuk Alur Kerja Kasir Cepat</h2>
-                <p class="mt-3 text-sm text-slate-600">Semua fitur esensial yang Anda butuhkan untuk mengelola transaksi ritel, F&B, dan layanan jasa harian.</p>
+                <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Ekosistem FilaPOS Smart</span>
+                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">3 Pilar Utama untuk Melejitkan Pendapatan Toko</h2>
+                <p class="mt-3 text-sm text-slate-600">Bukan cuma kasir biasa, FilaPOS Smart mengubah usaha Anda menjadi pusat layanan digital modern.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Feature 1 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Pillar 1 Card -->
+                <div id="pos-terminal" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-lime-300 transition-all duration-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-lime-100 text-lime-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-lime-700 bg-lime-50 px-2 py-0.5 rounded">Pilar 01</span>
+                        <h3 class="mt-2 text-xl font-extrabold text-slate-900">Sistem Kasir Digital (POS)</h3>
+                        <p class="mt-3 text-xs text-slate-600 leading-relaxed">
+                            Aplikasi kasir web-based responsif untuk transaksi toko fisik, cetak struk thermal ESC/POS via Bluetooth/USB, monitor stok berkurang otomatis, dan rekapan omzet real-time.
+                        </p>
+                        <ul class="mt-5 space-y-2 text-xs text-slate-700">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Multi-device (HP, Tablet, PC)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Cetak Nota Thermal 58mm & 80mm</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Pemisahan Hak Akses Kasir vs Owner</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="{{ route('login') }}" class="text-xs font-bold text-lime-700 hover:text-lime-800 flex items-center gap-1">
+                            <span>Akses Terminal Kasir</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Pillar 2 Card -->
+                <div id="ppob-digital" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Pilar 02</span>
+                        <h3 class="mt-2 text-xl font-extrabold text-slate-900">Layanan PPOB & Produk Digital</h3>
+                        <p class="mt-3 text-xs text-slate-600 leading-relaxed">
+                            Tambah sumber penghasilan toko dengan melayani pembayaran harian pelanggan: token listrik PLN, pulsa & kuota data semua operator, top-up e-wallet, dan voucher game online.
+                        </p>
+                        <ul class="mt-5 space-y-2 text-xs text-slate-700">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Token PLN, Tagihan Listrik & BPJS</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Top Up DANA, OVO, GoPay, ShopeePay</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Voucher Mobile Legends, FF, Steam, dll</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="#simulasi" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                            <span>Hitung Potensi Cuan PPOB</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Pillar 3 Card -->
+                <div id="ai-subscription" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-800 transition-all duration-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-lime-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-900 bg-slate-100 px-2 py-0.5 rounded">Pilar 03</span>
+                        <h3 class="mt-2 text-xl font-extrabold text-slate-900">AI Subscription Hub</h3>
+                        <p class="mt-3 text-xs text-slate-600 leading-relaxed">
+                            Akses langganan akun AI premium (ChatGPT Plus, Midjourney, Claude, Gemini) untuk kebutuhan pribadi, operasional toko, maupun dijual kembali (*reseller*) dengan profit menjanjikan.
+                        </p>
+                        <ul class="mt-5 space-y-2 text-xs text-slate-700">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Akses ChatGPT Plus & GPT-4o Instan</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Tools AI Desain, Copywriting & Media</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-lime-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Peluang Bisnis Reseller Akun AI Digital</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="{{ url('/admin') }}" class="text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1">
+                            <span>Kelola Layanan AI</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- DETAILED SERVICE MATRIX                                  -->
+    <!-- ======================================================== -->
+    <section class="py-20 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Katalog Lengkap</span>
+                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Semua Layanan Transaksi Digital yang Anda Butuhkan</h2>
+                <p class="mt-3 text-sm text-slate-600">Pelanggan tidak perlu ke tempat lain. Jadikan toko Anda pusat transaksi segala kebutuhan sehari-hari.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Item 1: PLN & Tagihan -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-900">Listrik PLN & Tagihan</h4>
+                    <p class="mt-1 text-xs text-slate-600">Token listrik prabayar, bayar tagihan PLN pascabayar, PDAM, dan BPJS Kesehatan secara instan.</p>
+                </div>
+
+                <!-- Item 2: Pulsa & Paket Data -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Multi-Device Mobile First</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Tampilan otomatis menyesuaikan layar sentuh smartphone vertikal maupun mode layar lebar tablet/desktop kasir dengan tombol praktis.
-                    </p>
+                    <h4 class="font-extrabold text-sm text-slate-900">Pulsa & Paket Data</h4>
+                    <p class="mt-1 text-xs text-slate-600">Telkomsel, Indosat Ooredoo, XL, Axis, Tri, dan Smartfren dengan harga grosir kompetitif.</p>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <!-- Item 3: Top Up E-Wallet -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-900">Isi Saldo E-Wallet</h4>
+                    <p class="mt-1 text-xs text-slate-600">Top-up saldo DANA, GoPay Customer & Driver, OVO, ShopeePay, Maxim, hingga LinkAja.</p>
+                </div>
+
+                <!-- Item 4: Top Up Game Online -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-900">Voucher Game Favorit</h4>
+                    <p class="mt-1 text-xs text-slate-600">Mobile Legends Diamonds, Free Fire, PUBG Mobile, Roblox, Valorant, Genshin Impact & Steam Wallet.</p>
+                </div>
+
+                <!-- Item 5: Media Sosial & Streaming -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-900">Streaming & Sosmed</h4>
+                    <p class="mt-1 text-xs text-slate-600">Voucher Spotify Premium, Netflix, YouTube Premium, Disney+, dan boost media sosial terpercaya.</p>
+                </div>
+
+                <!-- Item 6: ChatGPT & AI Assistant -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-lime-400 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-900">Langganan Akun AI</h4>
+                    <p class="mt-1 text-xs text-slate-600">ChatGPT Plus, Claude Pro, Midjourney, Canva Pro, dan Gemini Advanced dengan garansi penuh.</p>
+                </div>
+
+                <!-- Item 7: Kasir Toko & Thermal Struk -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-lime-100 text-lime-800 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Cetak Struk Thermal ESC/POS</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Integrasi native ke printer thermal ukuran 58mm atau 80mm via USB atau Bluetooth. Format nota rapi, jelas, dan otomatis terpotong.
-                    </p>
+                    <h4 class="font-extrabold text-sm text-slate-900">Cetak Struk Thermal</h4>
+                    <p class="mt-1 text-xs text-slate-600">Cetak bukti transaksi kasir ritel maupun struk PPOB (Token PLN, Pulsa) via printer kasir Bluetooth/USB.</p>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                <!-- Item 8: Multi Pembayaran & QRIS -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                         </svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Inventori & Kontrol Stok Akurat</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Stok berkurang otomatis setiap ada penjualan. Lengkap dengan notifikasi peringatan stok menipis agar Anda tidak kehabisan barang.
-                    </p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-base font-bold text-slate-900">Tunai, Transfer, & QRIS</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Kalkulator otomatis untuk uang diterima dan kembalian tunai. Mendukung pembayaran non-tunai yang fleksibel sesuai kebutuhan pembeli.
-                    </p>
-                </div>
-
-                <!-- Feature 5 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-base font-bold text-slate-900">Laporan Rekap Penjualan Cepat</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Lihat omzet harian, transaksi per kasir, dan menu produk terlaris tanpa repot menghitung nota fisik satu per satu saat tutup toko.
-                    </p>
-                </div>
-
-                <!-- Feature 6 -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-lime-300 transition-all duration-200 group">
-                    <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-base font-bold text-slate-900">Proteksi Role Kasir & Admin</h3>
-                    <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Akses kasir dibuat fokus hanya untuk input penjualan, sedangkan data modal, margin keuntungan, dan pengaturan sistem aman di tangan pemilik toko.
-                    </p>
+                    <h4 class="font-extrabold text-sm text-slate-900">QRIS & Multi-Payment</h4>
+                    <p class="mt-1 text-xs text-slate-600">Terima pembayaran pelanggan lewat tunai, transfer bank, hingga QRIS dinamis/statis.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- INTERACTIVE COST-SAVING CALCULATOR                       -->
+    <!-- INTERACTIVE PROFIT / CUAN CALCULATOR                     -->
     <!-- ======================================================== -->
-    <section id="simulasi" class="py-20 bg-white border-y border-slate-200">
+    <section id="simulasi" class="py-20 bg-slate-50 border-y border-slate-200">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Kalkulator Penghematan</span>
-                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Hitung Penghematan Bisnis Anda Bersama FilaPOS Smart</h2>
-                <p class="mt-2 text-sm text-slate-600">Lihat seberapa banyak waktu kerja dan biaya operasional yang dapat Anda pangkas dibandingkan sistem kasir konvensional.</p>
+                <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Simulasi Pendapatan Ekstra</span>
+                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Hitung Potensi Cuan Tambahan Bisnis Anda</h2>
+                <p class="mt-2 text-sm text-slate-600">Kombinasikan keuntungan penjualan kasir toko dengan komisi transaksi PPOB dan margin layanan AI.</p>
             </div>
 
             <!-- Calculator Card -->
-            <div class="bg-slate-50 rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-lg shadow-slate-200/50">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl shadow-slate-200/50">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <!-- Left: Sliders Input (7 cols) -->
                     <div class="lg:col-span-7 space-y-6">
-                        <!-- Slider 1: Transaksi Harian -->
+                        <!-- Slider 1: Transaksi Kasir Toko Fisik -->
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <label for="txRange" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Transaksi Harian Per Outlet</label>
+                                <label for="txRange" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Transaksi Kasir Toko Harian</label>
                                 <span class="text-sm font-extrabold text-lime-700 bg-lime-100 px-2.5 py-0.5 rounded-lg">
-                                    <span id="txValueText">60</span> Transaksi / hari
+                                    <span id="txValueText">50</span> Trx Kasir / hari
                                 </span>
                             </div>
-                            <input id="txRange" type="range" min="15" max="300" step="5" value="60" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" oninput="updateCalculator()">
+                            <input id="txRange" type="range" min="10" max="250" step="5" value="50" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" oninput="updateCalculator()">
                             <div class="flex justify-between text-[11px] text-slate-600 mt-1 font-medium">
-                                <span>15 (Toko Kecil)</span>
-                                <span>150 (Kafe Sibuk)</span>
-                                <span>300+ (Grosir/Ritel)</span>
+                                <span>10 Trx</span>
+                                <span>100 Trx</span>
+                                <span>250+ Trx</span>
                             </div>
                         </div>
 
-                        <!-- Slider 2: Jumlah Kasir / Outlet -->
+                        <!-- Slider 2: Transaksi PPOB & Game (Listrik, Pulsa, Diamond) -->
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <label for="outletRange" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Jumlah Kasir / Outlet Anda</label>
-                                <span class="text-sm font-extrabold text-lime-700 bg-lime-100 px-2.5 py-0.5 rounded-lg">
-                                    <span id="outletValueText">1</span> Kasir / Cabang
+                                <label for="ppobRange" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Transaksi PPOB & Game Harian</label>
+                                <span class="text-sm font-extrabold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-lg">
+                                    <span id="ppobValueText">30</span> Trx PPOB / hari
                                 </span>
                             </div>
-                            <input id="outletRange" type="range" min="1" max="5" step="1" value="1" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" oninput="updateCalculator()">
+                            <input id="ppobRange" type="range" min="5" max="150" step="5" value="30" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" oninput="updateCalculator()">
                             <div class="flex justify-between text-[11px] text-slate-600 mt-1 font-medium">
-                                <span>1 Outlet</span>
-                                <span>3 Outlet</span>
-                                <span>5 Outlet</span>
+                                <span>5 Trx</span>
+                                <span>50 Trx</span>
+                                <span>150+ Trx</span>
                             </div>
                         </div>
 
-                        <!-- Comparison Note -->
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
-                            <svg class="w-4 h-4 text-lime-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>
-                                Tanpa biaya sewa mesin POS mahal (Rp 300rb–500rb/bln) dan bebas selisih nota salah hitung manual setiap tutup kasir harian.
-                            </span>
+                        <!-- Slider 3: Penjualan Akun AI Subscription Bulanan -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="aiRange" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Penjualan Langganan AI / Bulan</label>
+                                <span class="text-sm font-extrabold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-lg">
+                                    <span id="aiValueText">10</span> Akun AI / bulan
+                                </span>
+                            </div>
+                            <input id="aiRange" type="range" min="0" max="50" step="1" value="10" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" oninput="updateCalculator()">
+                            <div class="flex justify-between text-[11px] text-slate-600 mt-1 font-medium">
+                                <span>0 Akun</span>
+                                <span>25 Akun</span>
+                                <span>50+ Akun</span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Right: Dynamic Outcome Panel (5 cols) -->
                     <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-6 text-white flex flex-col justify-between space-y-6 shadow-xl">
                         <div>
-                            <span class="text-[11px] uppercase tracking-wider font-bold text-lime-400">Estimasi Penghematan</span>
+                            <span class="text-[11px] uppercase tracking-wider font-bold text-lime-400">Estimasi Tambahan Profit Bersih</span>
                             <div class="mt-2">
-                                <div class="text-xs text-slate-400">Hemat Biaya Hardware & Alat Khusus:</div>
+                                <div class="text-xs text-slate-400">Total Keuntungan Tambahan:</div>
                                 <div id="calcMoneySaved" class="text-3xl font-extrabold text-lime-400 tracking-tight mt-0.5">
-                                    Rp 4.200.000
+                                    Rp 3.750.000
                                 </div>
-                                <div class="text-[11px] text-slate-400">per tahun / outlet</div>
+                                <div class="text-[11px] text-slate-400">per bulan (PPOB + Kasir + AI)</div>
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-slate-800 grid grid-cols-2 gap-3">
                                 <div>
-                                    <div class="text-[11px] text-slate-400">Waktu Dihemat:</div>
-                                    <div id="calcHoursSaved" class="text-lg font-bold text-white">45 Jam</div>
-                                    <div class="text-[10px] text-slate-500">per bulan</div>
+                                    <div class="text-[11px] text-slate-400">Cuan PPOB & Game:</div>
+                                    <div id="calcPpobProfit" class="text-base font-bold text-emerald-400">Rp 2.250.000</div>
+                                    <div class="text-[10px] text-slate-500">Margin ~Rp 2.500/trx</div>
                                 </div>
                                 <div>
-                                    <div class="text-[11px] text-slate-400">Akurasi Kasir:</div>
-                                    <div class="text-lg font-bold text-emerald-400">100%</div>
-                                    <div class="text-[10px] text-slate-500">Anti salah nota</div>
+                                    <div class="text-[11px] text-slate-400">Profit Akun AI:</div>
+                                    <div id="calcAiProfit" class="text-base font-bold text-white">Rp 500.000</div>
+                                    <div class="text-[10px] text-slate-500">Margin ~Rp 50rb/akun</div>
                                 </div>
                             </div>
                         </div>
 
                         <a href="{{ route('login') }}" class="w-full py-3 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-slate-950 font-extrabold text-xs text-center rounded-xl transition-all shadow-md">
-                            Mulai Hemat Sekarang ➔
+                            Mulai Dapatkan Cuan Sekarang ➔
                         </a>
                     </div>
                 </div>
@@ -634,45 +772,45 @@
     <!-- ======================================================== -->
     <!-- 3 SIMPLE STEPS TO GET STARTED                            -->
     <!-- ======================================================== -->
-    <section id="keunggulan" class="py-20 bg-slate-50">
+    <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-14">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Alur Mudah</span>
-                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Mulai Jualan dalam 3 Langkah Praktis</h2>
-                <p class="mt-2 text-sm text-slate-600">Tidak ada teknisi rumit atau waktu tunggu berminggu-minggu.</p>
+                <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Mulai Seluruh Layanan dalam 3 Langkah Praktis</h2>
+                <p class="mt-2 text-sm text-slate-600">Satu akun untuk mengoperasikan kasir, jualan PPOB, dan berlangganan AI.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Step 1 -->
-                <div class="bg-white p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
-                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-white font-extrabold text-sm flex items-center justify-center mb-4">
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         01
                     </div>
                     <h3 class="text-base font-bold text-slate-900">Buka di Browser Gadget Anda</h3>
                     <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Akses FilaPOS Smart langsung melalui Google Chrome, Safari, atau Firefox di HP, tablet, maupun PC kasir Anda tanpa perlu download APK.
+                        Akses FilaPOS Smart langsung melalui Google Chrome, Safari, atau browser pilihan Anda tanpa ribet download APK atau root perangkat.
                     </p>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="bg-white p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
-                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-white font-extrabold text-sm flex items-center justify-center mb-4">
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         02
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Masukkan Produk & Harga Toko</h3>
+                    <h3 class="text-base font-bold text-slate-900">Pilih Layanan yang Ingin Digunakan</h3>
                     <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Kelola katalog, kategori barang, dan harga modal/jual via portal admin yang bersih dan rapi.
+                        Input pesanan barang toko di menu POS kasir, atau masukkan nomor pelanggan untuk isi token PLN, pulsa, game, dan akses AI.
                     </p>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="bg-white p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
-                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-white font-extrabold text-sm flex items-center justify-center mb-4">
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         03
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Siap Transaksi & Cetak Struk</h3>
+                    <h3 class="text-base font-bold text-slate-900">Terima Bayar & Cetak Bukti Struk</h3>
                     <p class="mt-2 text-xs text-slate-600 leading-relaxed">
-                        Klik produk, terima pembayaran pelanggan, dan cetak struk via printer thermal bluetooth/USB dalam hitungan detik.
+                        Cetak bukti pembayaran via printer thermal atau kirim struk digital ke pelanggan secara cepat dan transparan.
                     </p>
                 </div>
             </div>
@@ -682,78 +820,78 @@
     <!-- ======================================================== -->
     <!-- INTERACTIVE FAQ SECTION                                  -->
     <!-- ======================================================== -->
-    <section id="faq" class="py-20 bg-white border-t border-slate-200">
+    <section id="faq" class="py-20 bg-slate-50 border-t border-slate-200">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Tanya Jawab</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Pertanyaan yang Sering Diajukan</h2>
-                <p class="mt-2 text-sm text-slate-600">Punya pertanyaan seputar cara kerja FilaPOS Smart? Temukan jawabannya di sini.</p>
+                <p class="mt-2 text-sm text-slate-600">Pelajari lebih lanjut tentang integrasi Kasir POS, PPOB, dan Layanan AI FilaPOS Smart.</p>
             </div>
 
             <!-- FAQ Accordion Container -->
             <div class="space-y-3.5">
                 <!-- Item 1 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                     <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
-                        <span>Apakah saya harus membeli mesin kasir atau hardware khusus?</span>
+                        <span>Apakah saya bisa menjalankan kasir toko dan jualan PPOB secara bersamaan?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="px-5 pb-4 text-xs text-slate-600 leading-relaxed hidden">
-                        Tidak perlu sama sekali! FilaPOS Smart 100% berbasis web (web-based). Anda bisa menggunakan smartphone Android/iOS, tablet, laptop, atau komputer kasir yang sudah Anda miliki cukup dengan membuka web browser.
+                        Tentu saja! FilaPOS Smart dirancang sebagai ekosistem bisnis terpadu. Kasir Anda dapat melayani pesanan produk fisik toko (makanan, minuman, ritel) sekaligus memproses transaksi digital seperti pulsa, token listrik PLN, top-up e-wallet, dan voucher game dari satu layar kerja.
                     </div>
                 </div>
 
                 <!-- Item 2 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                     <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
-                        <span>Printer thermal apa saja yang didukung oleh FilaPOS Smart?</span>
+                        <span>Apa saja jenis layanan AI Subscription yang tersedia di platform?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="px-5 pb-4 text-xs text-slate-600 leading-relaxed hidden">
-                        FilaPOS Smart mendukung printer kasir thermal standar industri (protokol ESC/POS) baik koneksi USB, Bluetooth (printer thermal portable/mini), maupun Network (LAN/Wi-Fi) dengan ukuran kertas 58mm dan 80mm.
+                        Kami menyediakan akses langganan tools AI terpopuler dunia seperti ChatGPT Plus (GPT-4o), Midjourney, Claude Pro, Canva Pro, dan asisten pintar copywriter toko. Anda dapat menggunakannya untuk menunjang promosi bisnis sendiri atau menjualnya kembali kepada pelanggan toko Anda dengan margin keuntungan yang menarik.
                     </div>
                 </div>
 
                 <!-- Item 3 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                     <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
-                        <span>Apakah kasir toko bisa melihat data keuntungan pemilik?</span>
+                        <span>Apakah struk transaksi PPOB (seperti token PLN) bisa dicetak di printer thermal?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="px-5 pb-4 text-xs text-slate-600 leading-relaxed hidden">
-                        Tidak bisa. FilaPOS Smart memiliki sistem hak akses terpisah. Pengguna dengan akun Kasir hanya dapat mengakses antarmuka transaksi penjualan kasir (POS), sedangkan harga modal, margin keuntungan, dan laporan keuangan komprehensif hanya dapat dibuka oleh akun Administrator toko.
+                        Bisa! Sistem mendukung cetak struk ESC/POS standar (ukuran kertas 58mm dan 80mm) via Bluetooth atau kabel USB. Nomor token listrik PLN 20-digit, kode voucher game, dan rincian transaksi akan tercetak rapi layaknya struk kasir profesional.
                     </div>
                 </div>
 
                 <!-- Item 4 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                     <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
-                        <span>Bagaimana jika saya memiliki lebih dari satu kasir atau cabang?</span>
+                        <span>Perangkat apa saja yang didukung oleh FilaPOS Smart?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="px-5 pb-4 text-xs text-slate-600 leading-relaxed hidden">
-                        Sistem mendukung multi-kasir. Anda dapat membuat beberapa akun kasir untuk melayani transaksi secara bersamaan dari berbagai perangkat berbeda, dengan data stok dan penjualan tersinkronisasi langsung ke sistem pusat.
+                        Semua perangkat yang memiliki peramban web (browser modern) seperti smartphone Android, iPhone, iPad, tablet, laptop, dan komputer kasir PC. Tampilan kami 100% responsif dan otomatis menyesuaikan orientasi layar Anda.
                     </div>
                 </div>
 
                 <!-- Item 5 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                     <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
-                        <span>Bagaimana cara mulai menggunakan FilaPOS Smart?</span>
+                        <span>Bagaimana cara mulai menggunakan platform FilaPOS Smart?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="px-5 pb-4 text-xs text-slate-600 leading-relaxed hidden">
-                        Sangat mudah! Anda dapat langsung mengklik tombol "Buka Kasir POS" untuk login ke terminal kasir, atau mengakses portal admin untuk mengelola katalog produk, stok, dan pengaturan toko Anda.
+                        Cukup klik tombol "Buka Kasir POS" untuk langsung masuk ke terminal kasir penjualan, atau klik tombol "Portal Admin" untuk mengelola pengaturan toko, produk, dan laporan keuangan bisnis Anda.
                     </div>
                 </div>
             </div>
@@ -769,10 +907,10 @@
 
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
-                Tingkatkan Kecepatan Kasir Toko Anda Mulai Hari Ini
+                Upgrade Bisnis Anda ke Ekosistem Digital Terlengkap Sekarang
             </h2>
             <p class="mt-4 text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-normal">
-                Beralih ke sistem kasir web-based yang fleksibel, tanpa biaya hardware mahal, dan siap cetak nota kapan pun dibutuhkan.
+                Kelola kasir toko lebih efisien, gandakan keuntungan lewat transaksi PPOB, dan nikmati kemudahan langganan AI dalam satu genggaman.
             </p>
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-400 hover:bg-lime-300 active:bg-lime-500 rounded-xl shadow-lg shadow-lime-400/20 transition-all duration-200">
@@ -796,20 +934,22 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <!-- Brand Info -->
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-lime-500 text-white flex items-center justify-center shadow-xs">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    <div class="w-8 h-8 rounded-lg bg-lime-500 text-slate-950 flex items-center justify-center shadow-xs">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <span class="text-base font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span> Smart</span>
-                    <span class="text-xs text-slate-400 pl-2 border-l border-slate-200">Point of Sale Digital Modern</span>
+                    <span class="text-xs text-slate-400 pl-2 border-l border-slate-200">Kasir Digital • PPOB • AI Hub</span>
                 </div>
 
                 <!-- Footer Nav Links -->
                 <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-600">
-                    <a href="#fitur" class="hover:text-lime-600 transition-colors">Fitur</a>
-                    <a href="#keunggulan" class="hover:text-lime-600 transition-colors">Keunggulan</a>
-                    <a href="#simulasi" class="hover:text-lime-600 transition-colors">Simulasi</a>
+                    <a href="#layanan" class="hover:text-lime-600 transition-colors">Ekosistem</a>
+                    <a href="#pos-terminal" class="hover:text-lime-600 transition-colors">Kasir POS</a>
+                    <a href="#ppob-digital" class="hover:text-lime-600 transition-colors">PPOB & PLN</a>
+                    <a href="#ai-subscription" class="hover:text-lime-600 transition-colors">AI Subscriptions</a>
+                    <a href="#simulasi" class="hover:text-lime-600 transition-colors">Simulasi Cuan</a>
                     <a href="#faq" class="hover:text-lime-600 transition-colors">FAQ</a>
                     <a href="{{ route('login') }}" class="hover:text-lime-600 font-semibold transition-colors">Login Kasir</a>
                     <a href="{{ url('/admin') }}" class="hover:text-lime-600 font-semibold transition-colors">Portal Admin</a>
@@ -862,29 +1002,42 @@
             }
         });
 
-        // Interactive Cost Calculator
+        // Interactive Combined Profit Calculator
         function updateCalculator() {
             const txEl = document.getElementById('txRange');
-            const outletEl = document.getElementById('outletRange');
-            if (!txEl || !outletEl) return;
+            const ppobEl = document.getElementById('ppobRange');
+            const aiEl = document.getElementById('aiRange');
+            if (!txEl || !ppobEl || !aiEl) return;
 
             const tx = parseInt(txEl.value, 10);
-            const outlets = parseInt(outletEl.value, 10);
+            const ppob = parseInt(ppobEl.value, 10);
+            const ai = parseInt(aiEl.value, 10);
 
             const txValText = document.getElementById('txValueText');
-            const outletValText = document.getElementById('outletValueText');
+            const ppobValText = document.getElementById('ppobValueText');
+            const aiValText = document.getElementById('aiValueText');
+
             if (txValText) txValText.innerText = tx;
-            if (outletValText) outletValText.innerText = outlets;
+            if (ppobValText) ppobValText.innerText = ppob;
+            if (aiValText) aiValText.innerText = ai;
 
             // Calculations:
-            const moneySaved = outlets * 4200000;
-            const minutesSavedDaily = (tx * 0.4) * outlets;
-            const hoursSavedMonthly = Math.round((minutesSavedDaily * 30) / 60);
+            // PPOB profit: average Rp 2.500 margin per transaction * 30 days
+            const monthlyPpob = ppob * 2500 * 30;
+            // AI profit: average Rp 50.000 margin per active subscription sold/month
+            const monthlyAi = ai * 50000;
+            // POS efficiency savings & extra transactions: ~Rp 1.000 per transaction processed efficiently * 30 days
+            const monthlyPos = tx * 1000 * 30;
+
+            const totalMonthly = monthlyPpob + monthlyAi + monthlyPos;
 
             const calcMoney = document.getElementById('calcMoneySaved');
-            const calcHours = document.getElementById('calcHoursSaved');
-            if (calcMoney) calcMoney.innerText = 'Rp ' + moneySaved.toLocaleString('id-ID');
-            if (calcHours) calcHours.innerText = hoursSavedMonthly + ' Jam';
+            const calcPpob = document.getElementById('calcPpobProfit');
+            const calcAi = document.getElementById('calcAiProfit');
+
+            if (calcMoney) calcMoney.innerText = 'Rp ' + totalMonthly.toLocaleString('id-ID');
+            if (calcPpob) calcPpob.innerText = 'Rp ' + monthlyPpob.toLocaleString('id-ID');
+            if (calcAi) calcAi.innerText = 'Rp ' + monthlyAi.toLocaleString('id-ID');
         }
 
         // FAQ Accordion
