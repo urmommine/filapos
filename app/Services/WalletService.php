@@ -164,7 +164,6 @@ class WalletService
 
             // 3. Update Status Order menjadi Paid
             $order->update([
-                'customer_id' => $lockedUser->id,
                 'payment_method' => 'balance',
                 'payment_status' => 'paid',
                 'amount_paid' => $amount,

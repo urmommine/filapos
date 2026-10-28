@@ -157,17 +157,27 @@
 
     <script>
         window.addEventListener('topup-alert', event => {
-            const detail = event.detail[0] || event.detail;
-            if (typeof ToastMagic !== 'undefined') {
-                if (detail.type === 'error') {
-                    ToastMagic.error(detail.message);
-                } else if (detail.type === 'success') {
-                    ToastMagic.success(detail.message);
+            const detail = (event.detail && event.detail[0]) ? event.detail[0] : (event.detail || {});
+            const msg = detail.message || (typeof event.detail === 'string' ? event.detail : 'Pemberitahuan');
+            const type = detail.type || 'info';
+
+            try {
+                if (typeof window.toastMagic !== 'undefined') {
+                    if (type === 'error' && typeof window.toastMagic.error === 'function') {
+                        window.toastMagic.error('Pemberitahuan', msg);
+                    } else if (type === 'success' && typeof window.toastMagic.success === 'function') {
+                        window.toastMagic.success('Berhasil', msg);
+                    } else if (typeof window.toastMagic.info === 'function') {
+                        window.toastMagic.info('Info', msg);
+                    } else {
+                        alert((type === 'error' ? '⚠️ ' : '✅ ') + msg);
+                    }
                 } else {
-                    ToastMagic.info(detail.message);
+                    alert((type === 'error' ? '⚠️ ' : '✅ ') + msg);
                 }
-            } else {
-                alert((detail.type === 'error' ? '⚠️ ' : '✅ ') + detail.message);
+            } catch (err) {
+                console.error('Toast error:', err);
+                alert((type === 'error' ? '⚠️ ' : '✅ ') + msg);
             }
         });
     </script>
