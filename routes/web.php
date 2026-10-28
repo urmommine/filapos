@@ -45,12 +45,7 @@ Route::get('/pos/login', \App\Livewire\Auth\PosLogin::class)->name('login')->mid
 Route::get('/pos/forgot-password', \App\Livewire\Auth\PosForgotPassword::class)->name('password.request')->middleware('guest');
 
 // POS Routes (requires authentication and blocks role 'user')
-Route::middleware(['auth', function ($request, $next) {
-    if ($request->user() && $request->user()->role === 'user') {
-        abort(403, 'Akses Ditolak: Akun Member PPOB tidak memiliki izin mengakses Terminal Kasir.');
-    }
-    return $next($request);
-}])->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\BlockUserRoleFromPos::class])->group(function () {
     Route::get('/pos', PosTerminal::class)->name('pos');
     Route::get('/pos/receipt/{order}', App\Livewire\Receipt::class)->name('pos.receipt');
     // Route::get('/pos/receipt/{order}/print', [ReceiptController::class, 'print'])->name('pos.receipt.print');
