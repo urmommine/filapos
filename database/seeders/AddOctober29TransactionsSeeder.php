@@ -117,8 +117,16 @@ class AddOctober29TransactionsSeeder extends Seeder
             ],
         ];
 
-        // Hapus data tanggal 2026-10-29 jika sudah ada agar seeder bersifat idempoten
-        $existingOrders = Order::whereDate('created_at', '2026-10-29')->get();
+        // Hapus data seeder tanggal 2026-10-29 sebelumnya (jangan hapus transaksi riil user manual)
+        $existingOrders = Order::whereDate('created_at', '2026-10-29')
+            ->where('id', '!=', 5977)
+            ->where(function ($q) use ($cashierId) {
+                $q->where(function ($sub) use ($cashierId) {
+                    $sub->where('channel', 'pos')->where('user_id', $cashierId);
+                })->orWhere('channel', 'ppob');
+            })
+            ->get();
+
         foreach ($existingOrders as $oldOrder) {
             OrderItem::where('order_id', $oldOrder->id)->delete();
             WalletTransaction::where('order_id', $oldOrder->id)->delete();
@@ -137,13 +145,13 @@ class AddOctober29TransactionsSeeder extends Seeder
             'pos', 'pos', 'ppob',
         ];
 
-        // 24 Timestamp acak antara 08:00 s.d. 21:45 WIB
+        // 24 Timestamp acak antara 00:05 s.d. 02:45 WIB (sebelum transaksi manual user 02:51)
         $dateStr = '2026-10-29';
         $carbonDate = Carbon::parse($dateStr);
 
         $secondOffsets = [];
         for ($i = 0; $i < 24; $i++) {
-            $secondOffsets[] = rand(8 * 3600, 21 * 3600 + 45 * 60);
+            $secondOffsets[] = rand(5 * 60, 2 * 3600 + 45 * 60);
         }
         sort($secondOffsets);
 
