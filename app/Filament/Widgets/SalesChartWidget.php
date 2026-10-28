@@ -22,8 +22,8 @@ class SalesChartWidget extends ChartWidget
     {
         return [
             '7' => '7 Hari Terakhir',
+            '14' => '14 Hari Terakhir',
             '30' => '30 Hari Terakhir',
-            '90' => '90 Hari Terakhir',
         ];
     }
 
