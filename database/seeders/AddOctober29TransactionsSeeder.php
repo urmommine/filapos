@@ -49,71 +49,71 @@ class AddOctober29TransactionsSeeder extends Seeder
 
         $customerIds = Customer::pluck('id')->toArray();
 
-        // 8 Katalog produk PPOB nyata dengan nominal kecil-menengah (Total: Rp 161.000)
+        // 8 Katalog produk PPOB nyata diambil langsung dari endpoint Melostore H2H (Harga Modal + Margin Resmi Sistem)
         $ppobProducts = [
             [
-                'name' => 'Pulsa Telkomsel Rp 10.000',
-                'game' => 'Telkomsel',
-                'slug' => 'telkomsel',
-                'sku' => 'telkomsel-10k',
-                'nominal' => 10000,
-                'type' => 'pulsa',
-            ],
-            [
-                'name' => 'Token Listrik PLN Rp 20.000',
-                'game' => 'PLN Prepaid',
-                'slug' => 'pln-prepaid',
-                'sku' => 'pln-20k',
-                'nominal' => 20000,
-                'type' => 'pln',
-            ],
-            [
-                'name' => 'Top Up Mobile Legends - 28 Diamonds',
+                'name' => 'Top Up Mobile Legends - 33 Diamonds',
                 'game' => 'Mobile Legends',
                 'slug' => 'mobile-legends',
-                'sku' => 'mlbb-28dm',
-                'nominal' => 10000,
+                'sku' => 'mlid33dd-s12a',
+                'nominal' => 11200, // Modal: Rp 10.636 + Margin 5% = Rp 11.200
                 'type' => 'game',
             ],
             [
-                'name' => 'Top Up Free Fire - 70 Diamonds',
+                'name' => 'Top Up Free Fire - 110 Diamonds',
                 'game' => 'Free Fire',
                 'slug' => 'free-fire',
-                'sku' => 'ff-70dm',
-                'nominal' => 10000,
+                'sku' => 'ffgl110da-s111',
+                'nominal' => 15600, // Modal: Rp 14.836 + Margin 5% = Rp 15.600
                 'type' => 'game',
             ],
             [
-                'name' => 'Pulsa Indosat Ooredoo Rp 25.000',
-                'game' => 'Indosat',
-                'slug' => 'indosat',
-                'sku' => 'indosat-25k',
-                'nominal' => 25000,
-                'type' => 'pulsa',
-            ],
-            [
-                'name' => 'Paket Data Tri Happy 2GB 7 Hari',
-                'game' => 'Tri (3)',
-                'slug' => 'tri',
-                'sku' => 'tri-happy-2gb',
-                'nominal' => 15000,
-                'type' => 'data',
-            ],
-            [
-                'name' => 'Token Listrik PLN Rp 50.000',
+                'name' => 'Token Listrik PLN 20.000',
                 'game' => 'PLN Prepaid',
                 'slug' => 'pln-prepaid',
-                'sku' => 'pln-50k',
-                'nominal' => 50000,
+                'sku' => 'pp20kpo-s9',
+                'nominal' => 22500, // Modal: Rp 21.365 + Margin 5% = Rp 22.500
                 'type' => 'pln',
             ],
             [
-                'name' => 'Top Up Mobile Legends - 86 Diamonds',
-                'game' => 'Mobile Legends',
-                'slug' => 'mobile-legends',
-                'sku' => 'mlbb-86dm',
-                'nominal' => 21000,
+                'name' => 'Pulsa Telkomsel - Pulsa 8.000',
+                'game' => 'Telkomsel',
+                'slug' => 'telkomsel-12',
+                'sku' => 't1kmp8ko-s41',
+                'nominal' => 10200, // Modal: Rp 9.665 + Margin 5% = Rp 10.200
+                'type' => 'pulsa',
+            ],
+            [
+                'name' => 'Pulsa Indosat - Pulsa 10.000',
+                'game' => 'Indosat',
+                'slug' => 'indosat-12',
+                'sku' => 'isatidp10ka-s12',
+                'nominal' => 12000, // Modal: Rp 11.386 + Margin 5% = Rp 12.000
+                'type' => 'pulsa',
+            ],
+            [
+                'name' => 'Top Up Free Fire - Weekly Lite Diamonds',
+                'game' => 'Free Fire',
+                'slug' => 'free-fire',
+                'sku' => 'ffglwld-s111',
+                'nominal' => 7500, // Modal: Rp 7.103 + Margin 5% = Rp 7.500
                 'type' => 'game',
+            ],
+            [
+                'name' => 'Token Listrik PLN 10.000',
+                'game' => 'PLN Prepaid',
+                'slug' => 'pln-prepaid',
+                'sku' => 'ppprs10ko-s9',
+                'nominal' => 12000, // Modal: Rp 11.415 + Margin 5% = Rp 12.000
+                'type' => 'pln',
+            ],
+            [
+                'name' => 'Top Up Saldo DANA - Tier Basic',
+                'game' => 'DANA',
+                'slug' => 'dana',
+                'sku' => 'dana-2',
+                'nominal' => 10500, // Modal: Rp 10.000 + Margin 5% = Rp 10.500
+                'type' => 'ewallet',
             ],
         ];
 
@@ -155,8 +155,8 @@ class AddOctober29TransactionsSeeder extends Seeder
         }
         $randomCodes = array_values($randomCodes);
 
-        // Target: Total POS ~Rp 340.000 + Total PPOB Rp 161.000 = Total Grand ~Rp 501.000 (< Rp 1.000.000)
-        $targetPosBudget = 340000;
+        // Target: Total POS ~Rp 395.000 + Total PPOB Rp 101.500 = Total Grand ~Rp 496.500 (< Rp 1.000.000)
+        $targetPosBudget = 395000;
         $runningPosSum = 0;
 
         DB::beginTransaction();
@@ -403,7 +403,7 @@ class AddOctober29TransactionsSeeder extends Seeder
 
             $this->command->info("BERHASIL! Menambahkan 24 Transaksi untuk 29 Oktober 2026:");
             $this->command->info("- POS Cash: {$posCount} transaksi (Total: Rp " . number_format($runningPosSum, 0, ',', '.') . ")");
-            $this->command->info("- PPOB Saldo: {$ppobCount} transaksi (Total: Rp 161.000)");
+            $this->command->info("- PPOB Saldo: {$ppobCount} transaksi (Total: Rp " . number_format($grandTotalSales - $runningPosSum, 0, ',', '.') . ")");
             $this->command->info(">>> GRAND TOTAL PENJUALAN: Rp " . number_format($grandTotalSales, 0, ',', '.') . " <<<");
         } catch (\Throwable $e) {
             DB::rollBack();
