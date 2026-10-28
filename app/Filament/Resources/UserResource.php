@@ -116,10 +116,13 @@ class UserResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => !auth()->user()?->isTamu()),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => !auth()->user()?->isTamu()),
             ])
-            ->bulkActions([
+            ->bulkActions(auth()->user()?->isTamu() ? [] : [
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),

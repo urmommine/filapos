@@ -91,13 +91,15 @@ class AdminPanelProvider extends PanelProvider
                     ->url('/pos')
                     ->icon('heroicon-o-computer-desktop')
                     ->group('Transaksi')
-                    ->sort(-1),
+                    ->sort(-1)
+                    ->visible(fn () => !auth()->user()?->isTamu()),
             ])
             ->userMenuItems([
                 MenuItem::make()
                     ->label('Buka Kasir (POS)')
                     ->url('/pos')
-                    ->icon('heroicon-o-computer-desktop'),
+                    ->icon('heroicon-o-computer-desktop')
+                    ->visible(fn () => !auth()->user()?->isTamu()),
             ]);
     }
 }

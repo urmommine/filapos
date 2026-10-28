@@ -12,6 +12,10 @@ class ListCategories extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        if (auth()->user()?->isTamu()) {
+            return [];
+        }
+
         return [
             Actions\CreateAction::make(),
         ];

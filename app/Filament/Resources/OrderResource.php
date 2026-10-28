@@ -183,11 +183,7 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // No bulk delete for orders
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function infolist(Infolist $infolist): Infolist

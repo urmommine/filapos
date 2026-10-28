@@ -28,4 +28,9 @@ class ViewOrder extends ViewRecord
             $this->redirect(OrderResource::getUrl('index'));
         }
     }
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

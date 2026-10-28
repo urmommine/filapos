@@ -187,13 +187,12 @@ class ProductResource extends Resource
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn () => !auth()->user()?->isTamu()),
             ])
-            ->bulkActions([
+            ->bulkActions(auth()->user()?->isTamu() ? [] : [
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
                         ->exporter(ProductExporter::class)
                         ->label('Export Terpilih'),
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn () => !auth()->user()?->isTamu()),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
