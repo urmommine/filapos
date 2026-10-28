@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -22,8 +23,6 @@ class TopupGame extends Component
     public string $search = '';
     public string $activeCategory = 'All';
     public string $selectedGame = 'mobile-legends';
-    public array $gameDetails = [];
-    public array $gamesList = [];
     public int $wizardStep = 1; // 1: Pilih Produk, 2: Isi Akun, 3: Konfirmasi & Bayar
 
     // Form Input Akun Pembeli
@@ -80,9 +79,21 @@ class TopupGame extends Component
         $this->resumePendingOrderIfAny();
     }
 
+    #[Computed]
+    public function gamesList(): array
+    {
+        return MeloStoreService::getGameCategories();
+    }
+
+    #[Computed]
+    public function gameDetails(): array
+    {
+        return MeloStoreService::getGameProducts($this->selectedGame ?: 'mobile-legends');
+    }
+
     public function loadGames(): void
     {
-        $this->gamesList = MeloStoreService::getGameCategories();
+        // Dynamically resolved via computed gamesList
     }
 
     public function setCategory(string $category): void
@@ -115,7 +126,6 @@ class TopupGame extends Component
     public function loadGameDetails(string $slug): void
     {
         $this->selectedGame = $slug;
-        $this->gameDetails = MeloStoreService::getGameProducts($slug);
 
         // Reset form input ketika berganti game
         $this->target = '';
@@ -128,15 +138,15 @@ class TopupGame extends Component
         $this->wizardStep = 1;
 
         // Auto pilih paket pertama jika ada
-        if (!empty($this->gameDetails['products'])) {
-            $this->selectProduct($this->gameDetails['products'][0]['sku_code']);
+        $products = $this->gameDetails['products'] ?? [];
+        if (!empty($products)) {
+            $this->selectProduct($products[0]['sku_code']);
         }
     }
 
     public function clearGame(): void
     {
         $this->selectedGame = '';
-        $this->gameDetails = [];
         $this->selectedSku = '';
         $this->selectedProduct = null;
         $this->target = '';
