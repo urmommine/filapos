@@ -83,6 +83,10 @@ class PosTerminal extends Component
      */
     public function mount(): void
     {
+        if (Auth::user()?->role === 'user') {
+            abort(403, 'Akses Ditolak: Akun Member PPOB tidak memiliki izin mengakses Terminal Kasir.');
+        }
+
         // Load tax percentage from settings
         $this->defaultTax = (float) StoreSetting::get(StoreSetting::TAX_PERCENTAGE, 0);
         $this->tax = $this->defaultTax;

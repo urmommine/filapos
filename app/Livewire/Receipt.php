@@ -15,6 +15,10 @@ class Receipt extends Component
 
     public function mount(Order $order)
     {
+        if (auth()->user()?->role === 'user') {
+            abort(403, 'Akses Ditolak.');
+        }
+
         $this->order = $order;
         $this->order->load(['items', 'user', 'customer']);
         

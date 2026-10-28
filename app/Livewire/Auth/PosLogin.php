@@ -26,6 +26,16 @@ class PosLogin extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
 
+            if (Auth::user()->role === 'user') {
+                Auth::logout();
+                session()->invalidate();
+                session()->regenerateToken();
+
+                throw ValidationException::withMessages([
+                    'email' => 'Akses Ditolak: Akun Member PPOB tidak memiliki izin mengakses Terminal Kasir.',
+                ]);
+            }
+
             if (Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()) {
                 return redirect()->intended('/admin');
             }
