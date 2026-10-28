@@ -19,11 +19,12 @@ class AddOctober29TransactionsSeeder extends Seeder
      * 24 Transaksi untuk tanggal 29 Oktober 2026:
      * - 16 POS Cash (66.67% ~ 67%)
      * - 8 PPOB Saldo (33.33% ~ 33%)
+     * Grand total transaksi keseluruhan di kisaran ~Rp 500.000 (di bawah Rp 1.000.000).
      * Harga dan kalkulasi match 100% dengan database dan stok ter-update.
      */
     public function run(): void
     {
-        $this->command->info("Menambahkan 24 data transaksi tanggal 29 Oktober 2026 (16 POS Cash, 8 PPOB Saldo)...");
+        $this->command->info("Menambahkan 24 data transaksi tanggal 29 Oktober 2026 (Grand total ~500rb, max < 1jt)...");
 
         $cashier = User::where('role', 'kasir')->first() ?? User::where('email', 'yuliana@pos.com')->first();
         $cashierId = $cashier ? $cashier->id : 2;
@@ -34,23 +35,69 @@ class AddOctober29TransactionsSeeder extends Seeder
             return;
         }
 
-        $allProducts = Product::where('is_active', true)->where('stock', '>=', 10)->get();
-        if ($allProducts->isEmpty()) {
-            $this->command->error("Tidak ada produk aktif dengan stok cukup!");
+        // Ambil produk ritel/harian dengan harga terjangkau (Rp 2.500 s.d. Rp 25.000)
+        $cheapProducts = Product::where('is_active', true)
+            ->where('selling_price', '>=', 2500)
+            ->where('selling_price', '<=', 25000)
+            ->where('stock', '>=', 10)
+            ->get();
+
+        if ($cheapProducts->isEmpty()) {
+            $this->command->error("Tidak ada produk aktif dengan harga murah dan stok cukup!");
             return;
         }
 
         $customerIds = Customer::pluck('id')->toArray();
 
-        // 8 Katalog produk PPOB nyata dengan harga pas
+        // 8 Katalog produk PPOB nyata dengan nominal kecil-menengah (Total: Rp 161.000)
         $ppobProducts = [
             [
-                'name' => 'Pulsa Telkomsel Rp 25.000',
+                'name' => 'Pulsa Telkomsel Rp 10.000',
                 'game' => 'Telkomsel',
                 'slug' => 'telkomsel',
-                'sku' => 'telkomsel-25k',
+                'sku' => 'telkomsel-10k',
+                'nominal' => 10000,
+                'type' => 'pulsa',
+            ],
+            [
+                'name' => 'Token Listrik PLN Rp 20.000',
+                'game' => 'PLN Prepaid',
+                'slug' => 'pln-prepaid',
+                'sku' => 'pln-20k',
+                'nominal' => 20000,
+                'type' => 'pln',
+            ],
+            [
+                'name' => 'Top Up Mobile Legends - 28 Diamonds',
+                'game' => 'Mobile Legends',
+                'slug' => 'mobile-legends',
+                'sku' => 'mlbb-28dm',
+                'nominal' => 10000,
+                'type' => 'game',
+            ],
+            [
+                'name' => 'Top Up Free Fire - 70 Diamonds',
+                'game' => 'Free Fire',
+                'slug' => 'free-fire',
+                'sku' => 'ff-70dm',
+                'nominal' => 10000,
+                'type' => 'game',
+            ],
+            [
+                'name' => 'Pulsa Indosat Ooredoo Rp 25.000',
+                'game' => 'Indosat',
+                'slug' => 'indosat',
+                'sku' => 'indosat-25k',
                 'nominal' => 25000,
                 'type' => 'pulsa',
+            ],
+            [
+                'name' => 'Paket Data Tri Happy 2GB 7 Hari',
+                'game' => 'Tri (3)',
+                'slug' => 'tri',
+                'sku' => 'tri-happy-2gb',
+                'nominal' => 15000,
+                'type' => 'data',
             ],
             [
                 'name' => 'Token Listrik PLN Rp 50.000',
@@ -66,46 +113,6 @@ class AddOctober29TransactionsSeeder extends Seeder
                 'slug' => 'mobile-legends',
                 'sku' => 'mlbb-86dm',
                 'nominal' => 21000,
-                'type' => 'game',
-            ],
-            [
-                'name' => 'Top Up Free Fire - 140 Diamonds',
-                'game' => 'Free Fire',
-                'slug' => 'free-fire',
-                'sku' => 'ff-140dm',
-                'nominal' => 20000,
-                'type' => 'game',
-            ],
-            [
-                'name' => 'Pulsa Indosat Ooredoo Rp 50.000',
-                'game' => 'Indosat',
-                'slug' => 'indosat',
-                'sku' => 'indosat-50k',
-                'nominal' => 50000,
-                'type' => 'pulsa',
-            ],
-            [
-                'name' => 'Paket Data Tri Happy 5GB 7 Hari',
-                'game' => 'Tri (3)',
-                'slug' => 'tri',
-                'sku' => 'tri-happy-5gb',
-                'nominal' => 25000,
-                'type' => 'data',
-            ],
-            [
-                'name' => 'Token Listrik PLN Rp 20.000',
-                'game' => 'PLN Prepaid',
-                'slug' => 'pln-prepaid',
-                'sku' => 'pln-20k',
-                'nominal' => 20000,
-                'type' => 'pln',
-            ],
-            [
-                'name' => 'Top Up Mobile Legends - 172 Diamonds',
-                'game' => 'Mobile Legends',
-                'slug' => 'mobile-legends',
-                'sku' => 'mlbb-172dm',
-                'nominal' => 42000,
                 'type' => 'game',
             ],
         ];
@@ -148,12 +155,17 @@ class AddOctober29TransactionsSeeder extends Seeder
         }
         $randomCodes = array_values($randomCodes);
 
+        // Target: Total POS ~Rp 340.000 + Total PPOB Rp 161.000 = Total Grand ~Rp 501.000 (< Rp 1.000.000)
+        $targetPosBudget = 340000;
+        $runningPosSum = 0;
+
         DB::beginTransaction();
 
         try {
             $posCount = 0;
             $ppobCount = 0;
             $ppobIndex = 0;
+            $grandTotalSales = 0;
 
             for ($i = 0; $i < 24; $i++) {
                 $type = $sequence[$i];
@@ -175,9 +187,14 @@ class AddOctober29TransactionsSeeder extends Seeder
                         $customerId = $customerIds[array_rand($customerIds)];
                     }
 
-                    // Keranjang: 1 s.d. 3 produk nyata acak
+                    // Hitung target alokasi transaksi POS ini agar rata-rata nominal tetap proporsional (~21.000 / tx)
+                    $remainingPosTx = 16 - ($posCount - 1);
+                    $remainingBudget = max(15000 * $remainingPosTx, $targetPosBudget - $runningPosSum);
+                    $targetThisTx = $remainingBudget / $remainingPosTx;
+
+                    // Keranjang: 1 s.d. 3 item murah
                     $numItems = rand(1, 3);
-                    $selectedProducts = $allProducts->random(min($numItems, $allProducts->count()));
+                    $selectedProducts = $cheapProducts->random(min($numItems, $cheapProducts->count()));
 
                     $orderItemsData = [];
                     $subtotal = 0;
@@ -186,6 +203,16 @@ class AddOctober29TransactionsSeeder extends Seeder
                         $qty = rand(1, 2);
                         $unitPrice = (float) $prod->selling_price;
                         $lineTotal = round($unitPrice * $qty, 2);
+
+                        // Batasi agar tidak melampaui target transaksi per order jika sudah ada item
+                        if ($subtotal > 0 && ($subtotal + $lineTotal) > ($targetThisTx * 1.25)) {
+                            $qty = 1;
+                            $lineTotal = round($unitPrice * $qty, 2);
+                            if ($subtotal > 0 && ($subtotal + $lineTotal) > ($targetThisTx * 1.35)) {
+                                continue;
+                            }
+                        }
+
                         $subtotal += $lineTotal;
 
                         $orderItemsData[] = [
@@ -196,16 +223,36 @@ class AddOctober29TransactionsSeeder extends Seeder
                             'unit_price' => $unitPrice,
                             'total_price' => $lineTotal,
                         ];
+
+                        if ($subtotal >= $targetThisTx * 0.9) {
+                            break;
+                        }
+                    }
+
+                    // Fallback jika tidak ada item terpilih
+                    if (empty($orderItemsData)) {
+                        $fallbackProd = $cheapProducts->where('selling_price', '<=', 15000)->random();
+                        $unitPrice = (float) $fallbackProd->selling_price;
+                        $subtotal = $unitPrice;
+                        $orderItemsData[] = [
+                            'product' => $fallbackProd,
+                            'product_id' => $fallbackProd->id,
+                            'product_name' => $fallbackProd->name,
+                            'quantity' => 1,
+                            'unit_price' => $unitPrice,
+                            'total_price' => $unitPrice,
+                        ];
                     }
 
                     $totalAmount = $subtotal;
+                    $runningPosSum += $totalAmount;
+                    $grandTotalSales += $totalAmount;
 
-                    // Logika uang tunai yang realistis (pembulatan pecahan uang kertas Rp10.000, Rp20.000, Rp50.000, Rp100.000)
-                    $denominations = [10000, 20000, 50000, 100000];
+                    // Logika uang tunai yang realistis (uang pas atau pecahan 10k, 20k, 50k)
+                    $denominations = [10000, 20000, 50000];
                     $amountPaid = $totalAmount;
 
-                    // 60% pelanggan bayar pakai uang pas atau pecahan lebih besar
-                    if (rand(1, 100) <= 60) {
+                    if (rand(1, 100) <= 65) {
                         foreach ($denominations as $denom) {
                             $multiple = ceil($totalAmount / $denom) * $denom;
                             if ($multiple >= $totalAmount) {
@@ -215,9 +262,8 @@ class AddOctober29TransactionsSeeder extends Seeder
                         }
                     }
 
-                    // Jika amountPaid masih sama, atau pecahan tidak cocok, bulatkan ke 50.000 terdekat ke atas
                     if ($amountPaid < $totalAmount) {
-                        $amountPaid = ceil($totalAmount / 50000) * 50000;
+                        $amountPaid = ceil($totalAmount / 10000) * 10000;
                     }
 
                     $change = round($amountPaid - $totalAmount, 2);
@@ -267,6 +313,7 @@ class AddOctober29TransactionsSeeder extends Seeder
 
                     $member = $members[$ppobCount % $members->count()];
                     $nominal = (float) $prod['nominal'];
+                    $grandTotalSales += $nominal;
 
                     // Pastikan saldo member mencukupi sebelum transaksi
                     $currentBalance = (float) $member->balance;
@@ -355,8 +402,9 @@ class AddOctober29TransactionsSeeder extends Seeder
             DB::commit();
 
             $this->command->info("BERHASIL! Menambahkan 24 Transaksi untuk 29 Oktober 2026:");
-            $this->command->info("- POS Cash: {$posCount} transaksi (" . round($posCount / 24 * 100, 1) . "%)");
-            $this->command->info("- PPOB Saldo: {$ppobCount} transaksi (" . round($ppobCount / 24 * 100, 1) . "%)");
+            $this->command->info("- POS Cash: {$posCount} transaksi (Total: Rp " . number_format($runningPosSum, 0, ',', '.') . ")");
+            $this->command->info("- PPOB Saldo: {$ppobCount} transaksi (Total: Rp 161.000)");
+            $this->command->info(">>> GRAND TOTAL PENJUALAN: Rp " . number_format($grandTotalSales, 0, ',', '.') . " <<<");
         } catch (\Throwable $e) {
             DB::rollBack();
             $this->command->error("Gagal menambahkan seeder transaksi: " . $e->getMessage());
