@@ -24,25 +24,7 @@ class NotifyTamuOnAdminEntry
             if (! $lastShown || now()->diffInSeconds($lastShown) > 60) {
                 session()->put('tamu_welcome_notified_at', now());
 
-                $body = '<div class="space-y-2 text-xs leading-relaxed">'
-                    . '<p class="text-gray-700 dark:text-gray-200">Anda login dalam <strong>Mode Tamu (Read-Only)</strong>. Berikut rincian hak akses Anda:</p>'
-                    . '<div>'
-                    . '<p class="font-semibold text-emerald-600 dark:text-emerald-400">✅ Fitur yang Dapat Diakses:</p>'
-                    . '<ul class="list-disc list-inside space-y-0.5 text-gray-600 dark:text-gray-300">'
-                    . '<li>Ringkasan statistik penjualan pada Dashboard</li>'
-                    . '<li>Katalog Produk & Kategori (hanya melihat data)</li>'
-                    . '<li>Riwayat Transaksi (hanya transaksi mulai 20 Okt 2026)</li>'
-                    . '</ul>'
-                    . '</div>'
-                    . '<div>'
-                    . '<p class="font-semibold text-amber-600 dark:text-amber-400">🔒 Dibatasi / Disembunyikan (Privasi):</p>'
-                    . '<ul class="list-disc list-inside space-y-0.5 text-gray-600 dark:text-gray-300">'
-                    . '<li>Transaksi sebelum 20 Okt 2026 disembunyikan untuk privasi</li>'
-                    . '<li>Menu Pengguna & Pelanggan di-hide total</li>'
-                    . '<li>Aksi tambah, ubah, dan hapus data dinonaktifkan</li>'
-                    . '</ul>'
-                    . '</div>'
-                    . '</div>';
+                $body = 'Anda login dengan akun <strong>Tamu (Read-Only)</strong>. Sebagian menu dan data tidak ditampilkan demi menjaga privasi dan keamanan pengguna.';
 
                 Notification::make()
                     ->title("Selamat datang, {$user->name}!")
@@ -50,7 +32,7 @@ class NotifyTamuOnAdminEntry
                     ->iconColor('info')
                     ->body($body)
                     ->info()
-                    ->duration(12000)
+                    ->duration(7000)
                     ->send();
             }
         }
