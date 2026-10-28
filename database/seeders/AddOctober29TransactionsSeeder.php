@@ -283,7 +283,7 @@ class AddOctober29TransactionsSeeder extends Seeder
                         'payment_status' => 'paid',
                         'qris_reference_id' => null,
                         'qris_qr_string' => null,
-                        'notes' => 'Transaksi POS Kasir Tunai',
+                        'notes' => null,
                         'created_at' => $timeStr,
                         'updated_at' => $timeStr,
                     ]);
