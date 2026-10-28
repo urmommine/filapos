@@ -492,6 +492,14 @@ class TopupGame extends Component
 
             DB::commit();
 
+            // Refresh user saldo terbaru & dispatch event sinkronisasi saldo ke seluruh halaman
+            $freshUser = $user->fresh();
+            $newBalance = $freshUser ? (float) $freshUser->balance : 0;
+            $this->dispatch('balance-updated', 
+                balance: $newBalance, 
+                formattedBalance: 'Rp ' . number_format($newBalance, 0, ',', '.')
+            );
+
             $this->orderId = $order->id;
             $this->qrisInvoice = $invoiceNumber;
             $this->paymentStatus = 'paid';

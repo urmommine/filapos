@@ -90,11 +90,13 @@
             <!-- Right Actions -->
             <div class="flex items-center gap-2.5">
                 @auth
-                    <!-- Member Saldo Badge -->
+                    <!-- Member Saldo Badge (Sync Otomatis) -->
                     <a href="{{ route('topups.account') }}" 
+                       x-data="{ navBalance: 'Rp {{ number_format(Auth::user()->balance, 0, ',', '.') }}' }"
+                       @balance-updated.window="navBalance = ($event.detail && $event.detail.formattedBalance) ? $event.detail.formattedBalance : (($event.detail && $event.detail[0]) ? $event.detail[0].formattedBalance : navBalance)"
                        class="inline-flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold shadow-xs hover:bg-slate-800 transition-all border border-slate-800">
                         <span class="text-slate-400 font-normal">Saldo:</span>
-                        <span class="font-mono text-lime-400">Rp {{ number_format(Auth::user()->balance, 0, ',', '.') }}</span>
+                        <span class="font-mono text-lime-400" x-text="navBalance">Rp {{ number_format(Auth::user()->balance, 0, ',', '.') }}</span>
                         <span class="w-5 h-5 rounded-lg bg-lime-500 text-slate-950 flex items-center justify-center text-xs font-black">+</span>
                     </a>
 

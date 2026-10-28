@@ -626,7 +626,7 @@
                                         <div>
                                             <div class="text-xs font-extrabold text-slate-900">Saldo Akun (Instan 1-Detik)</div>
                                             <div class="text-[11px] font-mono text-slate-500">
-                                                Tersedia: <strong class="text-slate-900">Rp {{ number_format(Auth::user()->balance, 0, ',', '.') }}</strong>
+                                                Tersedia: <strong class="text-slate-900 font-mono">Rp <span x-text="new Intl.NumberFormat('id-ID').format(userBalance)"></span></strong>
                                             </div>
                                         </div>
                                     </div>
@@ -912,6 +912,13 @@
                         this.nicknameValid = detail.valid || false;
                         this.nickname = detail.nickname || '';
                         this.nicknameMessage = detail.message || '';
+                    });
+
+                    window.addEventListener('balance-updated', e => {
+                        const detail = (e.detail && e.detail.balance !== undefined) ? e.detail : (e.detail && e.detail[0] ? e.detail[0] : {});
+                        if (detail.balance !== undefined) {
+                            this.userBalance = parseFloat(detail.balance);
+                        }
                     });
                 },
 
