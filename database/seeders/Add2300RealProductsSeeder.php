@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Str;
+
 class Add2300RealProductsSeeder extends Seeder
 {
     /**
@@ -14,20 +16,29 @@ class Add2300RealProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Pastikan kategori yang dituju ada
-        $categories = Category::pluck('id', 'name')->toArray();
+        // Pastikan kategori yang dituju selalu ada di database agar tidak melanggar foreign key
+        $getOrCreateCat = function(string $name, array $keywords = []) {
+            foreach ($keywords as $kw) {
+                $found = Category::where('name', 'LIKE', "%{$kw}%")->first();
+                if ($found) return $found->id;
+            }
+            $cat = Category::firstOrCreate(
+                ['name' => $name],
+                ['slug' => Str::slug($name), 'description' => "Kategori {$name}", 'is_active' => true]
+            );
+            return $cat->id;
+        };
 
-        $catMakanan = $categories['Makanan & Mie Instan'] ?? 12;
-        $catMinuman = $categories['Minuman Dingin & Hangat'] ?? ($categories['Minuman'] ?? 13);
-        $catMinuman2 = $categories['Minuman'] ?? $catMinuman;
-        $catSnack = $categories['Snack & Biskuit'] ?? 14;
-        $catSembako = $categories['Sembako & Kebutuhan Dapur'] ?? 15;
-        $catPersonalCare = $categories['Personal Care & Kebersihan'] ?? 16;
-        $catMandi = $categories['Personal Care & Mandi'] ?? 18;
-        $catKebersihan = $categories['Kebersihan Rumah & Dapur'] ?? 19;
-        $catObat = $categories['Obat & Kesehatan'] ?? 20;
-        $catRokok = $categories['Rokok & Tembakau'] ?? 17;
-        $catFrozen = $categories['Frozen Foods'] ?? 7;
+        $catMakanan = $getOrCreateCat('Makanan & Mie Instan', ['Makanan', 'Mie']);
+        $catMinuman = $getOrCreateCat('Minuman Dingin & Hangat', ['Minuman', 'Drink']);
+        $catSnack = $getOrCreateCat('Snack & Biskuit', ['Snack', 'Biskuit', 'Camilan']);
+        $catSembako = $getOrCreateCat('Sembako & Kebutuhan Dapur', ['Sembako', 'Dapur', 'Bahan']);
+        $catPersonalCare = $getOrCreateCat('Personal Care & Kebersihan', ['Personal Care', 'Perawatan']);
+        $catMandi = $getOrCreateCat('Personal Care & Mandi', ['Mandi', 'Sabun', 'Sampo']);
+        $catKebersihan = $getOrCreateCat('Kebersihan Rumah & Dapur', ['Kebersihan', 'Deterjen']);
+        $catObat = $getOrCreateCat('Obat & Kesehatan', ['Obat', 'Kesehatan']);
+        $catRokok = $getOrCreateCat('Rokok & Tembakau', ['Rokok', 'Tembakau']);
+        $catFrozen = $getOrCreateCat('Frozen Foods', ['Frozen', 'Beku']);
 
         // Ambil barcode & SKU yang sudah ada di database untuk mencegah duplikasi
         $existingBarcodes = Product::pluck('barcode')->filter()->flip()->toArray();
