@@ -232,30 +232,30 @@ class OrderResource extends Resource
                             ->money('IDR'),
                     ])->columns(3),
 
-                Infolists\Components\Section::make('Detail Layanan Top Up / PPOB (Otomatis H2H)')
-                    ->schema([
-                        Infolists\Components\TextEntry::make('game_name')
-                            ->label('Game / Brand')
-                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['game'] ?? '-'),
-                        // Infolists\Components\TextEntry::make('target_id')
-                        //     ->label('User ID / No. Tujuan')
-                        //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['target'] ?? '-'),
-                        Infolists\Components\TextEntry::make('zone_id')
-                            ->label('Zone / Server ID')
-                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['zone'] ?? '-'),
-                        // Infolists\Components\TextEntry::make('nickname')
-                        //     ->label('Nickname Akun')
-                        //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['nickname'] ?? '-'),
-                        // Infolists\Components\TextEntry::make('customer_phone')
-                        //     ->label('No. WhatsApp Pelanggan')
-                        //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['customer_phone'] ?? '-'),
-                        Infolists\Components\TextEntry::make('serial_number')
-                            ->label('Serial Number (SN) / Status H2H')
-                            ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['sn'] ?? (json_decode($record->notes ?? '', true)['melo_status'] ?? '-'))
-                            ->copyable(),
-                    ])
-                    ->columns(3)
-                    ->visible(fn (Order $record): bool => !empty(json_decode($record->notes ?? '', true)['type']) && str_starts_with(json_decode($record->notes ?? '', true)['type'], 'ppob_')),
+                // Infolists\Components\Section::make('Detail Layanan Top Up / PPOB (Otomatis H2H)')
+                //     ->schema([
+                //         Infolists\Components\TextEntry::make('game_name')
+                //             ->label('Game / Brand')
+                //             ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['game'] ?? '-'),
+                //         // Infolists\Components\TextEntry::make('target_id')
+                //         //     ->label('User ID / No. Tujuan')
+                //         //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['target'] ?? '-'),
+                //         Infolists\Components\TextEntry::make('zone_id')
+                //             ->label('Zone / Server ID')
+                //             ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['zone'] ?? '-'),
+                //         // Infolists\Components\TextEntry::make('nickname')
+                //         //     ->label('Nickname Akun')
+                //         //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['nickname'] ?? '-'),
+                //         // Infolists\Components\TextEntry::make('customer_phone')
+                //         //     ->label('No. WhatsApp Pelanggan')
+                //         //     ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['customer_phone'] ?? '-'),
+                //         Infolists\Components\TextEntry::make('serial_number')
+                //             ->label('Serial Number (SN) / Status H2H')
+                //             ->state(fn (Order $record) => json_decode($record->notes ?? '', true)['sn'] ?? (json_decode($record->notes ?? '', true)['melo_status'] ?? '-'))
+                //             ->copyable(),
+                //     ])
+                //     ->columns(3)
+                //     ->visible(fn (Order $record): bool => !empty(json_decode($record->notes ?? '', true)['type']) && str_starts_with(json_decode($record->notes ?? '', true)['type'], 'ppob_')),
 
                 Infolists\Components\Section::make('Item Transaksi')
                     ->schema([
