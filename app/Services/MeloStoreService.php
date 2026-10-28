@@ -87,98 +87,104 @@ class MeloStoreService
      */
     public static function getGameCategories(bool $forceRefresh = false): array
     {
-        $cacheKey = 'melostore_game_categories_v3';
+        $cacheKey = 'melostore_game_categories_v5';
         $ttl = now()->addMinutes((int) config('melostore.categories_cache_minutes', 30));
 
         if ($forceRefresh) {
             Cache::forget($cacheKey);
+        } elseif (Cache::has($cacheKey)) {
+            $cached = Cache::get($cacheKey);
+            if (is_array($cached) && count($cached) > 20) {
+                return $cached;
+            }
         }
 
-        return Cache::remember($cacheKey, $ttl, function () {
-            $apiKey = self::getApiKey();
-            $secretKey = self::getSecretKey();
+        $apiKey = self::getApiKey();
+        $secretKey = self::getSecretKey();
 
-            if (empty($apiKey) || empty($secretKey)) {
-                return self::getFallbackGames();
-            }
+        if (empty($apiKey) || empty($secretKey)) {
+            return self::getFallbackGames();
+        }
 
-            try {
-                $response = Http::withHeaders(self::getHeaders())
-                    ->timeout(6)
-                    ->get(self::getBaseUrl() . '/api/v1/h2h/pricelists/categories');
+        try {
+            $response = Http::withHeaders(self::getHeaders())
+                ->timeout(20)
+                ->get(self::getBaseUrl() . '/api/v1/h2h/pricelists/categories');
 
-                if ($response->successful() && isset($response->json()['data'])) {
-                    $allBrands = $response->json()['data'];
-                    $games = [];
+            if ($response->successful() && isset($response->json()['data'])) {
+                $allBrands = $response->json()['data'];
+                $games = [];
 
-                    $popularSlugs = [
-                        'mobile-legends' => 1,
-                        'free-fire' => 2,
-                        'free-fire-max' => 3,
-                        'genshin-impact' => 4,
-                        'pubg-mobile' => 5,
-                        'valorant' => 6,
-                        'honor-of-kings' => 7,
-                        'roblox' => 8,
-                        'call-of-duty-mobile' => 9,
-                        'steam-wallet-code-idr' => 10,
-                        'google-play-indonesia' => 11,
-                        'dana' => 12,
-                    ];
+                $popularSlugs = [
+                    'mobile-legends' => 1,
+                    'free-fire' => 2,
+                    'free-fire-max' => 3,
+                    'genshin-impact' => 4,
+                    'pubg-mobile' => 5,
+                    'valorant' => 6,
+                    'honor-of-kings' => 7,
+                    'roblox' => 8,
+                    'call-of-duty-mobile' => 9,
+                    'steam-wallet-code-idr' => 10,
+                    'google-play-indonesia' => 11,
+                    'dana' => 12,
+                ];
 
-                    foreach ($allBrands as $b) {
-                        $rawCat = $b['category']['name'] ?? ($b['category'] ?? '');
-                        $category = 'Game';
-                        if (stripos($rawCat, 'airtime') !== false || stripos($rawCat, 'pulsa') !== false || stripos($rawCat, 'data') !== false) {
-                            $category = 'Pulsa & Data';
-                        } elseif (stripos($rawCat, 'gift') !== false) {
-                            $category = 'Gift Card';
-                        } elseif (stripos($rawCat, 'ewallet') !== false || stripos($rawCat, 'wallet') !== false) {
-                            $category = 'E-Wallet';
-                        } elseif (stripos($rawCat, 'pln') !== false || stripos($rawCat, 'listrik') !== false) {
-                            $category = 'PLN';
-                        } elseif (stripos($rawCat, 'social') !== false || stripos($rawCat, 'chat') !== false) {
-                            $category = 'Social';
-                        } elseif (stripos($rawCat, 'aplikasi') !== false || stripos($rawCat, 'langganan') !== false) {
-                            $category = 'Aplikasi';
-                        }
-
-                        $slug = $b['slug'] ?? '';
-                        $order = $popularSlugs[$slug] ?? 999;
-
-                        // Simpan hanya atribut esensial agar ukuran JSON HTML ringan (kurangi ~75% payload)
-                        $games[] = [
-                            'brand_id' => $b['brand_id'] ?? $b['id'] ?? null,
-                            'name' => $b['name'],
-                            'slug' => $slug,
-                            'category' => $category,
-                            'thumbnail' => self::getGameIconUrl($slug),
-                            '_order' => $order,
-                        ];
+                foreach ($allBrands as $b) {
+                    $rawCat = $b['category']['name'] ?? ($b['category'] ?? '');
+                    $category = 'Game';
+                    if (stripos($rawCat, 'airtime') !== false || stripos($rawCat, 'pulsa') !== false || stripos($rawCat, 'data') !== false) {
+                        $category = 'Pulsa & Data';
+                    } elseif (stripos($rawCat, 'gift') !== false) {
+                        $category = 'Gift Card';
+                    } elseif (stripos($rawCat, 'ewallet') !== false || stripos($rawCat, 'wallet') !== false) {
+                        $category = 'E-Wallet';
+                    } elseif (stripos($rawCat, 'pln') !== false || stripos($rawCat, 'listrik') !== false) {
+                        $category = 'PLN';
+                    } elseif (stripos($rawCat, 'social') !== false || stripos($rawCat, 'chat') !== false) {
+                        $category = 'Social';
+                    } elseif (stripos($rawCat, 'aplikasi') !== false || stripos($rawCat, 'langganan') !== false) {
+                        $category = 'Aplikasi';
                     }
 
-                    // Sort popular games first, then alphabetically
-                    usort($games, function ($a, $b) {
-                        if ($a['_order'] === $b['_order']) {
-                            return strcasecmp($a['name'], $b['name']);
-                        }
-                        return $a['_order'] <=> $b['_order'];
-                    });
+                    $slug = $b['slug'] ?? '';
+                    $order = $popularSlugs[$slug] ?? 999;
 
-                    // Hapus _order setelah diurutkan agar payload bersih
-                    $games = array_map(function ($g) {
-                        unset($g['_order']);
-                        return $g;
-                    }, $games);
-
-                    return !empty($games) ? $games : self::getFallbackGames();
+                    // Simpan hanya atribut esensial agar ukuran JSON HTML ringan
+                    $games[] = [
+                        'brand_id' => $b['brand_id'] ?? $b['id'] ?? null,
+                        'name' => $b['name'],
+                        'slug' => $slug,
+                        'category' => $category,
+                        'thumbnail' => self::getGameIconUrl($slug),
+                        '_order' => $order,
+                    ];
                 }
-            } catch (\Throwable $e) {
-                Log::warning('Melostore getGameCategories failed: ' . $e->getMessage());
-            }
 
-            return self::getFallbackGames();
-        });
+                // Sort popular games first, then alphabetically
+                usort($games, function ($a, $b) {
+                    if ($a['_order'] === $b['_order']) {
+                        return strcasecmp($a['name'], $b['name']);
+                    }
+                    return $a['_order'] <=> $b['_order'];
+                });
+
+                // Hapus _order setelah diurutkan agar payload bersih
+                $games = array_map(function ($g) {
+                    unset($g['_order']);
+                    return $g;
+                }, $games);
+
+                if (count($games) > 20) {
+                    Cache::put($cacheKey, $games, $ttl);
+                    return $games;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Melostore getGameCategories failed: ' . $e->getMessage());
+        }
+
+        return self::getFallbackGames();
     }
 
     /**
@@ -186,78 +192,87 @@ class MeloStoreService
      */
     public static function getGameProducts(string $brandSlug, bool $forceRefresh = false): array
     {
-        $cacheKey = "melostore_products_{$brandSlug}_v3";
+        $cacheKey = "melostore_products_v5_{$brandSlug}";
         $ttl = now()->addMinutes((int) config('melostore.products_cache_minutes', 5));
 
         if ($forceRefresh) {
             Cache::forget($cacheKey);
+        } elseif (Cache::has($cacheKey)) {
+            $cached = Cache::get($cacheKey);
+            if (is_array($cached) && !empty($cached['products'])) {
+                return $cached;
+            }
         }
 
-        return Cache::remember($cacheKey, $ttl, function () use ($brandSlug) {
-            $apiKey = self::getApiKey();
-            $secretKey = self::getSecretKey();
+        $apiKey = self::getApiKey();
+        $secretKey = self::getSecretKey();
 
-            if (empty($apiKey) || empty($secretKey)) {
-                return self::getFallbackProducts($brandSlug);
-            }
+        if (empty($apiKey) || empty($secretKey)) {
+            return self::getFallbackProducts($brandSlug);
+        }
 
-            try {
-                $response = Http::withHeaders(self::getHeaders())
-                    ->timeout(6)
-                    ->get(self::getBaseUrl() . "/api/v1/h2h/pricelists/{$brandSlug}");
+        try {
+            $response = Http::withHeaders(self::getHeaders())
+                ->timeout(20)
+                ->get(self::getBaseUrl() . "/api/v1/h2h/pricelists/{$brandSlug}");
 
-                if ($response->successful() && isset($response->json()['data'])) {
-                    $json = $response->json();
-                    $rawProducts = $json['data'] ?? [];
-                    $meta = $json['meta'] ?? [];
+            if ($response->successful() && isset($response->json()['data'])) {
+                $json = $response->json();
+                $rawProducts = $json['data'] ?? [];
+                $meta = $json['meta'] ?? [];
 
-                    // Fields form inquiry (contoh: ID dan Zone)
-                    $inquiryFields = [];
-                    if (!empty($meta['inquiry_forms'])) {
-                        $firstForm = reset($meta['inquiry_forms']);
-                        $inquiryFields = $firstForm['fields'] ?? [];
+                // Fields form inquiry (contoh: ID dan Zone)
+                $inquiryFields = [];
+                if (!empty($meta['inquiry_forms'])) {
+                    $firstForm = reset($meta['inquiry_forms']);
+                    $inquiryFields = $firstForm['fields'] ?? [];
+                }
+
+                $formattedProducts = [];
+                foreach ($rawProducts as $p) {
+                    if (($p['status'] ?? 'active') !== 'active') {
+                        continue;
                     }
 
-                    $formattedProducts = [];
-                    foreach ($rawProducts as $p) {
-                        if (($p['status'] ?? 'active') !== 'active') {
-                            continue;
-                        }
+                    $modalPrice = (float) ($p['price'] ?? 0);
+                    $sellingPrice = self::calculateSellingPrice($modalPrice);
 
-                        $modalPrice = (float) ($p['price'] ?? 0);
-                        $sellingPrice = self::calculateSellingPrice($modalPrice);
-
-                        $formattedProducts[] = [
-                            'sku_code' => $p['sku_code'],
-                            'name' => $p['name'],
-                            'type' => $p['type_name'] ?? 'Regular',
-                            'modal_price' => $modalPrice,
-                            'price' => $sellingPrice,
-                            'formatted_price' => 'Rp ' . number_format($sellingPrice, 0, ',', '.'),
-                            'server_code' => $p['server_code'] ?? 'global',
-                            'server_name' => $p['server_name'] ?? 'Global',
-                        ];
-                    }
-
-                    // Urutkan berdasarkan harga jual terendah ke tertinggi
-                    usort($formattedProducts, fn($a, $b) => $a['price'] <=> $b['price']);
-
-                    return [
-                        'brand' => [
-                            'name' => $json['category']['name'] ?? ucwords(str_replace('-', ' ', $brandSlug)),
-                            'slug' => $brandSlug,
-                            'thumbnail' => self::getGameIconUrl($brandSlug),
-                        ],
-                        'inquiry_fields' => !empty($inquiryFields) ? $inquiryFields : self::getDefaultInquiryFields($brandSlug),
-                        'products' => $formattedProducts,
+                    $formattedProducts[] = [
+                        'sku_code' => $p['sku_code'],
+                        'name' => $p['name'],
+                        'type' => $p['type_name'] ?? 'Regular',
+                        'modal_price' => $modalPrice,
+                        'price' => $sellingPrice,
+                        'formatted_price' => 'Rp ' . number_format($sellingPrice, 0, ',', '.'),
+                        'server_code' => $p['server_code'] ?? 'global',
+                        'server_name' => $p['server_name'] ?? 'Global',
                     ];
                 }
-            } catch (\Throwable $e) {
-                Log::warning("Melostore getGameProducts({$brandSlug}) failed: " . $e->getMessage());
-            }
 
-            return self::getFallbackProducts($brandSlug);
-        });
+                // Urutkan berdasarkan harga jual terendah ke tertinggi
+                usort($formattedProducts, fn($a, $b) => $a['price'] <=> $b['price']);
+
+                $result = [
+                    'brand' => [
+                        'name' => $json['category']['name'] ?? ucwords(str_replace('-', ' ', $brandSlug)),
+                        'slug' => $brandSlug,
+                        'thumbnail' => self::getGameIconUrl($brandSlug),
+                    ],
+                    'inquiry_fields' => !empty($inquiryFields) ? $inquiryFields : self::getDefaultInquiryFields($brandSlug),
+                    'products' => $formattedProducts,
+                ];
+
+                if (!empty($formattedProducts)) {
+                    Cache::put($cacheKey, $result, $ttl);
+                }
+
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Melostore getGameProducts({$brandSlug}) failed: " . $e->getMessage());
+        }
+
+        return self::getFallbackProducts($brandSlug);
     }
 
     /**
