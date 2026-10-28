@@ -182,17 +182,40 @@ class ProductResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => !auth()->user()?->isTamu()),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => !auth()->user()?->isTamu()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
                         ->exporter(ProductExporter::class)
                         ->label('Export Terpilih'),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => !auth()->user()?->isTamu()),
                 ]),
             ]);
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->isTamu() && (auth()->user()?->isAdmin() || auth()->user()?->isSuperAdmin());
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return !auth()->user()?->isTamu() && (auth()->user()?->isAdmin() || auth()->user()?->isSuperAdmin());
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return !auth()->user()?->isTamu() && (auth()->user()?->isAdmin() || auth()->user()?->isSuperAdmin());
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->isTamu() && (auth()->user()?->isAdmin() || auth()->user()?->isSuperAdmin());
     }
 
     public static function getRelations(): array

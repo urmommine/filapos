@@ -7,12 +7,13 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Traits\PreventTamuModification;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, PreventTamuModification;
 
     /**
      * Atribut yang dapat diisi secara massal.

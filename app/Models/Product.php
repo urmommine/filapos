@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Traits\PreventTamuModification;
+use App\Models\User;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Filament\Notifications\Notification;
-use Filament\Notifications\Actions\Action;
-use App\Models\User;
 use Illuminate\Support\HtmlString;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, PreventTamuModification;
 
     protected $fillable = [
         'category_id',

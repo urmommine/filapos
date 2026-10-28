@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Traits\PreventTamuModification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, PreventTamuModification;
 
     protected $fillable = [
         'name',

@@ -60,6 +60,16 @@ class CategoryPolicy
      */
     public function forceDelete(User $user, Category $category): bool
     {
-        return $user->isSuperAdmin();
+        return $user->isSuperAdmin() && ! $user->isTamu();
+    }
+
+    public function deleteAny(User $user): bool
+    {
+        return ($user->isAdmin() || $user->isSuperAdmin()) && ! $user->isTamu();
+    }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->isSuperAdmin() && ! $user->isTamu();
     }
 }

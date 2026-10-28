@@ -311,6 +311,16 @@ class OrderResource extends Resource
         return false; // Orders are created from POS terminal
     }
 
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return !auth()->user()?->isTamu() && (bool) auth()->user()?->isSuperAdmin();
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
+    }
+
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         $query = parent::getEloquentQuery()

@@ -72,6 +72,16 @@ class OrderPolicy
      */
     public function forceDelete(User $user, Order $order): bool
     {
-        return $user->isSuperAdmin();
+        return $user->isSuperAdmin() && ! $user->isTamu();
+    }
+
+    public function deleteAny(User $user): bool
+    {
+        return false;
+    }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return false;
     }
 }

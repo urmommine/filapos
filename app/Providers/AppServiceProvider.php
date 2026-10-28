@@ -19,8 +19,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-          if (request()->header('X-Forwarded-Proto') === 'https') {
+        if (request()->header('X-Forwarded-Proto') === 'https') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
+
+        // Kunci mutlak keamanan akun Tamu: hanya izinkan view / viewAny.
+        // Blokir mutlak create, update, delete, deleteAny, forceDelete, restore, dll.
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            if ($user && method_exists($user, 'isTamu') && $user->isTamu()) {
+                if (in_array($ability, ['view', 'viewAny'])) {
+                    return null;
+                }
+
+                return false;
+            }
+        });
     }
 }

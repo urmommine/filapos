@@ -60,6 +60,16 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return $user->isSuperAdmin();
+        return $user->isSuperAdmin() && ! $user->isTamu();
+    }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->isSuperAdmin() && ! $user->isTamu();
+    }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->isSuperAdmin() && ! $user->isTamu();
     }
 }
