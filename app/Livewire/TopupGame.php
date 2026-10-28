@@ -438,7 +438,7 @@ class TopupGame extends Component
         try {
             DB::beginTransaction();
 
-            $invoiceNumber = BorderPayService::generateInvoiceNumber();
+            $invoiceNumber = Order::generateInvoiceNumber('balance');
             $gameName = $this->gameDetails()['brand']['name'] ?? ucwords(str_replace('-', ' ', $this->selectedGame));
             $productName = $this->selectedProduct['name'];
 
