@@ -122,8 +122,8 @@ class OrderResource extends Resource
                         default => $state,
                     }),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tanggal & Waktu')
-                    ->dateTime('d M Y, H:i')
+                    ->label('Tanggal')
+                    ->date('d M Y')
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
