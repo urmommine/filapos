@@ -1,7 +1,7 @@
 <div x-data="topupWizard({
         allGames: {{ Js::from($allGames) }},
         catalog: {{ Js::from($catalog) }},
-        initialGame: '{{ $selectedGame ?: 'mobile-legends' }}'
+        initialGame: '{{ $selectedGame }}'
     })" 
     class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
@@ -484,8 +484,16 @@
                                 </div>
                             </template>
 
+                            <template x-if="!selectedProduct">
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
+                                    <p class="text-xs text-slate-500 font-medium">Silakan klik salah satu nominal paket di atas untuk lanjut</p>
+                                </div>
+                            </template>
+
                             <button @click="goToStep(2)" type="button"
-                                    class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold text-xs tracking-wide shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                                    :disabled="!selectedProduct"
+                                    class="w-full py-3.5 rounded-xl font-bold text-xs tracking-wide shadow-xs transition-all flex items-center justify-center gap-1.5"
+                                    :class="selectedProduct ? 'bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white cursor-pointer' : 'bg-slate-200 text-slate-400 cursor-not-allowed'">
                                 <span>Lanjut: Masukkan Data Akun</span>
                                 <span class="material-symbols-outlined text-base">arrow_forward</span>
                             </button>
@@ -863,7 +871,7 @@
                 productsPerPage: 20, // 10 baris x 2 kolom = 20 item
                 productSearch: '',
 
-                selectedGame: config.initialGame || 'mobile-legends',
+                selectedGame: config.initialGame || '',
                 selectedSku: '',
                 target: '{{ addslashes($target) }}',
                 zone: '{{ addslashes($zone) }}',
@@ -887,13 +895,6 @@
                 nicknameMessage: '{{ addslashes($nicknameMessage) }}',
 
                 init() {
-                    if (this.selectedGame && this.catalog[this.selectedGame]) {
-                        const prods = this.catalog[this.selectedGame].products || [];
-                        if (prods.length > 0) {
-                            this.selectedSku = prods[0].sku_code;
-                        }
-                    }
-
                     window.addEventListener('nickname-checked', e => {
                         const detail = e.detail || (e[0] ? e[0] : {});
                         this.isCheckingNickname = false;
@@ -1084,8 +1085,7 @@
                         }
                     }
 
-                    const prods = this.currentProducts;
-                    this.selectedSku = prods.length > 0 ? prods[0].sku_code : '';
+                    this.selectedSku = '';
 
                     this.$nextTick(() => {
                         const panel = document.getElementById('topup-wizard-panel');

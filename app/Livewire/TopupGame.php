@@ -22,7 +22,7 @@ class TopupGame extends Component
     // Katalog & Game
     public string $search = '';
     public string $activeCategory = 'All';
-    public string $selectedGame = 'mobile-legends';
+    public string $selectedGame = '';
     public int $wizardStep = 1; // 1: Pilih Produk, 2: Isi Akun, 3: Konfirmasi & Bayar
 
     // Form Input Akun Pembeli
@@ -62,9 +62,6 @@ class TopupGame extends Component
 
         if (!empty($queryGame)) {
             $this->selectedGame = $queryGame;
-        }
-
-        if (!empty($this->selectedGame)) {
             $this->loadGameDetails($this->selectedGame);
         }
 
@@ -88,7 +85,11 @@ class TopupGame extends Component
     #[Computed]
     public function gameDetails(): array
     {
-        return MeloStoreService::getGameProducts($this->selectedGame ?: 'mobile-legends');
+        if (empty($this->selectedGame)) {
+            return [];
+        }
+
+        return MeloStoreService::getGameProducts($this->selectedGame);
     }
 
     public function loadGames(): void
@@ -136,12 +137,6 @@ class TopupGame extends Component
         $this->selectedSku = '';
         $this->selectedProduct = null;
         $this->wizardStep = 1;
-
-        // Auto pilih paket pertama jika ada
-        $products = $this->gameDetails['products'] ?? [];
-        if (!empty($products)) {
-            $this->selectProduct($products[0]['sku_code']);
-        }
     }
 
     public function clearGame(): void
@@ -708,14 +703,10 @@ class TopupGame extends Component
             'Aplikasi' => 'Aplikasi & Streaming',
         ];
 
-        $targetGame = $this->selectedGame ?: 'mobile-legends';
-        $gameData = !empty($this->gameDetails) 
-            ? $this->gameDetails 
-            : MeloStoreService::getGameProducts($targetGame);
-
-        $catalog = [
-            $targetGame => $gameData,
-        ];
+        $catalog = [];
+        if (!empty($this->selectedGame)) {
+            $catalog[$this->selectedGame] = $this->gameDetails;
+        }
 
         return view('livewire.topup-game', [
             'allGames' => $this->gamesList,
