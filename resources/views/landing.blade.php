@@ -41,11 +41,120 @@
             accent-color: #84cc16;
         }
 
-        .tab-btn.active {
-            background-color: #84cc16;
-            color: #0f172a;
-            font-weight: 700;
-            box-shadow: 0 4px 12px rgba(132, 204, 22, 0.25);
+        /* ======================================================== */
+        /* OPENING & SCROLL ANIMATION SYSTEM                        */
+        /* ======================================================== */
+        @keyframes heroFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heroScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0px) rotate(-1deg);
+            }
+            50% {
+                transform: translateY(-8px) rotate(0.5deg);
+            }
+        }
+
+        @keyframes floatReverse {
+            0%, 100% {
+                transform: translateY(0px) rotate(1deg);
+            }
+            50% {
+                transform: translateY(8px) rotate(-0.5deg);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 0.35;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.65;
+                transform: scale(1.08);
+            }
+        }
+
+        /* Opening Animation Classes */
+        .anim-fade-up {
+            opacity: 0;
+            animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .anim-scale-in {
+            opacity: 0;
+            animation: heroScaleIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .anim-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        .anim-float-reverse {
+            animation: floatReverse 7s ease-in-out infinite;
+        }
+
+        .anim-glow {
+            animation: pulseGlow 5s ease-in-out infinite;
+        }
+
+        /* Stagger Delays */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.65s; }
+
+        /* Scroll Reveal Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .anim-fade-up,
+            .anim-scale-in,
+            .anim-float,
+            .anim-float-reverse,
+            .anim-glow {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
         }
     </style>
 </head>
@@ -144,13 +253,13 @@
     <!-- HERO SECTION                                             -->
     <!-- ======================================================== -->
     <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-grid-pattern">
-        <!-- Background Glow Accent -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-lime-200/45 rounded-full blur-3xl pointer-events-none -z-10"></div>
+        <!-- Background Glow Accent with Breathing Animation -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-lime-200/45 rounded-full blur-3xl pointer-events-none -z-10 anim-glow"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-4xl mx-auto">
-                <!-- Pill Badge -->
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-100/90 border border-lime-300 text-lime-900 text-xs font-semibold mb-6 shadow-xs">
+                <!-- Pill Badge (Opening Delay 1) -->
+                <div class="anim-fade-up delay-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-100/90 border border-lime-300 text-lime-900 text-xs font-semibold mb-6 shadow-xs">
                     <span class="flex h-2 w-2 relative">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-lime-600"></span>
@@ -158,25 +267,25 @@
                     <span>Platform All-in-One: Kasir Web • Multi-PPOB • AI Subscriptions</span>
                 </div>
 
-                <!-- Main Heading -->
-                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
+                <!-- Main Heading (Opening Delay 2) -->
+                <h1 class="anim-fade-up delay-2 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
                     Satu Platform untuk <span class="text-lime-600 underline decoration-lime-300 decoration-wavy underline-offset-8">Kasir Cepat</span>, PPOB Lengkap & Layanan AI.
                 </h1>
 
-                <!-- Subtitle -->
-                <p class="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
+                <!-- Subtitle (Opening Delay 3) -->
+                <p class="anim-fade-up delay-3 mt-6 text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
                     Kelola transaksi kasir toko fisik Anda, raup cuan ekstra dari penjualan pulsa, token PLN, e-wallet, voucher game, hingga langganan tools AI modern langsung dalam satu web dashboard terintegrasi.
                 </p>
 
-                <!-- CTA Buttons -->
-                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 rounded-xl shadow-lg shadow-lime-500/30 hover:shadow-xl hover:shadow-lime-500/40 transition-all duration-200">
+                <!-- CTA Buttons (Opening Delay 4) -->
+                <div class="anim-fade-up delay-4 mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                    <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 rounded-xl shadow-lg shadow-lime-500/30 hover:shadow-xl hover:shadow-lime-500/40 hover:-translate-y-0.5 transition-all duration-200">
                         <span>Buka Aplikasi Kasir</span>
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
-                    <a href="{{ url('/admin') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-xs hover:border-slate-400 transition-all">
+                    <a href="{{ url('/admin') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-xs hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-200">
                         <svg class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -185,9 +294,9 @@
                     </a>
                 </div>
 
-                <!-- 3 Pillars Badges Strip -->
-                <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-left">
-                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                <!-- 3 Pillars Badges Strip (Opening Delay 5) -->
+                <div class="anim-fade-up delay-5 mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-left">
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs hover:border-lime-400 hover:shadow-sm transition-all duration-200">
                         <div class="w-9 h-9 rounded-lg bg-lime-100 text-lime-800 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -199,7 +308,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs hover:border-emerald-400 hover:shadow-sm transition-all duration-200">
                         <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -211,7 +320,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs">
+                    <div class="bg-white/80 backdrop-blur-xs border border-slate-200/90 rounded-xl p-3 flex items-center gap-3 shadow-xs hover:border-slate-800 hover:shadow-sm transition-all duration-200">
                         <div class="w-9 h-9 rounded-lg bg-slate-900 text-lime-400 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -226,9 +335,9 @@
             </div>
 
             <!-- ======================================================== -->
-            <!-- MULTI-SERVICE INTERACTIVE SHOWCASE                       -->
+            <!-- MULTI-SERVICE SHOWCASE (Opening Scale In Delay 6)        -->
             <!-- ======================================================== -->
-            <div class="mt-14 relative max-w-5xl mx-auto">
+            <div class="anim-scale-in delay-6 mt-14 relative max-w-5xl mx-auto">
                 <!-- Outer Laptop/Tablet Shell -->
                 <div class="rounded-2xl bg-slate-900 p-2 sm:p-3.5 shadow-2xl shadow-slate-950/20 border border-slate-800">
                     <!-- Top Window Bar -->
@@ -254,7 +363,7 @@
                     <div class="bg-slate-100 rounded-b-xl overflow-hidden p-3 sm:p-5 text-slate-800 grid grid-cols-1 lg:grid-cols-3 gap-4">
                         
                         <!-- Panel 1: POS Kasir -->
-                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
                             <div>
                                 <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
                                     <div class="flex items-center gap-2">
@@ -291,7 +400,7 @@
                         </div>
 
                         <!-- Panel 2: PPOB & Game Hub -->
-                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
                             <div>
                                 <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
                                     <div class="flex items-center gap-2">
@@ -328,7 +437,7 @@
                         </div>
 
                         <!-- Panel 3: AI Subscriptions Hub -->
-                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs">
+                        <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
                             <div>
                                 <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
                                     <div class="flex items-center gap-2">
@@ -367,8 +476,8 @@
                     </div>
                 </div>
 
-                <!-- Floating Live Transaction Notification (Top Left) -->
-                <div class="absolute -top-6 -left-2 sm:-top-8 sm:-left-6 w-52 sm:w-64 bg-white rounded-xl shadow-2xl p-3 border border-slate-200/90 text-[11px] transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                <!-- Floating Live PPOB Notification (Smooth Float Animation) -->
+                <div class="anim-float absolute -top-6 -left-2 sm:-top-8 sm:-left-6 w-52 sm:w-64 bg-white rounded-xl shadow-2xl p-3 border border-slate-200/90 text-[11px] pointer-events-none sm:pointer-events-auto">
                     <div class="flex items-center gap-2 mb-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                         <span class="font-bold text-slate-900">Transaksi PPOB Berhasil</span>
@@ -380,8 +489,8 @@
                     </div>
                 </div>
 
-                <!-- Floating AI Assistant Card (Bottom Right) -->
-                <div class="absolute -bottom-6 -right-2 sm:-bottom-8 sm:right-4 w-52 sm:w-64 bg-slate-950 text-white rounded-xl shadow-2xl p-3 border border-slate-800 text-[11px] transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                <!-- Floating AI Assistant Card (Reverse Float Animation) -->
+                <div class="anim-float-reverse absolute -bottom-6 -right-2 sm:-bottom-8 sm:right-4 w-52 sm:w-64 bg-slate-950 text-white rounded-xl shadow-2xl p-3 border border-slate-800 text-[11px] pointer-events-none sm:pointer-events-auto">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="w-2 h-2 rounded-full bg-lime-400"></span>
                         <span class="font-bold text-lime-400">AI Store Assistant</span>
@@ -395,27 +504,27 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- VALUE PROPOSITIONS METRIC STRIP                          -->
+    <!-- VALUE PROPOSITIONS METRIC STRIP (Scroll Reveal)          -->
     <!-- ======================================================== -->
     <section class="border-y border-slate-200 bg-white py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="p-3">
+                <div class="p-3 reveal" data-delay="0">
                     <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">3-in-1 Hub</div>
                     <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Multi Layanan</div>
                     <p class="mt-1 text-xs text-slate-500">Kasir Toko, PPOB Digital, & AI Subscriptions</p>
                 </div>
-                <div class="p-3">
+                <div class="p-3 reveal" data-delay="100">
                     <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">1000+ Produk</div>
                     <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">PPOB & Game</div>
                     <p class="mt-1 text-xs text-slate-500">PLN, Pulsa, DANA, OVO, MLBB, Free Fire, dll</p>
                 </div>
-                <div class="p-3">
+                <div class="p-3 reveal" data-delay="200">
                     <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Instan & 24 Jam</div>
                     <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Transaksi Otomatis</div>
                     <p class="mt-1 text-xs text-slate-500">Proses kilat dalam hitungan detik non-stop</p>
                 </div>
-                <div class="p-3">
+                <div class="p-3 reveal" data-delay="300">
                     <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Rp 0,- Hardware</div>
                     <div class="mt-1 text-xs font-semibold text-lime-700 uppercase tracking-wider">Tanpa Mesin Khusus</div>
                     <p class="mt-1 text-xs text-slate-500">Cukup buka browser di HP, tablet, atau PC</p>
@@ -425,11 +534,11 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 3 CORE PILLARS OVERVIEW                                  -->
+    <!-- 3 CORE PILLARS OVERVIEW (Scroll Reveal)                  -->
     <!-- ======================================================== -->
     <section id="layanan" class="py-20 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-14">
+            <div class="text-center max-w-2xl mx-auto mb-14 reveal">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Ekosistem FilaPOS Smart</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">3 Pilar Utama untuk Melejitkan Pendapatan Toko</h2>
                 <p class="mt-3 text-sm text-slate-600">Bukan cuma kasir biasa, FilaPOS Smart mengubah usaha Anda menjadi pusat layanan digital modern.</p>
@@ -437,9 +546,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Pillar 1 Card -->
-                <div id="pos-terminal" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-lime-300 transition-all duration-200 flex flex-col justify-between group">
+                <div id="pos-terminal" class="reveal bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-lime-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group" data-delay="0">
                     <div>
-                        <div class="w-12 h-12 rounded-2xl bg-lime-100 text-lime-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-2xl bg-lime-100 text-lime-800 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-lime-200 transition-all duration-300">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
@@ -471,7 +580,7 @@
                         </ul>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-100">
-                        <a href="{{ route('login') }}" class="text-xs font-bold text-lime-700 hover:text-lime-800 flex items-center gap-1">
+                        <a href="{{ route('login') }}" class="text-xs font-bold text-lime-700 hover:text-lime-800 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                             <span>Akses Terminal Kasir</span>
                             <span>➔</span>
                         </a>
@@ -479,9 +588,9 @@
                 </div>
 
                 <!-- Pillar 2 Card -->
-                <div id="ppob-digital" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-200 flex flex-col justify-between group">
+                <div id="ppob-digital" class="reveal bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group" data-delay="150">
                     <div>
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-200 transition-all duration-300">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
@@ -513,7 +622,7 @@
                         </ul>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-100">
-                        <a href="#simulasi" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                        <a href="#simulasi" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                             <span>Hitung Potensi Cuan PPOB</span>
                             <span>➔</span>
                         </a>
@@ -521,9 +630,9 @@
                 </div>
 
                 <!-- Pillar 3 Card -->
-                <div id="ai-subscription" class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-800 transition-all duration-200 flex flex-col justify-between group">
+                <div id="ai-subscription" class="reveal bg-white rounded-3xl p-7 border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-slate-800 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group" data-delay="300">
                     <div>
-                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-lime-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-lime-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-slate-800 transition-all duration-300">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
@@ -555,7 +664,7 @@
                         </ul>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-100">
-                        <a href="{{ url('/admin') }}" class="text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1">
+                        <a href="{{ url('/admin') }}" class="text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                             <span>Kelola Layanan AI</span>
                             <span>➔</span>
                         </a>
@@ -566,11 +675,11 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- DETAILED SERVICE MATRIX                                  -->
+    <!-- DETAILED SERVICE MATRIX (Scroll Reveal)                  -->
     <!-- ======================================================== -->
     <section class="py-20 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-14">
+            <div class="text-center max-w-3xl mx-auto mb-14 reveal">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Katalog Lengkap</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Semua Layanan Transaksi Digital yang Anda Butuhkan</h2>
                 <p class="mt-3 text-sm text-slate-600">Pelanggan tidak perlu ke tempat lain. Jadikan toko Anda pusat transaksi segala kebutuhan sehari-hari.</p>
@@ -578,7 +687,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Item 1: PLN & Tagihan -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="50">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -589,7 +698,7 @@
                 </div>
 
                 <!-- Item 2: Pulsa & Paket Data -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="100">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -600,7 +709,7 @@
                 </div>
 
                 <!-- Item 3: Top Up E-Wallet -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="150">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -611,7 +720,7 @@
                 </div>
 
                 <!-- Item 4: Top Up Game Online -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="200">
                     <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -623,7 +732,7 @@
                 </div>
 
                 <!-- Item 5: Media Sosial & Streaming -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="250">
                     <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
@@ -634,7 +743,7 @@
                 </div>
 
                 <!-- Item 6: ChatGPT & AI Assistant -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="300">
                     <div class="w-10 h-10 rounded-xl bg-slate-900 text-lime-400 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -645,7 +754,7 @@
                 </div>
 
                 <!-- Item 7: Kasir Toko & Thermal Struk -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="350">
                     <div class="w-10 h-10 rounded-xl bg-lime-100 text-lime-800 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -656,7 +765,7 @@
                 </div>
 
                 <!-- Item 8: Multi Pembayaran & QRIS -->
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md transition-all">
+                <div class="reveal bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="400">
                     <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
@@ -670,18 +779,18 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- INTERACTIVE PROFIT / CUAN CALCULATOR                     -->
+    <!-- INTERACTIVE PROFIT / CUAN CALCULATOR (Scroll Reveal)     -->
     <!-- ======================================================== -->
     <section id="simulasi" class="py-20 bg-slate-50 border-y border-slate-200">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-12">
+            <div class="text-center max-w-2xl mx-auto mb-12 reveal">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Simulasi Pendapatan Ekstra</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Hitung Potensi Cuan Tambahan Bisnis Anda</h2>
                 <p class="mt-2 text-sm text-slate-600">Kombinasikan keuntungan penjualan kasir toko dengan komisi transaksi PPOB dan margin layanan AI.</p>
             </div>
 
             <!-- Calculator Card -->
-            <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl shadow-slate-200/50">
+            <div class="reveal bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl shadow-slate-200/50">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <!-- Left: Sliders Input (7 cols) -->
                     <div class="lg:col-span-7 space-y-6">
@@ -760,7 +869,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('login') }}" class="w-full py-3 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-slate-950 font-extrabold text-xs text-center rounded-xl transition-all shadow-md">
+                        <a href="{{ route('login') }}" class="w-full py-3 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-slate-950 font-extrabold text-xs text-center rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
                             Mulai Dapatkan Cuan Sekarang ➔
                         </a>
                     </div>
@@ -770,11 +879,11 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 3 SIMPLE STEPS TO GET STARTED                            -->
+    <!-- 3 SIMPLE STEPS TO GET STARTED (Scroll Reveal)            -->
     <!-- ======================================================== -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-14">
+            <div class="text-center max-w-2xl mx-auto mb-14 reveal">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Alur Mudah</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Mulai Seluruh Layanan dalam 3 Langkah Praktis</h2>
                 <p class="mt-2 text-sm text-slate-600">Satu akun untuk mengoperasikan kasir, jualan PPOB, dan berlangganan AI.</p>
@@ -782,7 +891,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Step 1 -->
-                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                <div class="reveal bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="0">
                     <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         01
                     </div>
@@ -793,7 +902,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                <div class="reveal bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="150">
                     <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         02
                     </div>
@@ -804,7 +913,7 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs">
+                <div class="reveal bg-slate-50 p-7 rounded-2xl border border-slate-200/80 relative shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200" data-delay="300">
                     <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 font-extrabold text-sm flex items-center justify-center mb-4">
                         03
                     </div>
@@ -818,11 +927,11 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- INTERACTIVE FAQ SECTION                                  -->
+    <!-- INTERACTIVE FAQ SECTION (Scroll Reveal)                  -->
     <!-- ======================================================== -->
     <section id="faq" class="py-20 bg-slate-50 border-t border-slate-200">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 reveal">
                 <span class="text-xs font-extrabold tracking-wider text-lime-700 uppercase bg-lime-100 px-3 py-1 rounded-full">Tanya Jawab</span>
                 <h2 class="mt-3 text-3xl font-extrabold text-slate-900 tracking-tight">Pertanyaan yang Sering Diajukan</h2>
                 <p class="mt-2 text-sm text-slate-600">Pelajari lebih lanjut tentang integrasi Kasir POS, PPOB, dan Layanan AI FilaPOS Smart.</p>
@@ -831,8 +940,8 @@
             <!-- FAQ Accordion Container -->
             <div class="space-y-3.5">
                 <!-- Item 1 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
+                <div class="reveal border border-slate-200 rounded-2xl overflow-hidden bg-white hover:border-slate-300 transition-colors" data-delay="0">
+                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none cursor-pointer" onclick="toggleFaq(this)">
                         <span>Apakah saya bisa menjalankan kasir toko dan jualan PPOB secara bersamaan?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -844,8 +953,8 @@
                 </div>
 
                 <!-- Item 2 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
+                <div class="reveal border border-slate-200 rounded-2xl overflow-hidden bg-white hover:border-slate-300 transition-colors" data-delay="100">
+                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none cursor-pointer" onclick="toggleFaq(this)">
                         <span>Apa saja jenis layanan AI Subscription yang tersedia di platform?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -857,8 +966,8 @@
                 </div>
 
                 <!-- Item 3 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
+                <div class="reveal border border-slate-200 rounded-2xl overflow-hidden bg-white hover:border-slate-300 transition-colors" data-delay="200">
+                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none cursor-pointer" onclick="toggleFaq(this)">
                         <span>Apakah struk transaksi PPOB (seperti token PLN) bisa dicetak di printer thermal?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -870,8 +979,8 @@
                 </div>
 
                 <!-- Item 4 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
+                <div class="reveal border border-slate-200 rounded-2xl overflow-hidden bg-white hover:border-slate-300 transition-colors" data-delay="300">
+                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none cursor-pointer" onclick="toggleFaq(this)">
                         <span>Perangkat apa saja yang didukung oleh FilaPOS Smart?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -883,8 +992,8 @@
                 </div>
 
                 <!-- Item 5 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none" onclick="toggleFaq(this)">
+                <div class="reveal border border-slate-200 rounded-2xl overflow-hidden bg-white hover:border-slate-300 transition-colors" data-delay="400">
+                    <button type="button" class="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm focus:outline-none cursor-pointer" onclick="toggleFaq(this)">
                         <span>Bagaimana cara mulai menggunakan platform FilaPOS Smart?</span>
                         <svg class="w-4 h-4 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -899,13 +1008,13 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- FINAL HIGH-CONVERSION CTA                                -->
+    <!-- FINAL HIGH-CONVERSION CTA (Scroll Reveal)                -->
     <!-- ======================================================== -->
     <section class="py-16 bg-slate-900 text-white relative overflow-hidden">
         <!-- Glow gradient -->
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-lime-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-lime-500/20 rounded-full blur-3xl pointer-events-none anim-glow"></div>
 
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center reveal">
             <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
                 Upgrade Bisnis Anda ke Ekosistem Digital Terlengkap Sekarang
             </h2>
@@ -913,13 +1022,13 @@
                 Kelola kasir toko lebih efisien, gandakan keuntungan lewat transaksi PPOB, dan nikmati kemudahan langganan AI dalam satu genggaman.
             </p>
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-400 hover:bg-lime-300 active:bg-lime-500 rounded-xl shadow-lg shadow-lime-400/20 transition-all duration-200">
+                <a href="{{ route('login') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-slate-950 bg-lime-400 hover:bg-lime-300 active:bg-lime-500 rounded-xl shadow-lg shadow-lime-400/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
                     <span>Buka Aplikasi Kasir Sekarang</span>
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                 </a>
-                <a href="{{ url('/admin') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all">
+                <a href="{{ url('/admin') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl hover:-translate-y-0.5 transition-all duration-200">
                     <span>Akses Portal Admin</span>
                 </a>
             </div>
@@ -964,7 +1073,8 @@
     </footer>
 
     <!-- ======================================================== -->
-    <!-- JAVASCRIPT LOGIC (Interactions, Mobile Menu, Calculator)  -->
+    <!-- JAVASCRIPT LOGIC (Interactions, Mobile Menu, Calculator,  -->
+    <!-- Scroll Reveal Observer)                                  -->
     <!-- ======================================================== -->
     <script>
         // Mobile Drawer Toggle
@@ -1022,11 +1132,8 @@
             if (aiValText) aiValText.innerText = ai;
 
             // Calculations:
-            // PPOB profit: average Rp 2.500 margin per transaction * 30 days
             const monthlyPpob = ppob * 2500 * 30;
-            // AI profit: average Rp 50.000 margin per active subscription sold/month
             const monthlyAi = ai * 50000;
-            // POS efficiency savings & extra transactions: ~Rp 1.000 per transaction processed efficiently * 30 days
             const monthlyPos = tx * 1000 * 30;
 
             const totalMonthly = monthlyPpob + monthlyAi + monthlyPos;
@@ -1056,9 +1163,41 @@
             }
         }
 
-        // Initialize Calculator on page load
+        // High-Performance Scroll Reveal with IntersectionObserver
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                reveals.forEach(el => el.classList.add('revealed'));
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const delay = el.getAttribute('data-delay') || 0;
+                        if (delay > 0) {
+                            setTimeout(() => {
+                                el.classList.add('revealed');
+                            }, parseInt(delay, 10));
+                        } else {
+                            el.classList.add('revealed');
+                        }
+                        obs.unobserve(el);
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -30px 0px'
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', function() {
             updateCalculator();
+            initScrollReveal();
         });
     </script>
 </body>
