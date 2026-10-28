@@ -58,6 +58,8 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(15)
+            ->paginationPageOptions([10, 15, 25, 50])
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->label('No. Invoice')
@@ -311,7 +313,8 @@ class OrderResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()
+            ->with(['user:id,name,role']);
 
         if (auth()->user()?->isTamu()) {
             $query->where('created_at', '>=', \Carbon\Carbon::create(2026, 10, 20)->startOfDay());

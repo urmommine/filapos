@@ -129,6 +129,8 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(15)
+            ->paginationPageOptions([10, 15, 25, 50])
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Foto')
@@ -209,9 +211,16 @@ class ProductResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->with(['category:id,name']);
+    }
+
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('stock', '<=', 5)->count() ?: null;
+        return cache()->remember('filament_low_stock_badge', 60, function () {
+            return static::getModel()::where('stock', '<=', 5)->count() ?: null;
+        });
     }
 
     public static function getNavigationBadgeColor(): ?string
