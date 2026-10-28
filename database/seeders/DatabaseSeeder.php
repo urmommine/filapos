@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create Admin User
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@pos.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@pos.com'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
         // Create Kasir User (Hanya Yuliana)
         User::firstOrCreate(
@@ -30,12 +32,14 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Yuliana', 'password' => Hash::make('password'), 'role' => 'kasir']
         );
 
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@pos.com',
-            'password' => Hash::make('notpassword'),
-            'role' => 'superadmin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'superadmin@pos.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('notpassword'),
+                'role' => 'superadmin',
+            ]
+        );
 
 
 
