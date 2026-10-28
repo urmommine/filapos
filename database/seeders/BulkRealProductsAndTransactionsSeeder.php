@@ -308,7 +308,7 @@ class BulkRealProductsAndTransactionsSeeder extends Seeder
                         'change' => $change,
                         'payment_status' => 'paid',
                         'qris_reference_id' => $qrisRef,
-                        'notes' => $notes,
+                        'notes' => null,
                         'created_at' => $orderTime,
                         'updated_at' => $orderTime,
                     ]);

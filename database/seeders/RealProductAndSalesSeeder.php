@@ -194,7 +194,7 @@ class RealProductAndSalesSeeder extends Seeder
                 } elseif ($methodRand <= 85) {
                     $method = 'qris';
                     $qrisRef = $isBorderEra ? $invoiceNumber : null;
-                    $notes = $isBorderEra ? 'Pembayaran QRIS BorderPay Sukses' : 'Pembayaran QRIS';
+                    $notes = null;
                 } else {
                     $method = 'transfer';
                     $qrisRef = null;

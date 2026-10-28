@@ -162,7 +162,7 @@ class HistoricalMonthlySalesSeeder extends Seeder
                             'change' => $change,
                             'payment_status' => 'paid',
                             'qris_reference_id' => null,
-                            'notes' => $notes,
+                            'notes' => null,
                         ]);
 
                         // Set timestamp historis persis

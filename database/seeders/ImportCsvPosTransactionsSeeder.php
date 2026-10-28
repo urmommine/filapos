@@ -345,7 +345,7 @@ class ImportCsvPosTransactionsSeeder extends Seeder
                     'payment_status'    => $paymentStatus,
                     'qris_reference_id' => $reference,
                     'qris_qr_string'    => null,
-                    'notes'             => $notes,
+                    'notes'             => null,
                     'created_at'        => $timeStr,
                     'updated_at'        => $timeStr,
                 ];

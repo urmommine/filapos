@@ -281,8 +281,11 @@ class OrderResource extends Resource
                     ->schema([
                         Infolists\Components\TextEntry::make('notes')
                             ->label('')
+                            ->formatStateUsing(fn ($state) => (empty($state) || str_starts_with(trim($state), '{')) ? null : $state)
                             ->placeholder('Tidak ada catatan'),
-                    ])->collapsed(),
+                    ])
+                    ->visible(fn (?Order $record) => $record && !empty($record->notes) && !str_starts_with(trim($record->notes), '{'))
+                    ->collapsed(),
             ]);
     }
 
