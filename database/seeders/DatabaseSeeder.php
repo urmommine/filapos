@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Create Tamu User (Akses Terbatas: Dashboard, Kategori, Produk, Riwayat Transaksi >= 20 Okt, dan Kasir POS)
+        // Create Tamu User (Akses Terbatas: Dashboard, Kategori, Produk, Riwayat Transaksi >= 26 Okt, dan Kasir POS)
         User::firstOrCreate(
             ['email' => 'tamu@pos.com'],
             [

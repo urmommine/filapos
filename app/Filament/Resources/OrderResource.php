@@ -157,23 +157,23 @@ class OrderResource extends Resource
                     ->form([
                         Forms\Components\DatePicker::make('from')
                             ->label('Dari Tanggal')
-                            ->default(fn () => auth()->user()?->isTamu() ? '2026-10-20' : null)
-                            ->minDate(fn () => auth()->user()?->isTamu() ? '2026-10-20' : null)
-                            ->helperText(fn () => auth()->user()?->isTamu() ? '⚠️ Akun Tamu hanya dapat melihat riwayat tanggal 20 Oktober 2026 ke atas.' : null),
+                            ->default(fn () => auth()->user()?->isTamu() ? '2026-10-26' : null)
+                            ->minDate(fn () => auth()->user()?->isTamu() ? '2026-10-26' : null)
+                            ->helperText(fn () => auth()->user()?->isTamu() ? '⚠️ Akun Tamu hanya dapat melihat riwayat tanggal 26 Oktober 2026 ke atas.' : null),
                         Forms\Components\DatePicker::make('until')
                             ->label('Sampai Tanggal'),
                     ])
                     ->query(function ($query, array $data) {
                         return $query
                             ->when($data['from'], function ($q, $date) {
-                                if (auth()->user()?->isTamu() && $date < '2026-10-20') {
+                                if (auth()->user()?->isTamu() && $date < '2026-10-26') {
                                     \Filament\Notifications\Notification::make()
                                         ->danger()
                                         ->title('Peringatan: Akses Terbatas!')
-                                        ->body('DILARANG: Akun Tamu tidak diizinkan melihat riwayat transaksi sebelum tanggal 20!')
+                                        ->body('DILARANG: Akun Tamu tidak diizinkan melihat riwayat transaksi sebelum tanggal 26!')
                                         ->persistent()
                                         ->send();
-                                    return $q->where('created_at', '>=', '2026-10-20 00:00:00');
+                                    return $q->where('created_at', '>=', '2026-10-26 00:00:00');
                                 }
                                 return $q->whereDate('created_at', '>=', $date);
                             })
@@ -323,7 +323,7 @@ class OrderResource extends Resource
             ->with(['user:id,name,role']);
 
         if (auth()->user()?->isTamu()) {
-            $query->where('created_at', '>=', \Carbon\Carbon::create(2026, 10, 20)->startOfDay());
+            $query->where('created_at', '>=', \Carbon\Carbon::create(2026, 10, 26)->startOfDay());
         }
 
         return $query;

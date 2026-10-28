@@ -15,13 +15,13 @@ class ViewOrder extends ViewRecord
     {
         parent::mount($record);
 
-        $cutoff = Carbon::create(2026, 10, 20)->startOfDay();
+        $cutoff = Carbon::create(2026, 10, 26)->startOfDay();
 
         if (auth()->user()?->isTamu() && $this->record->created_at < $cutoff) {
             Notification::make()
                 ->danger()
                 ->title('Peringatan: Akses Ditolak!')
-                ->body('DILARANG: Akun Tamu tidak diizinkan melihat detail transaksi sebelum tanggal 20!')
+                ->body('DILARANG: Akun Tamu tidak diizinkan melihat detail transaksi sebelum tanggal 26!')
                 ->persistent()
                 ->send();
 

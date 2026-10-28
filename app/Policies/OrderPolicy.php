@@ -18,8 +18,8 @@ class OrderPolicy
 
     /**
      * Determine whether the user can view the model.
-     * Tamu hanya boleh melihat transaksi mulai tanggal 20 Oktober 2026.
-     * Transaksi sebelum tanggal 20 dilarang dilihat.
+     * Tamu hanya boleh melihat transaksi mulai tanggal 26 Oktober 2026.
+     * Transaksi sebelum tanggal 26 dilarang dilihat.
      */
     public function view(User $user, Order $order): bool
     {
@@ -28,7 +28,7 @@ class OrderPolicy
         }
 
         if ($user->isTamu()) {
-            $cutoffDate = Carbon::create(2026, 10, 20)->startOfDay();
+            $cutoffDate = Carbon::create(2026, 10, 26)->startOfDay();
             return $order->created_at >= $cutoffDate;
         }
 

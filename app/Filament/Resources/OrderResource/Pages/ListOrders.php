@@ -18,7 +18,7 @@ class ListOrders extends ListRecords
             Notification::make()
                 ->warning()
                 ->title('Akses Terbatas: Akun Tamu')
-                ->body('Perhatian: Anda hanya dapat melihat riwayat transaksi hingga tanggal 20 Oktober 2026. Riwayat transaksi ke belakang sebelum tanggal 20 tidak dapat diakses!')
+                ->body('Perhatian: Anda hanya dapat melihat riwayat transaksi mulai tanggal 26 Oktober 2026. Riwayat transaksi ke belakang sebelum tanggal 26 tidak dapat diakses!')
                 ->persistent()
                 ->send();
         }
