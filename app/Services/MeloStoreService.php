@@ -87,8 +87,8 @@ class MeloStoreService
      */
     public static function getGameCategories(bool $forceRefresh = false): array
     {
-        $cacheKey = 'melostore_game_categories_v2';
-        $ttl = now()->addHours(config('melostore.cache_ttl_hours', 2));
+        $cacheKey = 'melostore_game_categories_v3';
+        $ttl = now()->addMinutes((int) config('melostore.categories_cache_minutes', 30));
 
         if ($forceRefresh) {
             Cache::forget($cacheKey);
@@ -104,7 +104,7 @@ class MeloStoreService
 
             try {
                 $response = Http::withHeaders(self::getHeaders())
-                    ->timeout(30)
+                    ->timeout(6)
                     ->get(self::getBaseUrl() . '/api/v1/h2h/pricelists/categories');
 
                 if ($response->successful() && isset($response->json()['data'])) {
@@ -146,13 +146,12 @@ class MeloStoreService
                         $slug = $b['slug'] ?? '';
                         $order = $popularSlugs[$slug] ?? 999;
 
+                        // Simpan hanya atribut esensial agar ukuran JSON HTML ringan (kurangi ~75% payload)
                         $games[] = [
                             'brand_id' => $b['brand_id'] ?? $b['id'] ?? null,
                             'name' => $b['name'],
                             'slug' => $slug,
                             'category' => $category,
-                            'icon' => $slug,
-                            'types' => $b['type'] ?? [],
                             'thumbnail' => self::getGameIconUrl($slug),
                             '_order' => $order,
                         ];
@@ -165,6 +164,12 @@ class MeloStoreService
                         }
                         return $a['_order'] <=> $b['_order'];
                     });
+
+                    // Hapus _order setelah diurutkan agar payload bersih
+                    $games = array_map(function ($g) {
+                        unset($g['_order']);
+                        return $g;
+                    }, $games);
 
                     return !empty($games) ? $games : self::getFallbackGames();
                 }
@@ -181,8 +186,8 @@ class MeloStoreService
      */
     public static function getGameProducts(string $brandSlug, bool $forceRefresh = false): array
     {
-        $cacheKey = "melostore_products_{$brandSlug}_v2";
-        $ttl = now()->addHours(config('melostore.cache_ttl_hours', 2));
+        $cacheKey = "melostore_products_{$brandSlug}_v3";
+        $ttl = now()->addMinutes((int) config('melostore.products_cache_minutes', 5));
 
         if ($forceRefresh) {
             Cache::forget($cacheKey);
@@ -198,7 +203,7 @@ class MeloStoreService
 
             try {
                 $response = Http::withHeaders(self::getHeaders())
-                    ->timeout(12)
+                    ->timeout(6)
                     ->get(self::getBaseUrl() . "/api/v1/h2h/pricelists/{$brandSlug}");
 
                 if ($response->successful() && isset($response->json()['data'])) {

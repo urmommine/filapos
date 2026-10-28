@@ -20,5 +20,6 @@ return [
     */
     'min_price' => (float) env('MELOSTORE_PRICE_MIN', 5000),
     'margin_percent' => (float) env('MELOSTORE_MARGIN_PERCENT', 5),
-    'cache_ttl_hours' => 2,
+    'products_cache_minutes' => (int) env('MELOSTORE_PRODUCTS_CACHE_MINUTES', 5),
+    'categories_cache_minutes' => (int) env('MELOSTORE_CATEGORIES_CACHE_MINUTES', 30),
 ];

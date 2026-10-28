@@ -687,20 +687,6 @@ class TopupGame extends Component
 
     public function render()
     {
-        $filteredGames = $this->gamesList;
-
-        if ($this->activeCategory !== 'All') {
-            $filteredGames = array_filter($filteredGames, function ($g) {
-                return ($g['category'] ?? 'Game') === $this->activeCategory;
-            });
-        }
-
-        if (!empty(trim($this->search))) {
-            $filteredGames = array_filter($filteredGames, function ($g) {
-                return stripos($g['name'], $this->search) !== false;
-            });
-        }
-
         $categories = [
             'All' => 'Semua',
             'Game' => 'Game',
@@ -712,12 +698,16 @@ class TopupGame extends Component
             'Aplikasi' => 'Aplikasi & Streaming',
         ];
 
+        $targetGame = $this->selectedGame ?: 'mobile-legends';
+        $gameData = !empty($this->gameDetails) 
+            ? $this->gameDetails 
+            : MeloStoreService::getGameProducts($targetGame);
+
         $catalog = [
-            $this->selectedGame => MeloStoreService::getGameProducts($this->selectedGame),
+            $targetGame => $gameData,
         ];
 
         return view('livewire.topup-game', [
-            'displayGames' => $filteredGames,
             'allGames' => $this->gamesList,
             'catalog' => $catalog,
             'categories' => $categories,
