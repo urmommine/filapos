@@ -62,6 +62,7 @@ class DatabaseSeeder extends Seeder
             ImportCsvPpobAndWalletSeeder::class,
             AddMemberBalancePurchasesSeeder::class,
             Add2300RealProductsSeeder::class,
+            AddOctober29TransactionsSeeder::class,
         ]);
 
         // Store Settings
