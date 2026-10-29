@@ -99,14 +99,6 @@ class RealProductAndSalesSeeder extends Seeder
                     ['name' => 'Mama Lemon Jeruk Nipis 680ml', 'sku' => 'PRC-MML-001', 'barcode' => '8998866100018', 'buy' => 11000, 'sell' => 14000, 'stock' => 3, 'min_stock' => 10], // Low stock alert
                 ],
             ],
-            'Rokok & Tembakau' => [
-                'desc' => 'Produk rokok filter dan kretek resmi',
-                'products' => [
-                    ['name' => 'Sampoerna A Mild 16 Batang', 'sku' => 'RKK-SMP-001', 'barcode' => '8992689001019', 'buy' => 31000, 'sell' => 35000, 'stock' => 60, 'min_stock' => 15],
-                    ['name' => 'Gudang Garam Surya 16 Batang', 'sku' => 'RKK-GGS-001', 'barcode' => '8992693001012', 'buy' => 32500, 'sell' => 36500, 'stock' => 55, 'min_stock' => 15],
-                    ['name' => 'Marlboro Red 20 Batang', 'sku' => 'RKK-MLB-001', 'barcode' => '8992689002016', 'buy' => 39000, 'sell' => 44000, 'stock' => 40, 'min_stock' => 10],
-                ],
-            ],
         ];
 
         $createdProducts = [];

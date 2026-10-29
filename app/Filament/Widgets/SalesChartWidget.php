@@ -21,9 +21,9 @@ class SalesChartWidget extends ChartWidget
     protected function getFilters(): ?array
     {
         return [
+            '1' => '1 Hari Terakhir',
             '7' => '7 Hari Terakhir',
             '14' => '14 Hari Terakhir',
-            '30' => '30 Hari Terakhir',
         ];
     }
 

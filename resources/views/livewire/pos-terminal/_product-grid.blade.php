@@ -4,10 +4,16 @@
         <div class="pos-product-card relative bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer group flex flex-col h-full {{ $product->available_stock <= 0 ? 'opacity-60 grayscale' : '' }}"
             wire:click="addToCart({{ $product->id }})">
 
-            <div class="pos-product-image relative aspect-[4/3] rounded-lg overflow-hidden mb-2 sm:mb-4 bg-slate-100">
-                <div class="w-full h-full bg-center bg-cover bg-no-repeat group-hover:scale-105 transition-transform duration-300"
-                    style='background-image: url("{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}");'>
-                </div>
+            <div class="pos-product-image relative aspect-[4/3] rounded-lg overflow-hidden mb-2 sm:mb-4 bg-slate-50 flex items-center justify-center border border-slate-100">
+                @if($product->image)
+                    <div class="w-full h-full bg-center bg-cover bg-no-repeat group-hover:scale-105 transition-transform duration-300"
+                        style='background-image: url("{{ Storage::url($product->image) }}");'>
+                    </div>
+                @else
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 group-hover:text-primary transition-colors bg-slate-50">
+                        <x-heroicon-o-shopping-bag class="w-10 h-10 stroke-[1.25]" />
+                    </div>
+                @endif
 
                 @if($product->available_stock <= 0)
                     <div class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10">
@@ -16,7 +22,6 @@
                         </span>
                     </div>
                 @endif
-
             </div>
 
             <div class="pos-product-details mt-auto">

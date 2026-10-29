@@ -134,8 +134,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Foto')
-                    ->circular()
-                    ->defaultImageUrl(url('/images/placeholder.png')),
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk')
                     ->searchable()

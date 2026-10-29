@@ -37,7 +37,6 @@ class Add2300RealProductsSeeder extends Seeder
         $catMandi = $getOrCreateCat('Personal Care & Mandi', ['Mandi', 'Sabun', 'Sampo']);
         $catKebersihan = $getOrCreateCat('Kebersihan Rumah & Dapur', ['Kebersihan', 'Deterjen']);
         $catObat = $getOrCreateCat('Obat & Kesehatan', ['Obat', 'Kesehatan']);
-        $catRokok = $getOrCreateCat('Rokok & Tembakau', ['Rokok', 'Tembakau']);
         $catFrozen = $getOrCreateCat('Frozen Foods', ['Frozen', 'Beku']);
 
         // Ambil barcode & SKU yang sudah ada di database untuk mencegah duplikasi
@@ -364,21 +363,6 @@ class Add2300RealProductsSeeder extends Seeder
                 ]
             ],
 
-            // -----------------------------------------------------------------
-            // 8. ROKOK & TEMBAKAU (Target ~50 item)
-            // -----------------------------------------------------------------
-            [
-                'cat_id' => $catRokok,
-                'prefix' => 'ROK',
-                'items' => [
-                    ['brand' => 'Sampoerna', 'base' => 'Rokok Filter & Kretek', 'variants' => ['A Mild 16 Batang', 'A Mild 12 Batang', 'A Mild Menthol Burst 16 Batang', 'Avolution Red 20 Batang', 'Avolution Menthol 20 Batang', 'Splash Tropical 16 Batang', 'Splash Sunny 16 Batang', 'Kretek Istimewa 12 Batang'], 'price' => [15000, 36500]],
-                    ['brand' => 'Djarum', 'base' => 'Rokok Kretek & Mild', 'variants' => ['Super 12 Batang', 'Super 16 Batang', 'Coklat Kretek 12 Batang', 'Black Cappuccino 16 Batang', 'Black Original 16 Batang', '76 Kretek 12 Batang', '76 Madu Hitam 12 Batang', '76 Kurma 12 Batang', 'LA Lights 16 Batang', 'LA Bold 20 Batang', 'LA Ice Purple Boost 16 Batang'], 'price' => [14500, 34500]],
-                    ['brand' => 'Gudang Garam', 'base' => 'Rokok Surya & Signature', 'variants' => ['Surya 12 Batang', 'Surya 16 Batang', 'Surya Pro 16 Batang', 'Surya Pro Mild 16 Batang', 'International Merah 12 Batang', 'Signature Cokelat 12 Batang', 'Patra Kretek 12 Batang', 'Klobot Tradisional 6 Batang'], 'price' => [14000, 33500]],
-                    ['brand' => 'Marlboro', 'base' => 'Rokok Putih Internasional', 'variants' => ['Red Merah 20 Batang', 'Gold Lights 20 Batang', 'Ice Burst Menthol 20 Batang', 'Filter Black 20 Batang', 'Crafted Selection 12 Batang'], 'price' => [23000, 43500]],
-                    ['brand' => 'Esse', 'base' => 'Rokok Slim Kapsul', 'variants' => ['Change Juicy Pop 20 Batang', 'Change Double Kapsul 20 Batang', 'Berry Pop 20 Batang', 'Café Aroma Kopi 20 Batang', 'Shuffle Pop 20 Batang'], 'price' => [32000, 42000]],
-                    ['brand' => 'Camel', 'base' => 'Rokok Putih & Mild', 'variants' => ['Yellow Filter 20 Batang', 'White Lights 20 Batang', 'Purple Option Rasa Anggur 20 Batang', 'Activate Crush Mint 20 Batang'], 'price' => [19500, 29500]],
-                ]
-            ],
 
             // -----------------------------------------------------------------
             // 9. FROZEN FOODS (Target ~50 item)
