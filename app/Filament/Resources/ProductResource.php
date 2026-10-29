@@ -234,7 +234,10 @@ class ProductResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->with(['category:id,name']);
+        return parent::getEloquentQuery()
+            ->with(['category:id,name'])
+            ->orderByRaw("CASE WHEN category_id IN (SELECT id FROM categories WHERE name LIKE '%Muslim%') THEN 0 ELSE 1 END")
+            ->orderBy('id', 'desc');
     }
 
     public static function getNavigationBadge(): ?string
