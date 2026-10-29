@@ -506,7 +506,7 @@
                     <div x-show="wizardStep === 2" class="space-y-4">
                         <div class="flex items-center justify-between">
                             <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                                Data Akun Player
+                                Data Akun Tujuan
                             </h4>
                             <span class="text-[11px] text-slate-400">Pastikan ID benar</span>
                         </div>
@@ -531,8 +531,8 @@
                                 </p>
                             </div>
 
-                            <!-- Bantuan Cek Username (Halaman Terpisah) -->
-                            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between text-xs text-slate-600">
+                            <!-- Bantuan Cek Username (Halaman Terpisah) - Hanya tampil jika kategori Game -->
+                            <div x-show="isGameBrand" x-cloak class="p-3 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between text-xs text-slate-600">
                                 <div class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-lime-600 text-lg">help_outline</span>
                                     <span>Ingin memastikan nama player?</span>
@@ -1054,14 +1054,34 @@
                     });
                 },
 
+                get isGameBrand() {
+                    if (!this.selectedGame) return false;
+                    const b = this.allGames.find(g => g.slug === this.selectedGame || (g.slug && g.slug.toLowerCase() === this.selectedGame.toLowerCase()));
+                    return b ? ((b.category || 'Game').toLowerCase() === 'game') : false;
+                },
+
                 get targetLabel() {
                     const fields = this.inquiryFields;
-                    return fields[0]?.name || (this.selectedGame.includes('mobile-legends') ? 'User ID' : 'User ID / Player ID');
+                    if (fields && fields[0]?.name) return fields[0].name;
+                    const b = this.allGames.find(g => g.slug === this.selectedGame);
+                    const cat = b ? (b.category || 'Game') : 'Game';
+                    if (cat === 'PLN') return 'No. Meter / ID Pelanggan PLN';
+                    if (cat === 'Pulsa & Data') return 'Nomor Handphone';
+                    if (cat === 'E-Wallet') return 'Nomor Akun / HP E-Wallet';
+                    if (this.selectedGame.includes('mobile-legends')) return 'User ID';
+                    return this.isGameBrand ? 'User ID / Player ID' : 'Nomor Tujuan / ID Akun';
                 },
 
                 get targetPlaceholder() {
                     const fields = this.inquiryFields;
-                    return fields[0]?.placeholder || (this.selectedGame.includes('mobile-legends') ? 'Contoh: 12345678' : 'Masukkan ID akun player');
+                    if (fields && fields[0]?.placeholder) return fields[0].placeholder;
+                    const b = this.allGames.find(g => g.slug === this.selectedGame);
+                    const cat = b ? (b.category || 'Game') : 'Game';
+                    if (cat === 'PLN') return 'Contoh: 14123456789';
+                    if (cat === 'Pulsa & Data') return 'Contoh: 081234567890';
+                    if (cat === 'E-Wallet') return 'Contoh: 081234567890';
+                    if (this.selectedGame.includes('mobile-legends')) return 'Contoh: 12345678';
+                    return this.isGameBrand ? 'Masukkan ID akun player' : 'Masukkan nomor tujuan / ID';
                 },
 
                 get zoneLabel() {

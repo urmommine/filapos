@@ -25,15 +25,24 @@ class CheckUsername extends Component
 
     public function mount(): void
     {
-        $this->gamesList = MeloStoreService::getGameCategories();
+        $allCategories = MeloStoreService::getGameCategories();
+        // Cek username hanya berlaku untuk brand/layanan dalam kategori Game
+        $this->gamesList = array_values(array_filter($allCategories, function ($item) {
+            return strtolower($item['category'] ?? '') === 'game';
+        }));
+
+        $validSlugs = array_column($this->gamesList, 'slug');
 
         $queryGame = request()->query('game');
         $queryTarget = request()->query('target');
         $queryZone = request()->query('zone');
 
-        if (!empty($queryGame)) {
+        if (!empty($queryGame) && in_array($queryGame, $validSlugs)) {
             $this->selectedGame = $queryGame;
+        } elseif (!in_array($this->selectedGame, $validSlugs) && !empty($this->gamesList)) {
+            $this->selectedGame = $this->gamesList[0]['slug'] ?? 'mobile-legends';
         }
+
         if (!empty($queryTarget)) {
             $this->target = trim($queryTarget);
         }
@@ -48,6 +57,11 @@ class CheckUsername extends Component
 
     public function selectGame(string $slug): void
     {
+        $validSlugs = array_column($this->gamesList, 'slug');
+        if (!in_array($slug, $validSlugs)) {
+            return;
+        }
+
         $this->selectedGame = $slug;
         $this->hasChecked = false;
         $this->isValid = false;

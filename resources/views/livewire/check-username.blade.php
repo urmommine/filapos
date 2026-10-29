@@ -89,14 +89,19 @@
             <!-- 1. Dropdown Pilih Game (Searchable All Brands) -->
             <div class="space-y-1.5 relative" @click.outside="dropdownOpen = false">
                 <label class="block text-xs font-bold text-slate-700">
-                    Pilih Game / Layanan <span class="text-red-500">*</span>
+                    Pilih Game <span class="text-red-500">*</span>
                 </label>
                 
                 <button @click="dropdownOpen = !dropdownOpen" type="button"
                         class="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-300 hover:border-lime-500 focus:border-lime-500 rounded-2xl text-left transition-all shadow-2xs cursor-pointer">
                     <div class="flex items-center gap-3 truncate">
-                        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-lg">sports_esports</span>
+                        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 overflow-hidden border border-slate-200">
+                            <template x-if="currentGameObj.thumbnail">
+                                <img :src="currentGameObj.thumbnail" :alt="currentGameObj.name" class="w-full h-full object-cover">
+                            </template>
+                            <template x-if="!currentGameObj.thumbnail">
+                                <span class="material-symbols-outlined text-lg">sports_esports</span>
+                            </template>
                         </div>
                         <div class="truncate">
                             <span class="text-xs font-bold text-slate-900 block truncate" x-text="currentGameObj.name"></span>
@@ -108,7 +113,7 @@
                     </svg>
                 </button>
 
-                <!-- Dropdown Popover List: All Games Full Load & Search -->
+                <!-- Dropdown Popover List: Game Categories Only -->
                 <div x-show="dropdownOpen" x-cloak
                      class="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 space-y-1 max-h-80 overflow-y-auto">
                     <!-- Search Input -->
@@ -123,19 +128,24 @@
                         </div>
                     </div>
 
-                    <!-- Items List (Memuat Seluruh Brand) -->
+                    <!-- Items List (Hanya Game) -->
                     <div class="py-1 space-y-0.5">
                         <template x-for="g in filteredGamesList" :key="g.slug">
                             <button @click="$wire.selectGame(g.slug); selectedGame = g.slug; dropdownOpen = false" type="button"
                                     class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left transition-colors cursor-pointer"
                                     :class="selectedGame === g.slug ? 'bg-lime-50 text-lime-950 font-bold border border-lime-300' : 'hover:bg-slate-50 text-slate-800'">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-6 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
-                                        <span class="material-symbols-outlined text-sm">sports_esports</span>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 overflow-hidden border border-slate-200">
+                                        <template x-if="g.thumbnail">
+                                            <img :src="g.thumbnail" :alt="g.name" class="w-full h-full object-cover">
+                                        </template>
+                                        <template x-if="!g.thumbnail">
+                                            <span class="material-symbols-outlined text-sm">sports_esports</span>
+                                        </template>
                                     </div>
                                     <span class="text-xs truncate font-semibold" x-text="g.name"></span>
                                 </div>
-                                <span class="text-[10px] text-slate-400 px-2 py-0.5 rounded bg-slate-100 shrink-0" x-text="g.category || 'Game'"></span>
+                                <span class="text-[10px] text-slate-400 px-2 py-0.5 rounded bg-slate-100 shrink-0">Game</span>
                             </button>
                         </template>
                         <div x-show="filteredGamesList.length === 0" class="py-4 text-center text-xs text-slate-400">
