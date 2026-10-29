@@ -15,7 +15,7 @@
                 Masuk Akun Member
             </h1>
             <p class="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-                Masuk untuk bayar instan pakai Saldo Akun & pantau mutasi riwayat top up game Anda.
+                Masuk untuk bayar instan pakai Saldo Akun & pantau mutasi riwayat top up Anda.
             </p>
         </div>
 

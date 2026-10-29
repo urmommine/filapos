@@ -412,7 +412,7 @@
                         <!-- Loading State -->
                         <div x-show="isLoadingProducts" class="py-12 flex flex-col items-center justify-center text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
                             <div class="w-7 h-7 border-3 border-lime-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-                            <p class="text-xs font-semibold text-slate-700">Memuat paket produk Melostore...</p>
+                            <p class="text-xs font-semibold text-slate-700">Memuat data...</p>
                             <span class="text-[10px] text-slate-400">Sinkronisasi data katalog H2H</span>
                         </div>
 
