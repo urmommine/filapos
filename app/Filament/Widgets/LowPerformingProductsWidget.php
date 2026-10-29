@@ -17,6 +17,11 @@ class LowPerformingProductsWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'half';
 
+    public static function canView(): bool
+    {
+        return !auth()->user()?->isTamu();
+    }
+
     public function table(Table $table): Table
     {
         return $table

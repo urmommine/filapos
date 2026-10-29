@@ -18,6 +18,11 @@ class BestSellersWidget extends BaseWidget
 
     protected static ?string $maxHeight = '300px';
 
+    public static function canView(): bool
+    {
+        return !auth()->user()?->isTamu();
+    }
+
     public function table(Table $table): Table
     {
         return $table

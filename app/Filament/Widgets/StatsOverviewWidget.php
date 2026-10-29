@@ -24,6 +24,36 @@ class StatsOverviewWidget extends BaseWidget
                 ->first()
                 ->total_profit ?? 0;
     }
+
+    /**
+     * Sensor nominal uang untuk role tamu, hanya menampilkan 2 angka pertama.
+     */
+    protected function maskAmount($amount): string
+    {
+        if ($amount <= 0) {
+            return 'Rp 0';
+        }
+
+        $formatted = number_format($amount, 0, ',', '.');
+        $digitCount = 0;
+        $masked = '';
+
+        for ($i = 0; $i < strlen($formatted); $i++) {
+            $char = $formatted[$i];
+            if (ctype_digit($char)) {
+                $digitCount++;
+                if ($digitCount <= 2) {
+                    $masked .= $char;
+                } else {
+                    $masked .= 'x';
+                }
+            } else {
+                $masked .= $char;
+            }
+        }
+
+        return 'Rp ' . $masked;
+    }
     
     protected function getStats(): array
     {
@@ -86,20 +116,25 @@ class StatsOverviewWidget extends BaseWidget
         $activeProducts = Product::active()->count();
         $lowStockCount = Product::active()->lowStock()->count();
         $totalRevenue = Order::paid()->sum('total_amount');
+        $isTamu = auth()->user()?->isTamu() ?? false;
+
+        $todaySalesLabel = $isTamu ? $this->maskAmount($todaySales) : 'Rp ' . number_format($todaySales, 0, ',', '.');
+        $todayProfitLabel = $isTamu ? $this->maskAmount($todayProfit) : 'Rp ' . number_format($todayProfit, 0, ',', '.');
+        $totalRevenueLabel = $isTamu ? $this->maskAmount($totalRevenue) : 'Rp ' . number_format($totalRevenue, 0, ',', '.');
 
         return [
-            Stat::make('Pendapatan Hari Ini', 'Rp ' . number_format($todaySales, 0, ',', '.'))
+            Stat::make('Pendapatan Hari Ini', $todaySalesLabel)
                 ->description($salesChange >= 0 ? '+' . number_format($salesChange, 1) . '%' : number_format($salesChange, 1) . '%')
                 ->descriptionIcon($salesChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($salesChange >= 0 ? 'success' : 'danger')
                 ->chart([7, 3, 4, 5, 6, 3, 5, 8]),
 
-            Stat::make('Laba Hari Ini', 'Rp ' . number_format($todayProfit, 0, ',', '.'))
+            Stat::make('Laba Hari Ini', $todayProfitLabel)
                 ->description($profitChange >= 0 ? '+' . number_format($profitChange, 1) . '%' : number_format($profitChange, 1) . '%')
                 ->descriptionIcon($profitChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($profitChange >= 0 ? 'success' : 'danger'),
 
-            Stat::make('Total Omset', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
+            Stat::make('Total Omset', $totalRevenueLabel)
                 ->description('Dari awal transaksi')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('primary'),
