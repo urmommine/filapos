@@ -14,10 +14,7 @@
 
         <!-- Content -->
         <div class="relative z-10 p-12 text-center max-w-lg">
-            <div
-                class="mx-auto size-24 bg-gradient-to-tr from-primary to-lime-400 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(132,204,22,0.4)] mb-8 transform rotate-6 hover:rotate-12 transition-transform duration-500">
-                <span class="material-symbols-outlined text-5xl text-white">point_of_sale</span>
-            </div>
+            <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="mx-auto size-28 object-contain rounded-3xl shadow-[0_0_40px_rgba(132,204,22,0.4)] mb-8 transform hover:scale-105 transition-transform duration-500">
             <h1 class="text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
                 {{ \App\Models\StoreSetting::get(\App\Models\StoreSetting::STORE_NAME, 'Fila POS') }}
             </h1>
@@ -50,10 +47,7 @@
         <div class="w-full max-w-md space-y-8">
             <!-- Mobile Header to match desktop feel on small screens -->
             <div class="text-center lg:text-left mb-10">
-                <div
-                    class="lg:hidden mx-auto size-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6 border border-primary/20 shadow-[0_0_15px_rgba(132,204,22,0.2)]">
-                    <span class="material-symbols-outlined text-3xl">point_of_sale</span>
-                </div>
+                <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="lg:hidden mx-auto size-16 object-contain rounded-2xl mb-6 shadow-md shadow-lime-500/20">
                 <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Selamat Datang</h2>
                 <p class="mt-3 text-slate-500">Silakan masuk ke akun Anda</p>
             </div>

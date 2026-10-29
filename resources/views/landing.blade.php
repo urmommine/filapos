@@ -8,6 +8,7 @@
     <meta name="description" content="FilaPOS Smart: Solusi bisnis all-in-one. Kelola kasir digital toko fisik, transaksi PPOB (pulsa, PLN, e-wallet, voucher game), dan langganan AI terpercaya dalam satu web app responsif.">
     <meta name="keywords" content="aplikasi kasir, ppob pulsa pln, top up game, voucher e-wallet, ai subscription indonesia, point of sale web, kasir pintar umkm">
     <meta name="theme-color" content="#84cc16">
+    <link rel="icon" type="image/png" href="{{ asset('images/filapos-icon.png') }}">
 
     <!-- Open Graph / Meta -->
     <meta property="og:type" content="website">
@@ -189,11 +190,7 @@
             <div class="flex items-center justify-between h-18">
                 <!-- Brand Logo -->
                 <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-lime-500 text-slate-950 flex items-center justify-center shadow-md shadow-lime-500/25 group-hover:scale-105 transition-transform duration-200">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
+                    <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="w-10 h-10 object-contain rounded-xl shadow-md shadow-lime-500/25 group-hover:scale-105 transition-transform duration-200">
                     <div class="flex items-center gap-1.5">
                         <span class="text-xl font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span></span>
                     </div>
@@ -1268,11 +1265,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <!-- Brand Info -->
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-lime-500 text-slate-950 flex items-center justify-center shadow-xs">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
+                    <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="w-8 h-8 object-contain rounded-lg shadow-xs">
                     <span class="text-base font-extrabold tracking-tight text-slate-900">Fila<span class="text-lime-600">POS</span> Smart</span>
                     <span class="text-xs text-slate-400 pl-2 border-l border-slate-200">Kasir Digital • PPOB • AI Hub</span>
                 </div>

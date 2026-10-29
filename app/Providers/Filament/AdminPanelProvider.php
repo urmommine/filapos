@@ -49,6 +49,9 @@ class AdminPanelProvider extends PanelProvider
             ->defaultThemeMode(ThemeMode::Light)
             ->font('Inter')
             ->brandName(fn() => StoreSetting::get(StoreSetting::STORE_NAME, 'Fila POS'))
+            ->brandLogo(asset('images/filapos-icon.png'))
+            ->brandLogoHeight('2.5rem')
+            ->favicon(asset('images/filapos-icon.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

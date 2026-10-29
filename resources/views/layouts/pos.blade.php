@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'POS') }} - Kasir</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/filapos-icon.png') }}">
 
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />

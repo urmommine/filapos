@@ -1,10 +1,9 @@
 {{-- Sidebar Navigation --}}
 <nav class="w-20 bg-white border-r border-slate-200 flex-col items-center py-6 shrink-0 z-20 hidden lg:flex">
     <div class="mb-8">
-        <div
-            class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
-            <span class="material-symbols-outlined text-3xl">storefront</span>
-        </div>
+        <a href="{{ url('/') }}" title="FilaPOS" class="block transition-transform hover:scale-105">
+            <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="w-12 h-12 object-contain rounded-xl shadow-md shadow-primary/20">
+        </a>
     </div>
 
     <div class="flex-1 flex flex-col gap-3 w-full px-2 overflow-y-auto no-scrollbar">

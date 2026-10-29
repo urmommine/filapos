@@ -1,6 +1,9 @@
 <div class="flex min-h-screen items-center justify-center bg-slate-50 p-4">
     <div class="w-full max-w-md">
         <div class="mb-8 text-center">
+            <a href="{{ url('/') }}" class="inline-block">
+                <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="mx-auto size-16 object-contain rounded-2xl mb-4 shadow-md shadow-lime-500/20">
+            </a>
             <h1 class="text-3xl font-bold tracking-tight text-slate-900">Reset Password</h1>
             <p class="mt-2 text-slate-600">
                 @if($step === 1) Masukkan email Anda untuk menerima kode OTP.

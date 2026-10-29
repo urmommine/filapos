@@ -10,11 +10,7 @@
         
         <!-- Header Brand -->
         <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-lime-500 text-slate-950 shadow-lg shadow-lime-500/25 mb-1 transform hover:scale-105 transition-transform duration-200">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-            </div>
+            <img src="{{ asset('images/filapos-icon.png') }}" alt="FilaPOS" class="inline-flex size-14 object-contain rounded-2xl shadow-lg shadow-lime-500/25 mb-1 transform hover:scale-105 transition-transform duration-200">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Daftar Akun Member
             </h1>
