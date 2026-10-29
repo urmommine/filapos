@@ -315,8 +315,8 @@
     @if($activeTab === 'orders')
         <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="p-6 border-b border-slate-200">
-                <h2 class="text-base font-extrabold text-slate-900">Riwayat Pembelian Game</h2>
-                <p class="text-xs text-slate-500">Daftar pesanan top up game yang telah Anda buat.</p>
+                <h2 class="text-base font-extrabold text-slate-900">Riwayat Pembelian</h2>
+                <p class="text-xs text-slate-500">Daftar pesanan top up yang telah dibuat.</p>
             </div>
 
             <div class="overflow-x-auto">
